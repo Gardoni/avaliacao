@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVALIACAO - Sem Duplicatas</title>
+<style>
+body{font-family:system-ui;background:#0a0a0a;color:#fff;text-align:center;padding:10px;margin:0}
+.card{background:#1a1a1a;padding:16px;border-radius:16px;max-width:600px;margin:10px auto;text-align:left;border:1px solid #333}
+input,textarea{width:100%;padding:12px;margin:6px 0;border-radius:12px;border:none;font-size:15px;box-sizing:border-box}
+button{border:none;padding:14px 20px;font-weight:800;border-radius:30px;margin:5px;cursor:pointer}
+.btn-go{background:#00ff88;color:#000}.btn-blue{background:#2962ff;color:#fff}.btn-red{background:#b71c1c;color:#fff}.btn-excel{background:#00c853;color:#fff}.btn-sec{background:#333;color:#fff}.btn-orange{background:#ff9800;color:#000}.btn-purple{background:#9c27b0;color:#fff}
+.tab{display:flex;max-width:600px;margin:10px auto;background:#222;border-radius:30px;padding:4px}
+.tab button{flex:1;background:transparent;color:#888;padding:12px}.tab button.active{background:#00ff88;color:#000}
+.q-item{background:#222;padding:12px;border-radius:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
+.opt{width:44px;height:44px;border:2px solid #555;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin:0 4px;cursor:pointer;font-weight:800}
+.opt.sel{background:#00ff88;color:#000;border-color:#00ff88}
+.pdf-viewer{width:100%;height:600px;border:2px solid #00ff88;border-radius:12px;background:#fff}
+table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{padding:6px;border-bottom:1px solid #333;text-align:left}
+</style>
+</head>
+<body>
+<h2 style="color:#00ff88">📄 AVALIAÇÃO - SÓ ÚLTIMO ENVIO</h2>
+
+<div class="tab">
+  <button id="tabProf" class="active" onclick="showTab('prof')">👨‍🏫 PROFESSOR</button>
+  <button id="tabAluno" onclick="showTab('aluno')">👨‍🎓 ALUNO</button>
+</div>
+
+<div id="loginProf" class="card" style="max-width:420px">
+  <h3 style="text-align:center;color:#00ff88">🔒 PROFESSOR</h3>
+  <input id="inputSenhaMestre" type="password" placeholder="Senha mestre">
+  <button class="btn-go" onclick="fazerLogin()" style="width:100%">ENTRAR</button>
+  <p id="msgLogin" style="text-align:center;color:#ff5252;font-size:13px"></p>
+  <hr style="border-color:#333">
+  <input id="novaSenhaMestre" type="password" placeholder="Criar senha mestre">
+  <input id="confirmaSenha" type="password" placeholder="Confirmar">
+  <button class="btn-sec" onclick="criarSenhaMestre()" style="width:100%">CRIAR</button>
+</div>
+
+<div id="areaProf" style="display:none">
+  <div class="card" style="display:flex;justify-content:space-between"><h3 style="color:#00ff88;margin:0">Professor ✅</h3><button class="btn-red" style="padding:8px 12px;font-size:12px" onclick="sair()">SAIR</button></div>
+
+  <div class="card">
+    <h3 style="color:#00ff88;margin:0 0 8px">Configurar Prova</h3>
+    <input id="nomeProva" value="AVALIACAO 8º ANO">
+    <input id="senhaUnica" placeholder="Senha do aluno">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><small>INÍCIO</small><input id="dataInicio" type="datetime-local"></div>
+      <div><small>FIM</small><input id="dataFim" type="datetime-local"></div>
+    </div>
+    <button class="btn-sec" style="width:100%;font-size:11px" onclick="setData(23,8,2026,'08:00','10:00')">Definir 23/08 08:00 às 10:00</button>
+    <input id="qtdQuestoes" type="number" placeholder="Nº questões">
+    <textarea id="gabaritoProf" rows="2" placeholder="Gabarito: A,B,C,D..."></textarea>
+    <input type="file" id="pdfFile" accept="application/pdf" onchange="loadPDF(this)">
+    <div id="pdfInfo" style="color:#00ff88;font-size:12px"></div>
+    <button class="btn-go" onclick="salvar()" style="width:100%">💾 SALVAR</button>
+  </div>
+
+  <div class="card">
+    <h3>Prova Ativa</h3><div id="listaProvas"></div>
+    <button class="btn-orange" onclick="exportarBackup()" style="width:100%">💾 BACKUP</button>
+    <button class="btn-sec" onclick="importarBackup()" style="width:100%">📥 RESTAURAR</button>
+    <input type="file" id="fileBackup" accept=".json" style="display:none" onchange="lerBackup(this)">
+  </div>
+
+  <div class="card">
+    <h3>Resultados - Só último envio</h3>
+    <div id="tabRes"></div>
+    <hr style="border-color:#333;margin:10px 0">
+    <button class="btn-purple" onclick="limparDuplicatas()" style="width:100%">🧹 MANTER SÓ ÚLTIMO DE CADA ALUNO (Limpar duplicatas)</button>
+    <small style="color:#888;display:block;margin-top:6px">Esse botão vai apagar as duplicatas do RODRIGO GARDONI e deixar só a última nota dele (4/10 40% de 15:37:23)</small>
+    <button class="btn-excel" onclick="baixar()" style="width:100%;margin-top:8px">📊 BAIXAR EXCEL (sem duplicatas)</button>
+    <button class="btn-red" onclick="limpar()" style="width:100%">🗑️ APAGAR TUDO</button>
+  </div>
+</div>
+
+<div id="areaAluno" style="display:none">
+  <div class="card">
+    <h3 style="color:#2962ff">Aluno</h3>
+    <div id="statusProvaAluno"></div>
+    <input id="alunoNome" placeholder="Nome completo">
+    <input id="alunoCodigo" placeholder="Código / RA">
+    <input id="alunoSenha" type="password" placeholder="Senha da prova">
+    <button class="btn-blue" onclick="abrir()" style="width:100%">ABRIR</button>
+  </div>
+  <div id="areaProva" class="card" style="display:none;max-width:900px">
+    <h3 id="titProva"></h3><p id="infoAl" style="color:#888"></p>
+    <div id="cronometro" style="font-size:22px;color:#00ff88;font-weight:900;text-align:center;background:#000;padding:8px;border-radius:10px">⏰ --:--:--</div>
+    <iframe id="pdfView" class="pdf-viewer"></iframe>
+    <h4 style="color:#00ff88">Gabarito:</h4><div id="qs"></div>
+    <button class="btn-go" onclick="enviar()" style="width:100%;margin-top:15px">✅ ENVIAR</button>
+  </div>
+  <div id="resAl" class="card" style="display:none"></div>
+</div>
+
+<script>
+let senhaMestreSalva=localStorage.getItem('senha_mestre_prof');
+let provas=JSON.parse(localStorage.getItem('avaliacao_pdf_horario')||'[]');
+let resultados=JSON.parse(localStorage.getItem('res_avaliacao_horario')||'[]');
+let pdfAtual=null, provaAtual=null, respostas=[], logado=false, timerInterval=null;
+
+function showTab(t){if(t=='prof'){if(!logado){loginProf.style.display='block'; areaProf.style.display='none';}else{loginProf.style.display='none'; areaProf.style.display='block';} areaAluno.style.display='none';}else{areaAluno.style.display='block'; areaProf.style.display='none'; loginProf.style.display='none'; mostrarStatusAluno();} tabProf.classList.toggle('active', t=='prof'); tabAluno.classList.toggle('active', t=='aluno');}
+function criarSenhaMestre(){let n=novaSenhaMestre.value.trim(), c=confirmaSenha.value.trim(); if(n.length<4||n!=c){alert("Min 4 e iguais");return;} localStorage.setItem('senha_mestre_prof', n); senhaMestreSalva=n; alert("Criada"); novaSenhaMestre.value=''; confirmaSenha.value='';}
+function fazerLogin(){if(inputSenhaMestre.value.trim()==senhaMestreSalva){logado=true; loginProf.style.display='none'; areaProf.style.display='block'; render();}else msgLogin.innerText='Incorreta';}
+function sair(){logado=false; areaProf.style.display='none'; loginProf.style.display='block';}
+function setData(d,m,a,hi,hf){let dia=String(d).padStart(2,'0'), mes=String(m).padStart(2,'0'); dataInicio.value=`${a}-${mes}-${dia}T${hi}`; dataFim.value=`${a}-${mes}-${dia}T${hf}`;} setData(23,8,2026,'08:00','10:00');
+function loadPDF(i){let f=i.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{pdfAtual=e.target.result; pdfInfo.innerText=`✅ ${f.name}`}; r.readAsDataURL(f);}
+function salvar(){let nome=nomeProva.value.trim(), senha=senhaUnica.value.trim(), ini=dataInicio.value, fim=dataFim.value, qtd=parseInt(qtdQuestoes.value), gab=gabaritoProf.value.split(',').map(s=>s.trim().toUpperCase()).filter(s=>s); if(!nome||!senha||!ini||!fim||!qtd||!gab.length){alert("Preencha tudo");return;} let obj={nome:nome, senha:senha, inicio:ini, fim:fim, qtd:qtd, gabarito:gab, pdf:pdfAtual||provas[0]?.pdf, data:new Date().toLocaleString()}; provas=[obj]; localStorage.setItem('avaliacao_pdf_horario', JSON.stringify(provas)); alert("Salvo!"); render();}
+function render(){let div=listaProvas; if(!provas.length){div.innerHTML='<small>Nenhuma</small>';return;} let p=provas[0], ini=new Date(p.inicio), fim=new Date(p.fim); div.innerHTML=`<div style="background:#222;padding:10px;border-radius:10px"><b style="color:#00ff88">${p.nome}</b><br><small>Senha: <b style="color:#ffeb3b">${p.senha}</b> | ${ini.toLocaleString()} → ${fim.toLocaleString()}</small></div>`; renderRes();}
+function mostrarStatusAluno(){let div=statusProvaAluno; if(!provas.length){div.innerHTML='Sem prova';return;} let p=provas[0], agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim); if(agora<ini) div.innerHTML=`<small>Abre ${ini.toLocaleString()}</small>`; else if(agora>fim) div.innerHTML=`<small>Encerrou ${fim.toLocaleString()}</small>`; else div.innerHTML=`<small style="color:#00ff88">ABERTA até ${fim.toLocaleString()}</small>`;}
+function abrir(){let nome=alunoNome.value.trim().toUpperCase(), cod=alunoCodigo.value.trim(), senha=alunoSenha.value.trim(); if(!nome||!cod||!senha){alert("Preencha tudo");return;} let p=provas[0]; if(p.senha!=senha){alert("Senha incorreta");return;} let agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim); if(agora<ini||agora>fim){alert("Fora do horário");return;} provaAtual=p; respostas=new Array(p.qtd).fill(''); titProva.innerText=p.nome; infoAl.innerText=`Aluno: ${nome} | ${cod}`; pdfView.src=p.pdf; let c=qs; c.innerHTML=''; for(let i=0;i<p.qtd;i++){c.innerHTML+=`<div class="q-item"><b>${i+1}</b><div><span class="opt" id="q${i}A" onclick="marcar(${i},'A')">A</span><span class="opt" id="q${i}B" onclick="marcar(${i},'B')">B</span><span class="opt" id="q${i}C" onclick="marcar(${i},'C')">C</span><span class="opt" id="q${i}D" onclick="marcar(${i},'D')">D</span></div></div>`;} areaProva.style.display='block'; areaProva.dataset.nome=nome; areaProva.dataset.cod=cod; if(timerInterval) clearInterval(timerInterval); timerInterval=setInterval(()=>{let d=fim-new Date(); if(d<=0){clearInterval(timerInterval); enviar(); return;} let h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000), s=Math.floor((d%60000)/1000); cronometro.innerText=`⏰ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;},1000);}
+function marcar(q,l){respostas[q]=l; ['A','B','C','D'].forEach(x=>document.getElementById(`q${q}${x}`).classList.toggle('sel',x==l));}
+function enviar(){
+ if(timerInterval) clearInterval(timerInterval);
+ let ac=0; for(let i=0;i<provaAtual.qtd;i++) if(respostas[i]==provaAtual.gabarito[i]) ac++;
+ let perc=(ac/provaAtual.qtd*100).toFixed(1), nome=areaProva.dataset.nome, cod=areaProva.dataset.cod;
+ let novo={nome:nome, codigo:cod, prova:provaAtual.nome, acertos:ac, total:provaAtual.qtd, nota:perc, respostas:respostas.join(','), data:new Date().toLocaleString(), timestamp:Date.now()};
+ let idx=resultados.findIndex(r=>r.codigo.toUpperCase()===cod.toUpperCase());
+ if(idx>=0){resultados[idx]=novo;} else {resultados.push(novo);}
+ localStorage.setItem('res_avaliacao_horario', JSON.stringify(resultados));
+ areaProva.style.display='none'; resAl.style.display='block'; resAl.innerHTML=`<h3 style="color:#00ff88">✅ Enviado!</h3><b>${nome}</b><br>${ac}/${provaAtual.qtd} = ${perc}%<br><small>${new Date().toLocaleString()}</small><br><br><button class="btn-blue" onclick="location.reload()" style="width:100%">Sair</button>`; renderRes();
+}
+function renderRes(){
+ let div=tabRes; if(!resultados.length){div.innerHTML='<small>Nenhum resultado</small>';return;}
+ let ord=[...resultados].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+ div.innerHTML=`<table><tr><th>ALUNO</th><th>NOTA</th><th>DATA</th></tr>`+ord.map(r=>`<tr><td><b>${r.nome}</b><br><small>${r.codigo}</small></td><td>${r.acertos}/${r.total} ${r.nota}%</td><td><small>${r.data}</small></td></tr>`).join('')+`</table><br><small>Total únicos: ${resultados.length}</small>`;
+}
+
+// *** NOVA FUNÇÃO PARA LIMPAR DUPLICATAS DO PRINT ***
+function limparDuplicatas(){
+ if(!resultados.length){alert("Nenhum resultado"); return;}
+ if(!confirm(`Você tem ${resultados.length} registros com duplicatas.\n\nExemplo do print:\nRODRIGO GARDONI 5/10 50% 15:35:59\nRODRIGO GARDONI 4/10 40% 15:37:23\n\nVai manter só o ÚLTIMO de cada aluno.\n\nConfirmar?`)) return;
+
+ let mapa = new Map();
+ // Ordena do mais antigo para o mais novo, para o último sobrescrever
+ let temp = [...resultados].sort((a,b)=>{
+   let ta = a.timestamp || new Date(a.data.replace(',', '').replace(/(\d+)\/(\d+)\/(\d+),/,'$3-$2-$1T')).getTime() || 0;
+   let tb = b.timestamp || new Date(b.data.replace(',', '').replace(/(\d+)\/(\d+)\/(\d+),/,'$3-$2-$1T')).getTime() || 0;
+   return ta - tb;
+ });
+
+ temp.forEach(r=>{
+   let chave = r.codigo? r.codigo.toUpperCase().trim() : r.nome.toUpperCase().trim();
+   mapa.set(chave, r);
+ });
+
+ let antes = resultados.length;
+ resultados = Array.from(mapa.values());
+ localStorage.setItem('res_avaliacao_horario', JSON.stringify(resultados));
+ alert(`✅ Limpeza feita!\n\nAntes: ${antes} registros\nAgora: ${resultados.length} alunos únicos\n\nO RODRIGO GARDONI agora só tem 1 registro: o último de 15:37:23 (4/10 40%)`);
+ renderRes();
+}
+
+function baixar(){if(!resultados.length){alert('Vazio');return;} let csv='NOME;CODIGO;PROVA;ACERTOS;TOTAL;NOTA;RESPOSTAS;DATA_ULTIMO\n'; resultados.forEach(r=>csv+=`${r.nome};${r.codigo};${r.prova};${r.acertos};${r.total};${r.nota}%;${r.respostas};${r.data}\n`); let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='RESULTADOS_UNICOS.csv'; a.click();}
+function limpar(){if(confirm('Apagar tudo?')){let s=prompt('Senha mestre:'); if(s==senhaMestreSalva){resultados=[]; localStorage.setItem('res_avaliacao_horario', JSON.stringify(resultados)); renderRes();}else alert('Senha incorreta');}}
+function exportarBackup(){let b={senha_mestre:senhaMestreSalva, provas:provas, resultados:resultados}; let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(b)],{type:'application/json'})); a.download=`BACKUP_${new Date().toISOString().slice(0,10)}.json`; a.click();}
+function importarBackup(){fileBackup.click();}
+function lerBackup(i){let f=i.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{try{let b=JSON.parse(e.target.result); localStorage.setItem('senha_mestre_prof', b.senha_mestre); localStorage.setItem('avaliacao_pdf_horario', JSON.stringify(b.provas)); localStorage.setItem('res_avaliacao_horario', JSON.stringify(b.resultados)); alert('Restaurado!'); location.reload();}catch{alert('Inválido');}}; r.readAsText(f);}
+if(senhaMestreSalva) msgLogin.innerText='Senha criada. Faça login.'; render();
+</script>
+</body>
+</html>
