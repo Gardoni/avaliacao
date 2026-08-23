@@ -94,7 +94,7 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
   <div class="card" style="max-width:500px;width:100%">
     <h3 style="color:#ffca28;margin-top:0">✏️ EDITAR</h3>
     <input type="hidden" id="editId">
-    <input id="editNome" placeholder="Nome"><input id="editCodigo" placeholder="Código">
+    <input id="editNome" placeholder="Nome"><input id="editCodigo" placeholder="Sala">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
       <input id="editAcertos" type="number" placeholder="Acertos"><input id="editTotal" type="number" placeholder="Total">
     </div>
@@ -110,7 +110,9 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
   <div class="card">
     <h3 style="color:#2962ff">Aluno</h3>
     <div id="statusProvaAluno"></div>
-    <input id="alunoNome" placeholder="Nome completo"><input id="alunoCodigo" placeholder="Código / RA"><input id="alunoSenha" type="password" placeholder="Senha da sala">
+    <input id="alunoNome" placeholder="Nome completo">
+    <input id="alunoCodigo" placeholder="Sala">
+    <input id="alunoSenha" type="password" placeholder="Senha da sala">
     <button class="btn-blue" onclick="abrir()" style="width:100%">ABRIR</button>
   </div>
   <div id="areaProva" class="card" style="display:none;max-width:900px">
@@ -244,7 +246,7 @@ window.abrir = function(){
   if(!nome||!cod||!senha){alert("Preencha");return;}
   let lista=window.todasProvas||[]; let p=lista.find(x=>x.senha==senha); if(!p){alert("Senha não encontrada");return;}
   let agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim); if(agora<ini||agora>fim){alert("Fora do horário");return;}
-  provaAtual=p; respostas=new Array(p.qtd).fill(''); titProva.innerText=`${p.nome} | Prof: ${p.professorNome}`; infoAl.innerText=`Aluno: ${nome} | ${cod}`;
+  provaAtual=p; respostas=new Array(p.qtd).fill(''); titProva.innerText=`${p.nome} | Prof: ${p.professorNome}`; infoAl.innerText=`Aluno: ${nome} | Sala: ${cod}`;
   if(p.pdf){document.getElementById('nomePDF').innerText=p.nome+".pdf"; let btn=document.getElementById('btnBaixarPDF'); btn.href=p.pdf; btn.download=`${p.nome}.pdf`; pdfView.src=p.pdf;}
   let c=qs; c.innerHTML=''; for(let i=0;i<p.qtd;i++){c.innerHTML+=`<div class="q-item"><b>${i+1}</b><div><span class="opt" id="q${i}A" onclick="marcar(${i},'A')">A</span><span class="opt" id="q${i}B" onclick="marcar(${i},'B')">B</span><span class="opt" id="q${i}C" onclick="marcar(${i},'C')">C</span><span class="opt" id="q${i}D" onclick="marcar(${i},'D')">D</span></div></div>`;}
   areaProva.style.display='block'; areaProva.dataset.nome=nome; areaProva.dataset.cod=cod;
@@ -256,23 +258,23 @@ window.enviar = async function(){
  if(timerInterval) clearInterval(timerInterval);
  let ac=0; for(let i=0;i<provaAtual.qtd;i++) if(respostas[i]==provaAtual.gabarito[i]) ac++;
  let perc=(ac/provaAtual.qtd*100).toFixed(1), nome=areaProva.dataset.nome, cod=areaProva.dataset.cod;
- let idResultado=`${provaAtual.id}_${cod.trim().toUpperCase().replace(/[^A-Z0-9]/g,'_')}`;
+ let idResultado=`${provaAtual.id}_${cod.trim().toUpperCase().replace(/[^A-Z0-9]/g,'_')}_${nome.replace(/[^A-Z0-9]/g,'_')}`;
  let novo={id:idResultado, provaId:provaAtual.id, provaNome:provaAtual.nome, professorId:provaAtual.professorId, professorNome:provaAtual.professorNome, nome:nome, codigo:cod.toUpperCase(), acertos:ac, total:provaAtual.qtd, nota:perc, respostas:respostas.join(','), data:new Date().toLocaleString(), timestamp:Date.now()};
  await setDoc(doc(db,"resultados",idResultado),novo,{merge:true});
- areaProva.style.display='none'; resAl.style.display='block'; resAl.innerHTML=`<h3 style="color:#00ff88">✅ Enviado!</h3><b>${nome}</b> ${ac}/${provaAtual.qtd} = ${perc}%<br><br><button class="btn-blue" onclick="location.reload()" style="width:100%">Sair</button>`;
+ areaProva.style.display='none'; resAl.style.display='block'; resAl.innerHTML=`<h3 style="color:#00ff88">✅ Enviado!</h3><b>${nome}</b> Sala: ${cod} - ${ac}/${provaAtual.qtd} = ${perc}%<br><br><button class="btn-blue" onclick="location.reload()" style="width:100%">Sair</button>`;
 }
 window.renderRes = function(){
  let div=tabRes; let filtro=document.getElementById('filtroSala')?.value || "TODAS";
  let lista=filtro=="TODAS"?resultados:resultados.filter(r=>r.provaId==filtro);
  if(!lista.length){div.innerHTML='<small>Nenhum resultado</small>';return;}
  let ord=[...lista].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
- div.innerHTML=`<table><tr><th>ALUNO</th><th>NOTA</th><th>AÇÃO</th></tr>`+ord.map(r=>`<tr><td><b>${r.nome}</b><br><small>${r.codigo}</small></td><td>${r.acertos}/${r.total} ${r.nota}%</td><td><button class="btn-edit" onclick="editarResultado('${r.id}')">✏️</button><button class="btn-red" onclick="apagarResultado('${r.id}')">🗑️</button></td></tr>`).join('')+`</table>`;
+ div.innerHTML=`<table><tr><th>ALUNO</th><th>NOTA</th><th>AÇÃO</th></tr>`+ord.map(r=>`<tr><td><b>${r.nome}</b><br><small>Sala: ${r.codigo}</small></td><td>${r.acertos}/${r.total} ${r.nota}%</td><td><button class="btn-edit" onclick="editarResultado('${r.id}')">✏️</button><button class="btn-red" onclick="apagarResultado('${r.id}')">🗑️</button></td></tr>`).join('')+`</table>`;
 }
 window.apagarResultado = async function(id){if(!confirm("Apagar?"))return; await deleteDoc(doc(db,"resultados",id)); await carregarDaNuvem();}
 window.baixar = function(){
  let filtro=document.getElementById('filtroSala')?.value || "TODAS"; let lista=filtro=="TODAS"?resultados:resultados.filter(r=>r.provaId==filtro);
  if(!lista.length){alert('Vazio');return;}
- let csv='PROFESSOR;SALA;NOME;CODIGO;ACERTOS;TOTAL;NOTA;RESPOSTAS;DATA\n';
+ let csv='PROFESSOR;SALA;NOME;SALA_ALUNO;ACERTOS;TOTAL;NOTA;RESPOSTAS;DATA\n';
  lista.forEach(r=>csv+=`${r.professorNome};${r.provaNome};${r.nome};${r.codigo};${r.acertos};${r.total};${r.nota}%;${r.respostas};${r.data}\n`);
  let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download=`RESULTADOS_${profLogado.usuario}.csv`; a.click();
 }
