@@ -3,32 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AVALIACAO - Sem Duplicatas</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<title>AVALIACAO - Só último envio - Firebase</title>
+<style>
+body{font-family:system-ui;background:#0a0a0a;color:#fff;text-align:center;padding:10px;margin:0}
+.card{background:#1a1a1a;padding:16px;border-radius:16px;max-width:600px;margin:10px auto;text-align:left;border:1px solid #333}
+input,textarea{width:100%;padding:12px;margin:6px 0;border-radius:12px;border:none;font-size:15px;box-sizing:border-box}
+button{border:none;padding:14px 20px;font-weight:800;border-radius:30px;margin:5px;cursor:pointer}
+.btn-go{background:#00ff88;color:#000}.btn-blue{background:#2962ff;color:#fff}.btn-red{background:#b71c1c;color:#fff}.btn-excel{background:#00c853;color:#fff}.btn-sec{background:#333;color:#fff}.btn-orange{background:#ff9800;color:#000}.btn-purple{background:#9c27b0;color:#fff}
+.tab{display:flex;max-width:600px;margin:10px auto;background:#222;border-radius:30px;padding:4px}
+.tab button{flex:1;background:transparent;color:#888;padding:12px}.tab button.active{background:#00ff88;color:#000}
+.q-item{background:#222;padding:12px;border-radius:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
+.opt{width:44px;height:44px;border:2px solid #555;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin:0 4px;cursor:pointer;font-weight:800}
+.opt.sel{background:#00ff88;color:#000;border-color:#00ff88}
+.pdf-viewer{width:100%;height:600px;border:2px solid #00ff88;border-radius:12px;background:#fff}
+table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{padding:6px;border-bottom:1px solid #333;text-align:left}
+</style>
 </head>
-<body class="bg-slate-100 p-4">
-<div class="max-w-2xl mx-auto">
-  <div class="bg-white rounded-2xl shadow-xl p-6">
-    <h1 class="text-2xl font-bold text-center">📋 Avaliação</h1>
-    <p class="text-center text-sm text-slate-500 mb-6">Nuvem • Sem duplicatas • Atualiza pelo último</p>
-    <div id="status" class="hidden p-3 rounded-lg text-sm text-center mb-4"></div>
-    <input id="nome" class="w-full p-3 border rounded-xl mb-3" placeholder="Nome do Aluno">
-    <input id="nota" class="w-full p-3 border rounded-xl mb-3" placeholder="Nota">
-    <textarea id="avaliacao" rows="4" class="w-full p-3 border rounded-xl mb-3" placeholder="Avaliação..."></textarea>
-    <button id="btnSalvar" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl">💾 Salvar</button>
-    <div class="grid grid-cols-2 gap-3 mt-3">
-      <button id="btnListar" class="bg-slate-800 text-white py-2.5 rounded-xl text-sm">📂 Ver Todas</button>
-      <button id="btnExportar" class="bg-emerald-600 text-white py-2.5 rounded-xl text-sm">📥 Exportar CSV</button>
+<body>
+<h2 style="color:#00ff88">📄 AVALIAÇÃO - FIREBASE - SÓ ÚLTIMO ENVIO</h2>
+<div id="statusFirebase" style="font-size:12px;color:#888">Conectando Firebase...</div>
+
+<div class="tab">
+  <button id="tabProf" class="active" onclick="showTab('prof')">👨‍🏫 PROFESSOR</button>
+  <button id="tabAluno" onclick="showTab('aluno')">👨‍🎓 ALUNO</button>
+</div>
+
+<div id="loginProf" class="card" style="max-width:420px">
+  <h3 style="text-align:center;color:#00ff88">🔒 PROFESSOR</h3>
+  <input id="inputSenhaMestre" type="password" placeholder="Senha mestre">
+  <button class="btn-go" onclick="fazerLogin()" style="width:100%">ENTRAR</button>
+  <p id="msgLogin" style="text-align:center;color:#ff5252;font-size:13px"></p>
+  <hr style="border-color:#333">
+  <input id="novaSenhaMestre" type="password" placeholder="Criar senha mestre">
+  <input id="confirmaSenha" type="password" placeholder="Confirmar">
+  <button class="btn-sec" onclick="criarSenhaMestre()" style="width:100%">CRIAR</button>
+</div>
+
+<div id="areaProf" style="display:none">
+  <div class="card" style="display:flex;justify-content:space-between"><h3 style="color:#00ff88;margin:0">Professor ✅</h3><button class="btn-red" style="padding:8px 12px;font-size:12px" onclick="sair()">SAIR</button></div>
+  <div class="card">
+    <h3 style="color:#00ff88;margin:0 0 8px">Configurar Prova</h3>
+    <input id="nomeProva" value="AVALIACAO 8º ANO">
+    <input id="senhaUnica" placeholder="Senha do aluno">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><small>INÍCIO</small><input id="dataInicio" type="datetime-local"></div>
+      <div><small>FIM</small><input id="dataFim" type="datetime-local"></div>
     </div>
+    <button class="btn-sec" style="width:100%;font-size:11px" onclick="setData(23,8,2026,'08:00','10:00')">Definir 23/08 08:00 às 10:00</button>
+    <input id="qtdQuestoes" type="number" placeholder="Nº questões">
+    <textarea id="gabaritoProf" rows="2" placeholder="Gabarito: A,B,C,D..."></textarea>
+    <input type="file" id="pdfFile" accept="application/pdf" onchange="loadPDF(this)">
+    <div id="pdfInfo" style="color:#00ff88;font-size:12px"></div>
+    <button class="btn-go" onclick="salvarProva()" style="width:100%">💾 SALVAR NA NUVEM</button>
   </div>
-  <div id="lista" class="bg-white rounded-2xl shadow-xl p-6 mt-4 hidden">
-    <h2 class="font-bold mb-3">Salvas (<span id="total">0</span>)</h2>
-    <div id="itens" class="space-y-3"></div>
+  <div class="card">
+    <h3>Prova Ativa (Nuvem)</h3><div id="listaProvas"></div>
+  </div>
+  <div class="card">
+    <h3>Resultados - Só último envio (Firebase)</h3>
+    <div id="tabRes"></div>
+    <hr style="border-color:#333;margin:10px 0">
+    <button class="btn-purple" onclick="limparDuplicatas()" style="width:100%">🧹 MANTER SÓ ÚLTIMO (Firebase)</button>
+    <small style="color:#888;display:block;margin-top:6px">Agora salva direto na nuvem: se RODRIGO GARDONI enviar 2x, fica só o de 15:37:23 (4/10)</small>
+    <button class="btn-excel" onclick="baixar()" style="width:100%;margin-top:8px">📊 BAIXAR EXCEL (sem duplicatas)</button>
+    <button class="btn-red" onclick="limparTudo()" style="width:100%">🗑️ APAGAR TUDO DA NUVEM</button>
   </div>
 </div>
+
+<div id="areaAluno" style="display:none">
+  <div class="card">
+    <h3 style="color:#2962ff">Aluno</h3>
+    <div id="statusProvaAluno"></div>
+    <input id="alunoNome" placeholder="Nome completo">
+    <input id="alunoCodigo" placeholder="Código / RA">
+    <input id="alunoSenha" type="password" placeholder="Senha da prova">
+    <button class="btn-blue" onclick="abrir()" style="width:100%">ABRIR</button>
+  </div>
+  <div id="areaProva" class="card" style="display:none;max-width:900px">
+    <h3 id="titProva"></h3><p id="infoAl" style="color:#888"></p>
+    <div id="cronometro" style="font-size:22px;color:#00ff88;font-weight:900;text-align:center;background:#000;padding:8px;border-radius:10px">⏰ --:--:--</div>
+    <iframe id="pdfView" class="pdf-viewer"></iframe>
+    <h4 style="color:#00ff88">Gabarito:</h4><div id="qs"></div>
+    <button class="btn-go" onclick="enviar()" style="width:100%;margin-top:15px">✅ ENVIAR PARA NUVEM</button>
+  </div>
+  <div id="resAl" class="card" style="display:none"></div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, setDoc, getDocs, collection, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, getDocs, collection, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCLaqaOCJnkfG4LID1Y5RoFpgEsX9nYGOM",
   authDomain: "testeapi-1ad07.firebaseapp.com",
@@ -40,14 +104,72 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const $ = id => document.getElementById(id);
-let cache=[];
-function showStatus(m,ok=true){const e=$('status');e.textContent=m;e.className=`p-3 rounded-lg text-sm text-center mb-4 ${ok?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}`;e.classList.remove('hidden');setTimeout(()=>e.classList.add('hidden'),3000);}
-function norm(n){return n.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-');}
-async function salvar(){const nome=$('nome').value.trim(),nota=$('nota').value.trim(),aval=$('avaliacao').value.trim();if(!nome||!aval){showStatus('Preencha nome e avaliação',false);return;}$('btnSalvar').textContent='Salvando...';try{await setDoc(doc(db,"avaliacoes",norm(nome)),{nomeOriginal:nome,nota,avaliacao:aval,atualizadoEm:serverTimestamp(),id:norm(nome)},{merge:true});showStatus(`${nome} salvo! Atualiza se já existia`);$('avaliacao').value='';listar();}catch(e){showStatus(e.message,false);}finally{$('btnSalvar').textContent='💾 Salvar';}}
-async function listar(){const snap=await getDocs(collection(db,"avaliacoes"));cache=[];snap.forEach(d=>cache.push(d.data()));cache.sort((a,b)=>(b.atualizadoEm?.seconds||0)-(a.atualizadoEm?.seconds||0));$('total').textContent=cache.length;const c=$('itens');c.innerHTML='';cache.forEach(i=>{const d=document.createElement('div');d.className='border p-3 rounded-xl flex justify-between gap-3';const data=i.atualizadoEm?new Date(i.atualizadoEm.seconds*1000).toLocaleString('pt-BR'):'agora';d.innerHTML=`<div class="flex-1"><div class="font-bold text-sm">${i.nomeOriginal} <span class="text-blue-600 font-normal">${i.nota||''}</span></div><div class="text-sm mt-1" style="white-space:pre-wrap">${i.avaliacao}</div><div class="text-[11px] text-slate-400 mt-1">${data}</div></div><button class="text-red-500 text-xs" data-del="${i.id}">Excluir</button>`;c.appendChild(d);});$('lista').classList.remove('hidden');c.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{if(!confirm('Excluir?'))return;await deleteDoc(doc(db,"avaliacoes",b.dataset.del));listar();});}
-function exportar(){let csv='Nome;Nota;Avaliacao;Data\n';cache.forEach(r=>{csv+=`"${r.nomeOriginal}";"${r.nota||''}";"${r.avaliacao.replace(/"/g,'""')}";"${r.atualizadoEm?new Date(r.atualizadoEm.seconds*1000).toLocaleString('pt-BR'):''}"\n`;});const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='avaliacoes.csv';a.click();}
-$('btnSalvar').onclick=salvar;$('btnListar').onclick=listar;$('btnExportar').onclick=exportar;
+document.getElementById('statusFirebase').innerText = "✅ Firebase conectado: " + firebaseConfig.projectId;
+
+let senhaMestreSalva=localStorage.getItem('senha_mestre_prof');
+let provas=[]; let resultados=[]; let pdfAtual=null, provaAtual=null, respostas=[], logado=false, timerInterval=null;
+
+window.showTab = function(t){if(t=='prof'){if(!logado){loginProf.style.display='block'; areaProf.style.display='none';}else{loginProf.style.display='none'; areaProf.style.display='block';} areaAluno.style.display='none';}else{areaAluno.style.display='block'; areaProf.style.display='none'; loginProf.style.display='none'; mostrarStatusAluno();} tabProf.classList.toggle('active', t=='prof'); tabAluno.classList.toggle('active', t=='aluno');}
+window.criarSenhaMestre = function(){let n=novaSenhaMestre.value.trim(), c=confirmaSenha.value.trim(); if(n.length<4||n!=c){alert("Min 4 e iguais");return;} localStorage.setItem('senha_mestre_prof', n); senhaMestreSalva=n; alert("Criada"); novaSenhaMestre.value=''; confirmaSenha.value='';}
+window.fazerLogin = function(){if(inputSenhaMestre.value.trim()==senhaMestreSalva){logado=true; loginProf.style.display='none'; areaProf.style.display='block'; carregarDaNuvem();}else msgLogin.innerText='Incorreta';}
+window.sair = function(){logado=false; areaProf.style.display='none'; loginProf.style.display='block';}
+window.setData = function(d,m,a,hi,hf){let dia=String(d).padStart(2,'0'), mes=String(m).padStart(2,'0'); dataInicio.value=`${a}-${mes}-${dia}T${hi}`; dataFim.value=`${a}-${mes}-${dia}T${hf}`;}; setData(23,8,2026,'08:00','10:00');
+window.loadPDF = function(i){let f=i.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{pdfAtual=e.target.result; pdfInfo.innerText=`✅ ${f.name} carregado`;}; r.readAsDataURL(f);}
+
+async function carregarDaNuvem(){
+  try{
+    const docRef = await getDoc(doc(db, "config", "prova_ativa"));
+    if(docRef.exists()){ provas=[docRef.data()]; if(!pdfAtual) pdfAtual=provas[0].pdf; } else provas=[];
+    const snap = await getDocs(collection(db, "resultados"));
+    resultados=[]; snap.forEach(d=>resultados.push(d.data()));
+    render(); renderRes();
+  }catch(e){ console.error(e); alert("Erro Firebase: "+e.message); }
+}
+window.salvarProva = async function(){
+  let nome=nomeProva.value.trim(), senha=senhaUnica.value.trim(), ini=dataInicio.value, fim=dataFim.value, qtd=parseInt(qtdQuestoes.value), gab=gabaritoProf.value.split(',').map(s=>s.trim().toUpperCase()).filter(s=>s);
+  if(!nome||!senha||!ini||!fim||!qtd||!gab.length){alert("Preencha tudo");return;}
+  let obj={nome:nome, senha:senha, inicio:ini, fim:fim, qtd:qtd, gabarito:gab, pdf:pdfAtual||provas[0]?.pdf, data:new Date().toLocaleString()};
+  try{ await setDoc(doc(db, "config", "prova_ativa"), obj); provas=[obj]; alert("✅ Salvo na NUVEM!"); render(); }catch(e){alert("Erro: "+e.message);}
+}
+function render(){let div=listaProvas; if(!provas.length){div.innerHTML='<small>Nenhuma prova na nuvem</small>';return;} let p=provas[0], ini=new Date(p.inicio), fim=new Date(p.fim); div.innerHTML=`<div style="background:#222;padding:10px;border-radius:10px"><b style="color:#00ff88">${p.nome}</b><br><small>Senha: <b style="color:#ffeb3b">${p.senha}</b> | ${ini.toLocaleString()} → ${fim.toLocaleString()} | ${p.qtd} questões</small></div>`; renderRes();}
+window.mostrarStatusAluno = function(){let div=statusProvaAluno; if(!provas.length){div.innerHTML='Sem prova na nuvem';return;} let p=provas[0], agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim); if(agora<ini) div.innerHTML=`<small>Abre ${ini.toLocaleString()}</small>`; else if(agora>fim) div.innerHTML=`<small>Encerrou ${fim.toLocaleString()}</small>`; else div.innerHTML=`<small style="color:#00ff88">ABERTA até ${fim.toLocaleString()}</small>`;}
+window.abrir = function(){
+  let nome=alunoNome.value.trim().toUpperCase(), cod=alunoCodigo.value.trim(), senha=alunoSenha.value.trim();
+  if(!nome||!cod||!senha){alert("Preencha tudo");return;}
+  let p=provas[0]; if(p.senha!=senha){alert("Senha incorreta");return;}
+  let agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim); if(agora<ini||agora>fim){alert("Fora do horário");return;}
+  provaAtual=p; respostas=new Array(p.qtd).fill(''); titProva.innerText=p.nome; infoAl.innerText=`Aluno: ${nome} | ${cod}`; pdfView.src=p.pdf;
+  let c=qs; c.innerHTML=''; for(let i=0;i<p.qtd;i++){c.innerHTML+=`<div class="q-item"><b>${i+1}</b><div><span class="opt" id="q${i}A" onclick="marcar(${i},'A')">A</span><span class="opt" id="q${i}B" onclick="marcar(${i},'B')">B</span><span class="opt" id="q${i}C" onclick="marcar(${i},'C')">C</span><span class="opt" id="q${i}D" onclick="marcar(${i},'D')">D</span></div></div>`;}
+  areaProva.style.display='block'; areaProva.dataset.nome=nome; areaProva.dataset.cod=cod;
+  if(timerInterval) clearInterval(timerInterval); timerInterval=setInterval(()=>{let d=fim-new Date(); if(d<=0){clearInterval(timerInterval); enviar(); return;} let h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000), s=Math.floor((d%60000)/1000); cronometro.innerText=`⏰ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;},1000);
+}
+window.marcar = function(q,l){respostas[q]=l; ['A','B','C','D'].forEach(x=>document.getElementById(`q${q}${x}`).classList.toggle('sel',x==l));}
+window.enviar = async function(){
+ if(timerInterval) clearInterval(timerInterval);
+ let ac=0; for(let i=0;i<provaAtual.qtd;i++) if(respostas[i]==provaAtual.gabarito[i]) ac++;
+ let perc=(ac/provaAtual.qtd*100).toFixed(1), nome=areaProva.dataset.nome, cod=areaProva.dataset.cod;
+ let id = cod.trim().toUpperCase().replace(/[^A-Z0-9]/g,'_'); // ID ÚNICO = SEM DUPLICATA
+ let novo={nome:nome, codigo:cod.toUpperCase(), prova:provaAtual.nome, acertos:ac, total:provaAtual.qtd, nota:perc, respostas:respostas.join(','), data:new Date().toLocaleString(), timestamp:Date.now(), id:id};
+ try{
+   await setDoc(doc(db, "resultados", id), novo, {merge:true}); // SEMPRE ATUALIZA PELO ÚLTIMO
+   areaProva.style.display='none'; resAl.style.display='block'; resAl.innerHTML=`<h3 style="color:#00ff88">✅ Enviado para NUVEM!</h3><b>${nome}</b><br>${ac}/${provaAtual.qtd} = ${perc}%<br><small>${new Date().toLocaleString()}</small><br><small style="color:#888">Se enviar de novo, atualiza para o último</small><br><br><button class="btn-blue" onclick="location.reload()" style="width:100%">Sair</button>`;
+   await carregarDaNuvem();
+ }catch(e){alert("Erro ao enviar: "+e.message);}
+}
+function renderRes(){
+ let div=tabRes; if(!resultados.length){div.innerHTML='<small>Nenhum resultado na nuvem</small>';return;}
+ let ord=[...resultados].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+ div.innerHTML=`<table><tr><th>ALUNO</th><th>NOTA</th><th>DATA ÚLTIMO</th></tr>`+ord.map(r=>`<tr><td><b>${r.nome}</b><br><small>${r.codigo}</small></td><td>${r.acertos}/${r.total} ${r.nota}%</td><td><small>${r.data}</small></td></tr>`).join('')+`</table><br><small>Total únicos: ${resultados.length} (sem duplicatas)</small>`;
+}
+window.limparDuplicatas = async function(){
+  alert("No Firebase já está sem duplicatas! O ID é o RA/código. Cada aluno só tem 1 registro, sempre o último.\n\nSe tinha duplicatas no localStorage antigo, elas não foram para a nuvem. Use BAIXAR EXCEL que já vem limpo.");
+  renderRes();
+}
+window.baixar = function(){if(!resultados.length){alert('Vazio');return;} let csv='NOME;CODIGO;PROVA;ACERTOS;TOTAL;NOTA;RESPOSTAS;DATA_ULTIMO\n'; resultados.forEach(r=>csv+=`${r.nome};${r.codigo};${r.prova};${r.acertos};${r.total};${r.nota}%;${r.respostas};${r.data}\n`); let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='RESULTADOS_UNICOS_FIREBASE.csv'; a.click();}
+window.limparTudo = async function(){if(!confirm('Apagar TODOS os resultados da NUVEM?'))return; let s=prompt('Senha mestre:'); if(s!=senhaMestreSalva){alert('Senha incorreta');return;} try{ const snap=await getDocs(collection(db,"resultados")); for(let d of snap.docs){ await deleteDoc(doc(db,"resultados", d.id)); } resultados=[]; renderRes(); alert("Apagado da nuvem!"); }catch(e){alert(e.message);} }
+
+if(senhaMestreSalva) msgLogin.innerText='Senha criada. Faça login.';
+carregarDaNuvem();
 </script>
 </body>
 </html>
