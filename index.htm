@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AVALIACAO - MASTER - Download Celular</title>
+<title>AVALIACAO - MASTER gardoni - Rga@193319</title>
 <style>
 body{font-family:system-ui;background:#0a0a0a;color:#fff;text-align:center;padding:10px;margin:0}
 .card{background:#1a1a1a;padding:16px;border-radius:16px;max-width:750px;margin:10px auto;text-align:left;border:1px solid #333}
@@ -23,7 +23,7 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
 </style>
 </head>
 <body>
-<h2 style="color:#00ff88">📥 DOWNLOAD CELULAR + MASTER GARDONI</h2>
+<h2 style="color:#00ff88">👑 MASTER gardoni - Senha Rga@193319</h2>
 <div id="statusFirebase" style="font-size:12px;color:#888">Conectando...</div>
 
 <div class="tab">
@@ -37,6 +37,7 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
   <input id="profSenha" type="password" placeholder="Senha">
   <button class="btn-go" onclick="loginProfessor()" style="width:100%;font-size:14px;padding:14px">ENTRAR</button>
   <p id="msgLogin" style="text-align:center;font-size:13px;color:#ff5252"></p>
+  <small style="color:#666;display:block;text-align:center">MASTER: gardoni / Rga@193319</small>
 </div>
 
 <div id="areaProf" style="display:none">
@@ -47,13 +48,14 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
 
   <div id="areaAdmin" class="card" style="display:none;border:2px solid #ff1744">
     <h3 style="color:#ff1744;margin:0 0 8px">👑 MASTER - GERENCIAR PROFESSORES</h3>
+    <p style="font-size:12px;color:#888">Sua senha MASTER é Rga@193319 - Só você cria, bloqueia e deleta</p>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
       <input id="novoProfNome" placeholder="Novo usuário ex: maria.silva">
-      <input id="novoProfSenha" type="password" placeholder="Senha">
+      <input id="novoProfSenha" type="password" placeholder="Senha desse prof">
     </div>
     <button class="btn-admin" onclick="criarProfessor()" style="width:100%">+ CRIAR PROFESSOR</button>
     <hr style="border-color:#333;margin:12px 0">
-    <h4 style="margin:5px 0;color:#ff1744">Professores - Bloquear / Deletar</h4>
+    <h4 style="margin:5px 0;color:#ff1744">Professores - Bloquear / Deletar / Senha</h4>
     <div id="listaProfessores"></div>
   </div>
 
@@ -116,21 +118,15 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
   <div id="areaProva" class="card" style="display:none;max-width:900px">
     <h3 id="titProva"></h3><p id="infoAl" style="color:#888"></p>
     <div id="cronometro" style="font-size:20px;color:#00ff88;font-weight:900;text-align:center;background:#000;padding:8px;border-radius:10px">⏰ --:--:--</div>
-    
-    <!-- DOWNLOAD CELULAR -->
     <div id="areaPDF" style="background:#222;padding:15px;border-radius:12px;margin:15px 0;text-align:center;border:2px dashed #00ff88">
       <h4 style="color:#00ff88;margin:0 0 10px">📄 PROVA EM PDF</h4>
       <p id="nomePDF" style="font-size:12px;color:#888"></p>
-      <a id="btnBaixarPDF" href="#" download="prova.pdf" target="_blank" style="text-decoration:none;display:block">
-        <button class="btn-go" style="width:100%;font-size:16px;padding:16px">📥 BAIXAR PROVA NO CELULAR</button>
-      </a>
+      <a id="btnBaixarPDF" href="#" download="prova.pdf" target="_blank" style="text-decoration:none;display:block"><button class="btn-go" style="width:100%;font-size:16px;padding:16px">📥 BAIXAR PROVA NO CELULAR</button></a>
       <button class="btn-blue" onclick="abrirPDFNovaAba()" style="width:100%;margin-top:8px">👁️ ABRIR EM NOVA ABA</button>
-      <small style="color:#888;display:block;margin-top:8px">Clique em BAIXAR, faça a prova e volte aqui para marcar o gabarito</small>
       <div id="pdfViewerDesktop" style="margin-top:10px"><iframe id="pdfView" class="pdf-viewer"></iframe></div>
     </div>
-
     <h4 style="color:#00ff88">Gabarito:</h4><div id="qs"></div>
-    <button class="btn-go" onclick="enviar()" style="width:100%;margin-top:15px">✅ ENVIAR RESPOSTAS</button>
+    <button class="btn-go" onclick="enviar()" style="width:100%;margin-top:15px">✅ ENVIAR</button>
   </div>
   <div id="resAl" class="card" style="display:none"></div>
 </div>
@@ -151,6 +147,7 @@ const db = getFirestore(app);
 
 let profLogado=null, provas=[], resultados=[], pdfAtual=null, provaAtual=null, respostas=[], timerInterval=null, editandoSalaId=null;
 const ADMIN_USER = "gardoni";
+const ADMIN_PASS = "Rga@193319";
 function norm(s){return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'_');}
 window.showTab = function(t){
   if(t=='prof'){if(!profLogado){loginProf.style.display='block'; areaProf.style.display='none';}else{loginProf.style.display='none'; areaProf.style.display='block';} areaAluno.style.display='none';}
@@ -158,7 +155,7 @@ window.showTab = function(t){
   tabProf.classList.toggle('active', t=='prof'); tabAluno.classList.toggle('active', t=='aluno');
 }
 window.criarProfessor = async function(){
-  if(!profLogado || profLogado.id!==ADMIN_USER){alert("Só MASTER");return;}
+  if(!profLogado || profLogado.id!==ADMIN_USER){alert("Só MASTER gardoni");return;}
   let u=novoProfNome.value.trim(), s=novoProfSenha.value.trim();
   if(u.length<3||s.length<4){alert("Min 3 e senha min 4");return;}
   let id=norm(u); if(id===ADMIN_USER){alert("Não pode criar gardoni");return;}
@@ -174,7 +171,7 @@ async function listarProfessores(){
   div.innerHTML=lista.map(p=>`
     <div style="background:#222;padding:10px;border-radius:10px;margin-bottom:8px;border-left:4px solid ${p.bloqueado?'#ff3d00':p.isAdmin?'#ff1744':'#00e676'}">
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap">
-        <div><b>${p.usuario}</b> ${p.isAdmin?'<span class="badge badge-admin">MASTER</span>':p.bloqueado?'<span class="badge badge-blocked">BLOQUEADO</span>':'<span class="badge badge-active">ATIVO</span>'}<br><small style="color:#888">${p.id}</small></div>
+        <div><b>${p.usuario}</b> ${p.isAdmin?'<span class="badge badge-admin">MASTER</span>':p.bloqueado?'<span class="badge badge-blocked">BLOQUEADO</span>':'<span class="badge badge-active">ATIVO</span>'}<br><small style="color:#888">${p.id} | ${p.criadoEm||''}</small></div>
         <div style="display:flex;gap:4px;margin-top:6px">${p.id!==ADMIN_USER?`
           ${p.bloqueado?`<button class="btn-unblock" onclick="desbloquearProfessor('${p.id}')">🔓 DESBLOQUEAR</button>`:`<button class="btn-block" onclick="bloquearProfessor('${p.id}')">🚫 BLOQUEAR</button>`}
           <button class="btn-edit" onclick="resetarSenha('${p.id}')">🔑 SENHA</button>
@@ -189,22 +186,34 @@ window.apagarProfessor = async function(id){if(id===ADMIN_USER){alert("Não pode
 window.resetarSenha = async function(id){let nova=prompt(`Nova senha para ${id}:`); if(!nova||nova.length<4)return; let snap=await getDoc(doc(db,"professores",id)); await setDoc(doc(db,"professores",id),{...snap.data(), senha:nova},{merge:true}); alert(`Senha de ${id}: ${nova}`);}
 window.loginProfessor = async function(){
   let u=profNome.value.trim(), s=profSenha.value.trim(); let id=norm(u);
+  if(!u||!s){msgLogin.innerText="Preencha";return;}
   let snap=await getDoc(doc(db,"professores",id));
-  if(!snap.exists() && id===ADMIN_USER && (s==="1234"||s==="gardoni")){
-    let admin={id:ADMIN_USER, usuario:"gardoni", senha:s, isAdmin:true, bloqueado:false, criadoEm:new Date().toLocaleString(), timestamp:Date.now()};
-    await setDoc(doc(db,"professores",ADMIN_USER), admin); snap=await getDoc(doc(db,"professores",ADMIN_USER));
+  // Cria ou atualiza MASTER com sua senha Rga@193319
+  if(id===ADMIN_USER){
+    if(!snap.exists()){
+      let admin={id:ADMIN_USER, usuario:"gardoni", senha:ADMIN_PASS, isAdmin:true, bloqueado:false, criadoEm:new Date().toLocaleString(), timestamp:Date.now()};
+      await setDoc(doc(db,"professores",ADMIN_USER), admin); snap=await getDoc(doc(db,"professores",ADMIN_USER));
+    } else {
+      // Se já existe mas senha é antiga 1234, atualiza para Rga@193319 automaticamente
+      if(snap.data().senha!==ADMIN_PASS && s===ADMIN_PASS){
+        await setDoc(doc(db,"professores",ADMIN_USER),{...snap.data(), senha:ADMIN_PASS, isAdmin:true, bloqueado:false},{merge:true});
+        snap=await getDoc(doc(db,"professores",ADMIN_USER));
+      }
+    }
   }
-  if(!snap.exists()){msgLogin.innerText="Usuário não existe. Peça ao MASTER.";return;}
-  let dados=snap.data(); if(dados.bloqueado){msgLogin.innerText=`⛔ BLOQUEADO pelo MASTER`;return;} if(dados.senha!=s){msgLogin.innerText="Senha incorreta";return;}
+  if(!snap.exists()){msgLogin.innerText="Usuário não existe. Peça ao MASTER gardoni.";return;}
+  let dados=snap.data();
+  if(dados.bloqueado){msgLogin.innerText=`⛔ BLOQUEADO pelo MASTER`;return;}
+  if(dados.senha!=s){msgLogin.innerText="Senha incorreta";return;}
   profLogado=dados; localStorage.setItem('prof_logado', JSON.stringify(profLogado));
   nomeProfLogado.innerText=profLogado.usuario; idProfLogado.innerText="ID: "+profLogado.id;
-  badgeAdmin.innerHTML=profLogado.id===ADMIN_USER?'<span class="badge badge-admin">MASTER</span>':'<span class="badge badge-prof">PROF</span>';
+  badgeAdmin.innerHTML=profLogado.id===ADMIN_USER?'<span class="badge badge-admin">MASTER Rga@193319</span>':'<span class="badge badge-prof">PROF</span>';
   loginProf.style.display='none'; areaProf.style.display='block';
   document.getElementById('areaAdmin').style.display=(profLogado.id===ADMIN_USER)?'block':'none';
   if(profLogado.id===ADMIN_USER) listarProfessores(); carregarDaNuvem();
 }
 window.sair = function(){profLogado=null; localStorage.removeItem('prof_logado'); areaProf.style.display='none'; loginProf.style.display='block';}
-window.loadPDF = function(i){let f=i.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{pdfAtual=e.target.result; pdfInfo.innerText=`✅ ${f.name} (${(f.size/1024/1024).toFixed(2)} MB)`;}; r.readAsDataURL(f);}
+window.loadPDF = function(i){let f=i.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{pdfAtual=e.target.result; pdfInfo.innerText=`✅ ${f.name}`;}; r.readAsDataURL(f);}
 async function carregarDaNuvem(){
   if(!profLogado) return;
   let snapProvas=await getDocs(collection(db,"provas")); provas=[]; snapProvas.forEach(d=>{let p=d.data(); if(p.professorId==profLogado.id) provas.push(p);});
@@ -244,14 +253,7 @@ window.abrir = function(){
   let lista=window.todasProvas||[]; let p=lista.find(x=>x.senha==senha); if(!p){alert("Senha não encontrada");return;}
   let agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim); if(agora<ini||agora>fim){alert("Fora do horário");return;}
   provaAtual=p; respostas=new Array(p.qtd).fill(''); titProva.innerText=`${p.nome} | Prof: ${p.professorNome}`; infoAl.innerText=`Aluno: ${nome} | ${cod}`;
-  if(p.pdf){
-    document.getElementById('nomePDF').innerText = p.nome + ".pdf";
-    let btn=document.getElementById('btnBaixarPDF'); btn.href=p.pdf; btn.download=`${p.nome}.pdf`;
-    pdfView.src=p.pdf;
-    if(window.innerWidth < 768){
-      setTimeout(()=>{ if(confirm("📥 Baixar prova no celular agora?")) window.open(p.pdf, '_blank'); }, 600);
-    }
-  }
+  if(p.pdf){document.getElementById('nomePDF').innerText=p.nome+".pdf"; let btn=document.getElementById('btnBaixarPDF'); btn.href=p.pdf; btn.download=`${p.nome}.pdf`; pdfView.src=p.pdf;}
   let c=qs; c.innerHTML=''; for(let i=0;i<p.qtd;i++){c.innerHTML+=`<div class="q-item"><b>${i+1}</b><div><span class="opt" id="q${i}A" onclick="marcar(${i},'A')">A</span><span class="opt" id="q${i}B" onclick="marcar(${i},'B')">B</span><span class="opt" id="q${i}C" onclick="marcar(${i},'C')">C</span><span class="opt" id="q${i}D" onclick="marcar(${i},'D')">D</span></div></div>`;}
   areaProva.style.display='block'; areaProva.dataset.nome=nome; areaProva.dataset.cod=cod;
   if(timerInterval) clearInterval(timerInterval);
@@ -284,6 +286,7 @@ window.baixar = function(){
 }
 let salvo=localStorage.getItem('prof_logado');
 if(salvo){try{profLogado=JSON.parse(salvo); nomeProfLogado.innerText=profLogado.usuario; idProfLogado.innerText="ID: "+profLogado.id; badgeAdmin.innerHTML=profLogado.id===ADMIN_USER?'<span class="badge badge-admin">MASTER</span>':'<span class="badge badge-prof">PROF</span>'; loginProf.style.display='none'; areaProf.style.display='block'; document.getElementById('areaAdmin').style.display=(profLogado.id===ADMIN_USER)?'block':'none'; if(profLogado.id===ADMIN_USER) listarProfessores(); carregarDaNuvem();}catch{}}
+document.getElementById('statusFirebase').innerText="✅ Firebase - MASTER gardoni Rga@193319";
 </script>
 </body>
 </html>
