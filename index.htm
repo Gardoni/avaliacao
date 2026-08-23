@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AVALIACAO - Sistema de Provas</title>
+<title>AVALIACAO - Aplicador de Avaliações</title>
 <style>
 body{font-family:system-ui;background:#0a0a0a;color:#fff;text-align:center;padding:10px;margin:0}
 .card{background:#1a1a1a;padding:16px;border-radius:16px;max-width:750px;margin:10px auto;text-align:left;border:1px solid #333}
@@ -23,7 +23,7 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
 </style>
 </head>
 <body>
-<h2 style="color:#00ff88">🎓 Sistema de Avaliação</h2>
+<h2 style="color:#00ff88">📝 Aplicador de Avaliações</h2>
 <div id="statusFirebase" style="font-size:12px;color:#888">Conectando...</div>
 
 <div class="tab">
@@ -192,9 +192,8 @@ window.loginProfessor = async function(){
   }
   if(!snap.exists()){msgLogin.innerText="Usuário não encontrado";return;}
   let dados=snap.data();
-  if(dados.bloqueado){msgLogin.innerText=`⛔ Acesso bloqueado. Contate o administrador.`;return;}
+  if(dados.bloqueado){msgLogin.innerText=`⛔ Usuário Bloqueado`;return;}
   if(dados.senha!=s){msgLogin.innerText="Senha incorreta";return;}
-  // Se for gardoni e senha antiga, atualiza silenciosamente para a nova sem mostrar
   if(id===ADMIN_USER && dados.senha!==ADMIN_PASS && s===ADMIN_PASS){
     await setDoc(doc(db,"professores",ADMIN_USER),{...dados, senha:ADMIN_PASS},{merge:true});
   }
@@ -279,7 +278,7 @@ window.baixar = function(){
 }
 let salvo=localStorage.getItem('prof_logado');
 if(salvo){try{profLogado=JSON.parse(salvo); nomeProfLogado.innerText=profLogado.usuario; idProfLogado.innerText="ID: "+profLogado.id; badgeAdmin.innerHTML=profLogado.isAdmin?'<span class="badge badge-admin">MASTER</span>':'<span class="badge badge-prof">PROF</span>'; loginProf.style.display='none'; areaProf.style.display='block'; document.getElementById('areaAdmin').style.display=(profLogado.isAdmin)?'block':'none'; if(profLogado.isAdmin) listarProfessores(); carregarDaNuvem();}catch{}}
-document.getElementById('statusFirebase').innerText="✅ Firebase conectado";
+document.getElementById('statusFirebase').innerText="✅ Conectado";
 </script>
 </body>
 </html>
