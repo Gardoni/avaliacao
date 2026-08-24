@@ -12,13 +12,16 @@ button{border:none;padding:9px 14px;font-weight:800;border-radius:30px;margin:3p
 .btn-go{background:#00ff88;color:#000}.btn-blue{background:#2962ff;color:#fff}.btn-red{background:#b71c1c;color:#fff}.btn-excel{background:#00c853;color:#fff}.btn-sec{background:#333;color:#fff}.btn-edit{background:#ffca28;color:#000}.btn-admin{background:#ff1744;color:#fff}.btn-block{background:#ff9100;color:#000}.btn-unblock{background:#00e676;color:#000}
 .tab{display:flex;max-width:750px;margin:10px auto;background:#222;border-radius:30px;padding:4px}
 .tab button{flex:1;background:transparent;color:#888;padding:12px}.tab button.active{background:#00ff88;color:#000}
+.subtab{display:flex;gap:6px;margin:10px 0}
+.subtab button{flex:1;padding:10px;font-size:12px}
+.subtab button.activeSub{background:#ff1744;color:#fff}
 .q-item{background:#222;padding:12px;border-radius:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
 .opt{width:44px;height:44px;border:2px solid #555;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin:0 4px;cursor:pointer;font-weight:800}
 .opt.sel{background:#00ff88;color:#000;border-color:#00ff88}
 .pdf-viewer{width:100%;height:500px;border:2px solid #00ff88;border-radius:12px;background:#fff}
 table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{padding:6px;border-bottom:1px solid #333;text-align:left}
 .badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:800;margin:2px}
-.badge-green{background:#00ff88;color:#000}.badge-admin{background:#ff1744;color:#fff}.badge-prof{background:#2962ff;color:#fff}
+.badge-green{background:#00ff88;color:#000}.badge-admin{background:#ff1744;color:#fff}.badge-prof{background:#2962ff;color:#fff}.badge-blocked{background:#ff3d00;color:#fff}.badge-active{background:#00e676;color:#000}
 .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:99;padding:15px}
 .step{display:none}.step.active{display:block}
 </style>
@@ -44,14 +47,35 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
     <div><h3 style="color:#00ff88;margin:0">Prof: <span id="nomeProfLogado"></span> <span id="badgeAdmin"></span></h3><small id="idProfLogado" style="color:#888"></small></div>
     <button class="btn-red" onclick="sair()">SAIR</button>
   </div>
+
   <div id="areaAdmin" class="card" style="display:none;border:2px solid #ff1744">
-    <h3 style="color:#ff1744;margin:0 0 8px">👑 Administração</h3>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="novoProfNome" placeholder="Novo usuário"><input id="novoProfSenha" type="password" placeholder="Senha"></div>
-    <button class="btn-admin" onclick="criarProfessor()" style="width:100%">+ CRIAR PROFESSOR</button><hr style="border-color:#333;margin:12px 0"><div id="listaProfessores"></div>
+    <h3 style="color:#ff1744;margin:0 0 8px">👑 MASTER - Gerenciar Sistema</h3>
+    <div class="subtab">
+      <button id="btnSubProf" class="activeSub" onclick="showSubAdmin('prof')">👨‍🏫 Professores</button>
+      <button id="btnSubAlunos" onclick="showSubAdmin('alunos')">👨‍🎓 Alunos</button>
+    </div>
+
+    <div id="adminProf">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="novoProfNome" placeholder="Novo professor"><input id="novoProfSenha" type="password" placeholder="Senha"></div>
+      <button class="btn-admin" onclick="criarProfessor()" style="width:100%">+ CRIAR PROFESSOR</button>
+      <hr style="border-color:#333;margin:12px 0"><div id="listaProfessores"></div>
+    </div>
+
+    <div id="adminAlunos" style="display:none">
+      <h4 style="color:#2962ff;margin:5px 0">Alunos Cadastrados (<span id="totalAlunosAdmin">0</span>) - MASTER pode criar senha de sala</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <input id="novoAlunoLogin" placeholder="Login aluno ex: joao.8a">
+        <input id="novoAlunoSenha" type="password" placeholder="Senha do aluno">
+      </div>
+      <button class="btn-blue" onclick="criarAlunoPeloMaster()" style="width:100%">+ CRIAR ALUNO / SENHA DE SALA</button>
+      <hr style="border-color:#333;margin:12px 0">
+      <div id="listaAlunosAdmin"></div>
+    </div>
   </div>
+
   <div class="card">
-    <h3 style="color:#00ff88;margin:0 0 8px" id="tituloFormSala">+ Nova Prova - Código</h3>
-    <input id="nomeProva" placeholder="Ex: 8º ANO A - AV1"><input id="senhaUnica" placeholder="CÓDIGO DA PROVA ex: MAT8A">
+    <h3 style="color:#00ff88;margin:0 0 8px" id="tituloFormSala">+ Nova Prova - Código da Sala</h3>
+    <input id="nomeProva" placeholder="Ex: 8º ANO A - AV1"><input id="senhaUnica" placeholder="CÓDIGO DA PROVA ex: MAT8A - aluno digita isso">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><small>INÍCIO</small><input id="dataInicio" type="datetime-local"></div><div><small>FIM</small><input id="dataFim" type="datetime-local"></div></div>
     <input id="qtdQuestoes" type="number" placeholder="Nº questões"><textarea id="gabaritoProf" rows="2" placeholder="Gabarito: A,B,C,D..."></textarea>
     <input type="file" id="pdfFile" accept="application/pdf" onchange="loadPDF(this)"><div id="pdfInfo" style="color:#00ff88;font-size:12px"></div>
@@ -66,35 +90,27 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
 <div id="areaAluno" style="display:none">
   <div id="alunoLogin" class="card" style="max-width:420px">
     <h3 style="color:#2962ff;text-align:center">👨‍🎓 LOGIN ALUNO</h3>
-
     <div id="stepLoginAluno" class="step active">
-      <input id="alunoLoginInput" placeholder="Login - ex: joao.silva">
-      <input id="alunoSenhaAluno" type="password" placeholder="Senha">
+      <input id="alunoLoginInput" placeholder="Login"><input id="alunoSenhaAluno" type="password" placeholder="Senha">
       <button class="btn-blue" onclick="loginAluno()" style="width:100%;padding:14px">ENTRAR / CADASTRAR</button>
       <p id="msgAluno" style="text-align:center;font-size:12px;color:#ff5252"></p>
-      <div style="background:#222;padding:10px;border-radius:10px;margin-top:10px">
-        <small style="color:#888">📝 <b>Primeiro acesso?</b><br>1. Digite um login (ex: joao.8a)<br>2. Crie uma senha<br>3. Clique em ENTRAR - sua conta será criada na hora</small>
-      </div>
+      <small style="color:#666">Primeira vez? Digite login e crie senha. Ou peça para o MASTER criar sua senha de sala.</small>
     </div>
-
     <div id="stepCodigoProva" class="step">
-      <h4 style="color:#00ff88;margin:0">Olá <span id="nomeAlunoLogado"></span> 👋</h4>
-      <hr style="border-color:#333">
-      <p style="font-size:13px">Digite o <b>Código da Prova</b> que o professor passou:</p>
+      <h4 style="color:#00ff88;margin:0">Olá <span id="nomeAlunoLogado"></span> 👋</h4><hr style="border-color:#333">
+      <p style="font-size:13px">Digite o <b>Código da Prova</b>:</p>
       <input id="codigoProvaAluno" placeholder="Código ex: MAT8A">
       <button class="btn-go" onclick="abrirProvaComCodigo()" style="width:100%;padding:14px">📝 ABRIR PROVA</button>
       <button class="btn-sec" onclick="sairAluno()" style="width:100%;margin-top:6px">SAIR</button>
       <div id="listaCodigosDisponiveis" style="font-size:10px;color:#666;margin-top:8px"></div>
     </div>
   </div>
-
   <div id="areaProva" class="card" style="display:none;max-width:900px">
     <h3 id="titProva"></h3><p id="infoAl" style="color:#888"></p>
     <div id="cronometro" style="font-size:20px;color:#00ff88;font-weight:900;text-align:center;background:#000;padding:8px;border-radius:10px">⏰ --:--:--</div>
     <div id="areaPDF" style="background:#222;padding:15px;border-radius:12px;margin:15px 0;text-align:center;border:2px dashed #00ff88">
-      <h4 style="color:#00ff88;margin:0 0 10px">📄 PROVA EM PDF</h4>
-      <p id="nomePDF" style="font-size:12px;color:#888"></p>
-      <a id="btnBaixarPDF" href="#" download="prova.pdf" target="_blank" style="text-decoration:none;display:block"><button class="btn-go" style="width:100%;font-size:16px;padding:16px">📥 BAIXAR PROVA</button></a>
+      <h4 style="color:#00ff88;margin:0 0 10px">📄 PROVA</h4><p id="nomePDF" style="font-size:12px;color:#888"></p>
+      <a id="btnBaixarPDF" href="#" download="prova.pdf" target="_blank" style="text-decoration:none;display:block"><button class="btn-go" style="width:100%;padding:16px">📥 BAIXAR PROVA</button></a>
       <button class="btn-blue" onclick="abrirPDFNovaAba()" style="width:100%;margin-top:8px">👁️ ABRIR EM NOVA ABA</button>
       <div id="pdfViewerDesktop" style="margin-top:10px"><iframe id="pdfView" class="pdf-viewer"></iframe></div>
     </div>
@@ -124,6 +140,14 @@ const ADMIN_USER = "gardoni";
 const ADMIN_PASS = "Rga@193319";
 function norm(s){return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'_');}
 
+window.showSubAdmin = function(t){
+  document.getElementById('adminProf').style.display = t=='prof'?'block':'none';
+  document.getElementById('adminAlunos').style.display = t=='alunos'?'block':'none';
+  document.getElementById('btnSubProf').classList.toggle('activeSub', t=='prof');
+  document.getElementById('btnSubAlunos').classList.toggle('activeSub', t=='alunos');
+  if(t=='alunos') listarAlunosAdmin();
+}
+
 async function carregarSalasParaAluno(){
   try{
     let snap=await getDocs(collection(db,"provas"));
@@ -151,20 +175,21 @@ function verificarAlunoLogado(){
   }
 }
 
+// ALUNO LOGIN
 window.loginAluno = async function(){
   let login=alunoLoginInput.value.trim().toLowerCase(), senha=alunoSenhaAluno.value.trim();
-  if(login.length<3||senha.length<3){msgAluno.innerText="Login min 3 letras e senha min 3";return;}
+  if(login.length<3||senha.length<3){msgAluno.innerText="Login e senha min 3";return;}
   let id=norm(login);
   let snap=await getDoc(doc(db,"alunos",id));
   if(!snap.exists()){
-    let novo={id:id, login:login, nome:login.toUpperCase(), senha:senha, criadoEm:new Date().toLocaleString(), timestamp:Date.now()};
+    let novo={id:id, login:login, nome:login.toUpperCase(), senha:senha, bloqueado:false, criadoPor:"auto", criadoEm:new Date().toLocaleString(), timestamp:Date.now()};
     await setDoc(doc(db,"alunos",id),novo);
     alunoLogado=novo;
     localStorage.setItem('aluno_logado', JSON.stringify(alunoLogado));
-    msgAluno.style.color="#00ff88"; msgAluno.innerText="✅ Conta criada! Bem-vindo!";
   }else{
     let dados=snap.data();
-    if(dados.senha!=senha){msgAluno.style.color="#ff5252"; msgAluno.innerText="Senha incorreta";return;}
+    if(dados.bloqueado){msgAluno.innerText="⛔ Usuário Bloqueado";return;}
+    if(dados.senha!=senha){msgAluno.innerText="Senha incorreta";return;}
     alunoLogado=dados;
     localStorage.setItem('aluno_logado', JSON.stringify(alunoLogado));
   }
@@ -173,18 +198,48 @@ window.loginAluno = async function(){
   document.getElementById('stepCodigoProva').classList.add('active');
   await carregarSalasParaAluno();
 }
+window.sairAluno = function(){alunoLogado=null; localStorage.removeItem('aluno_logado'); document.getElementById('stepCodigoProva').classList.remove('active'); document.getElementById('stepLoginAluno').classList.add('active');}
 
-window.sairAluno = function(){alunoLogado=null; localStorage.removeItem('aluno_logado'); document.getElementById('stepCodigoProva').classList.remove('active'); document.getElementById('stepLoginAluno').classList.add('active'); alunoLoginInput.value=""; alunoSenhaAluno.value=""; msgAluno.innerText="";}
+// MASTER CRIA ALUNO
+window.criarAlunoPeloMaster = async function(){
+  if(profLogado.id!==ADMIN_USER){alert("Só MASTER");return;}
+  let login=novoAlunoLogin.value.trim().toLowerCase(), senha=novoAlunoSenha.value.trim();
+  if(login.length<3||senha.length<3){alert("Min 3");return;}
+  let id=norm(login);
+  await setDoc(doc(db,"alunos",id),{id:id, login:login, nome:login.toUpperCase(), senha:senha, bloqueado:false, criadoPor:profLogado.usuario, criadoEm:new Date().toLocaleString(), timestamp:Date.now()},{merge:true});
+  alert("✅ Aluno "+login+" criado! Senha: "+senha); novoAlunoLogin.value=""; novoAlunoSenha.value=""; listarAlunosAdmin();
+}
+async function listarAlunosAdmin(){
+  if(profLogado.id!==ADMIN_USER) return;
+  let snap=await getDocs(collection(db,"alunos")); let lista=[]; snap.forEach(d=>lista.push(d.data()));
+  lista.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+  document.getElementById('totalAlunosAdmin').innerText=lista.length;
+  document.getElementById('listaAlunosAdmin').innerHTML=lista.map(a=>`
+    <div style="background:#222;padding:10px;border-radius:10px;margin-bottom:8px;border-left:4px solid ${a.bloqueado?'#ff3d00':'#2962ff'}">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap">
+        <div><b>${a.login}</b> ${a.bloqueado?'<span class="badge badge-blocked">BLOQUEADO</span>':'<span class="badge badge-active">ATIVO</span>'}<br><small>${a.criadoPor||''} - ${a.criadoEm||''}</small></div>
+        <div style="display:flex;gap:4px;margin-top:6px">
+          ${a.bloqueado?`<button class="btn-unblock" onclick="desbloquearAluno('${a.id}')">🔓 DESBLOQUEAR</button>`:`<button class="btn-block" onclick="bloquearAluno('${a.id}')">🚫 BLOQUEAR</button>`}
+          <button class="btn-edit" onclick="resetarSenhaAluno('${a.id}')">🔑 SENHA</button>
+          <button class="btn-red" onclick="apagarAluno('${a.id}')">🗑️</button>
+        </div>
+      </div>
+    </div>`).join('') || "<small>Nenhum aluno</small>";
+}
+window.bloquearAluno = async function(id){let snap=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...snap.data(), bloqueado:true},{merge:true}); listarAlunosAdmin();}
+window.desbloquearAluno = async function(id){let snap=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...snap.data(), bloqueado:false},{merge:true}); listarAlunosAdmin();}
+window.apagarAluno = async function(id){if(!confirm("Deletar aluno "+id+"?"))return; await deleteDoc(doc(db,"alunos",id)); listarAlunosAdmin();}
+window.resetarSenhaAluno = async function(id){let nova=prompt("Nova senha para "+id+":"); if(!nova||nova.length<3)return; let snap=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...snap.data(), senha:nova},{merge:true}); alert("Senha alterada para: "+nova);}
 
 window.abrirProvaComCodigo = function(){
   let codigo=codigoProvaAluno.value.trim().toLowerCase();
-  if(!codigo){alert("Digite o código da prova");return;}
+  if(!codigo){alert("Digite o código");return;}
   let lista=window.todasProvas||[];
   let p=lista.find(x=> x.senha.trim().toLowerCase() == codigo);
-  if(!p){alert("Código '"+codigoProvaAluno.value+"' não encontrado. Códigos: "+lista.map(x=>x.senha).join(', '));return;}
+  if(!p){alert("Código '"+codigoProvaAluno.value+"' não encontrado");return;}
   let agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim);
-  if(agora<ini){alert("Ainda não começou: "+p.inicio);return;}
-  if(agora>fim){alert("Já encerrou: "+p.fim);return;}
+  if(agora<ini){alert("Ainda não começou");return;}
+  if(agora>fim){alert("Já encerrou");return;}
   provaAtual=p; respostas=new Array(p.qtd).fill('');
   titProva.innerText=`${p.nome} | Código: ${p.senha} | Prof: ${p.professorNome}`;
   infoAl.innerText=`Aluno: ${alunoLogado.login}`;
@@ -196,24 +251,23 @@ window.abrirProvaComCodigo = function(){
 }
 
 window.criarProfessor = async function(){
-  if(!profLogado || profLogado.id!==ADMIN_USER){alert("Acesso negado");return;}
+  if(profLogado.id!==ADMIN_USER){alert("Só MASTER");return;}
   let u=novoProfNome.value.trim(), s=novoProfSenha.value.trim();
-  if(u.length<3||s.length<4){alert("Min 3 e senha min 4");return;}
-  let id=norm(u); if(id===ADMIN_USER){alert("Não pode criar gardoni");return;}
+  if(u.length<3||s.length<4){alert("Min 3 e 4");return;}
+  let id=norm(u); if(id===ADMIN_USER)return;
   if((await getDoc(doc(db,"professores",id))).exists()){alert("Já existe");return;}
   await setDoc(doc(db,"professores",id),{id:id, usuario:u, senha:s, isAdmin:false, bloqueado:false, criadoEm:new Date().toLocaleString(), timestamp:Date.now()});
-  alert(`✅ Professor ${u} criado!`); novoProfNome.value=""; novoProfSenha.value=""; listarProfessores();
+  alert("✅ Professor criado"); novoProfNome.value=""; novoProfSenha.value=""; listarProfessores();
 }
 async function listarProfessores(){
-  if(!profLogado || profLogado.id!==ADMIN_USER) return;
   let snap=await getDocs(collection(db,"professores")); let lista=[]; snap.forEach(d=>lista.push(d.data()));
   lista.sort((a,b)=> (b.isAdmin?1:0)-(a.isAdmin?1:0));
-  document.getElementById('listaProfessores').innerHTML=lista.map(p=>`<div style="background:#222;padding:10px;border-radius:10px;margin-bottom:8px;border-left:4px solid ${p.bloqueado?'#ff3d00':p.isAdmin?'#ff1744':'#00e676'}"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><div><b>${p.usuario}</b> ${p.isAdmin?'<span class="badge badge-admin">MASTER</span>':p.bloqueado?'<span class="badge" style="background:#ff3d00;color:#fff">BLOQUEADO</span>':'<span class="badge" style="background:#00e676;color:#000">ATIVO</span>'}<br><small>${p.id}</small></div><div style="display:flex;gap:4px;margin-top:6px">${p.id!==ADMIN_USER?`${p.bloqueado?`<button class="btn-unblock" onclick="desbloquearProfessor('${p.id}')">🔓 DESBLOQUEAR</button>`:`<button class="btn-block" onclick="bloquearProfessor('${p.id}')">🚫 BLOQUEAR</button>`}<button class="btn-edit" onclick="resetarSenha('${p.id}')">🔑 SENHA</button><button class="btn-red" onclick="apagarProfessor('${p.id}')">🗑️</button>`:``}</div></div></div>`).join('');
+  document.getElementById('listaProfessores').innerHTML=lista.map(p=>`<div style="background:#222;padding:10px;border-radius:10px;margin-bottom:8px;border-left:4px solid ${p.bloqueado?'#ff3d00':p.isAdmin?'#ff1744':'#00e676'}"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><div><b>${p.usuario}</b> ${p.isAdmin?'<span class="badge badge-admin">MASTER</span>':p.bloqueado?'<span class="badge badge-blocked">BLOQUEADO</span>':'<span class="badge badge-active">ATIVO</span>'}<br><small>${p.id}</small></div><div style="display:flex;gap:4px;margin-top:6px">${p.id!==ADMIN_USER?`${p.bloqueado?`<button class="btn-unblock" onclick="desbloquearProfessor('${p.id}')">🔓</button>`:`<button class="btn-block" onclick="bloquearProfessor('${p.id}')">🚫</button>`}<button class="btn-edit" onclick="resetarSenha('${p.id}')">🔑</button><button class="btn-red" onclick="apagarProfessor('${p.id}')">🗑️</button>`:``}</div></div></div>`).join('');
 }
-window.bloquearProfessor = async function(id){let snap=await getDoc(doc(db,"professores",id)); await setDoc(doc(db,"professores",id),{...snap.data(), bloqueado:true},{merge:true}); listarProfessores();}
-window.desbloquearProfessor = async function(id){let snap=await getDoc(doc(db,"professores",id)); await setDoc(doc(db,"professores",id),{...snap.data(), bloqueado:false},{merge:true}); listarProfessores();}
+window.bloquearProfessor = async function(id){let s=await getDoc(doc(db,"professores",id)); await setDoc(doc(db,"professores",id),{...s.data(), bloqueado:true},{merge:true}); listarProfessores();}
+window.desbloquearProfessor = async function(id){let s=await getDoc(doc(db,"professores",id)); await setDoc(doc(db,"professores",id),{...s.data(), bloqueado:false},{merge:true}); listarProfessores();}
 window.apagarProfessor = async function(id){if(id===ADMIN_USER)return; if(!confirm("Deletar?"))return; await deleteDoc(doc(db,"professores",id)); listarProfessores();}
-window.resetarSenha = async function(id){let nova=prompt("Nova senha:"); if(!nova||nova.length<4)return; let snap=await getDoc(doc(db,"professores",id)); await setDoc(doc(db,"professores",id),{...snap.data(), senha:nova},{merge:true}); alert("Senha alterada");}
+window.resetarSenha = async function(id){let n=prompt("Nova senha:"); if(!n||n.length<4)return; let s=await getDoc(doc(db,"professores",id)); await setDoc(doc(db,"professores",id),{...s.data(), senha:n},{merge:true}); alert("Alterada");}
 window.loginProfessor = async function(){
   let u=profNome.value.trim(), s=profSenha.value.trim(); let id=norm(u);
   if(!u||!s){msgLogin.innerText="Preencha";return;}
@@ -223,7 +277,7 @@ window.loginProfessor = async function(){
   let dados=snap.data(); if(dados.bloqueado){msgLogin.innerText="⛔ Usuário Bloqueado";return;} if(dados.senha!=s){msgLogin.innerText="Senha incorreta";return;}
   profLogado=dados; localStorage.setItem('prof_logado', JSON.stringify(profLogado));
   nomeProfLogado.innerText=profLogado.usuario; idProfLogado.innerText="ID: "+profLogado.id; badgeAdmin.innerHTML=profLogado.isAdmin?'<span class="badge badge-admin">MASTER</span>':'<span class="badge badge-prof">PROF</span>';
-  loginProf.style.display='none'; areaProf.style.display='block'; document.getElementById('areaAdmin').style.display=(profLogado.isAdmin)?'block':'none'; if(profLogado.isAdmin) listarProfessores(); carregarDaNuvem();
+  loginProf.style.display='none'; areaProf.style.display='block'; document.getElementById('areaAdmin').style.display=(profLogado.isAdmin)?'block':'none'; if(profLogado.isAdmin){listarProfessores(); listarAlunosAdmin();} carregarDaNuvem();
 }
 window.sair = function(){profLogado=null; localStorage.removeItem('prof_logado'); areaProf.style.display='none'; loginProf.style.display='block';}
 window.loadPDF = function(i){let f=i.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{pdfAtual=e.target.result; pdfInfo.innerText=`✅ ${f.name}`;}; r.readAsDataURL(f);}
@@ -234,13 +288,13 @@ async function carregarDaNuvem(){
   renderSalas(); renderRes(); await carregarSalasParaAluno();
 }
 window.editarSala = function(id){let p=provas.find(x=>x.id==id); if(!p) return; editandoSalaId=id; nomeProva.value=p.nome; senhaUnica.value=p.senha; dataInicio.value=p.inicio; dataFim.value=p.fim; qtdQuestoes.value=p.qtd; gabaritoProf.value=p.gabarito.join(','); pdfAtual=p.pdf; tituloFormSala.innerText="✏️ Editando: "+p.nome; btnSalvarSala.innerText="💾 ATUALIZAR"; btnCancelarSala.style.display="block"; window.scrollTo({top:0, behavior:'smooth'});}
-window.cancelarEdicaoSala = function(){editandoSalaId=null; nomeProva.value=""; senhaUnica.value=""; dataInicio.value=""; dataFim.value=""; qtdQuestoes.value=""; gabaritoProf.value=""; pdfAtual=null; pdfInfo.innerText=""; tituloFormSala.innerText="+ Nova Prova - Código"; btnSalvarSala.innerText="💾 SALVAR PROVA"; btnCancelarSala.style.display="none";}
+window.cancelarEdicaoSala = function(){editandoSalaId=null; nomeProva.value=""; senhaUnica.value=""; dataInicio.value=""; dataFim.value=""; qtdQuestoes.value=""; gabaritoProf.value=""; pdfAtual=null; pdfInfo.innerText=""; tituloFormSala.innerText="+ Nova Prova - Código da Sala"; btnSalvarSala.innerText="💾 SALVAR PROVA"; btnCancelarSala.style.display="none";}
 window.salvarProva = async function(){
   let nome=nomeProva.value.trim(), senha=senhaUnica.value.trim(), ini=dataInicio.value, fim=dataFim.value, qtd=parseInt(qtdQuestoes.value), gab=gabaritoProf.value.split(',').map(s=>s.trim().toUpperCase()).filter(s=>s);
   if(!nome||!senha||!ini||!fim||!qtd||!gab.length){alert("Preencha tudo");return;}
   let id=editandoSalaId||`${profLogado.id}_${norm(senha)}`;
   let obj={id:id, nome:nome, senha:senha, inicio:ini, fim:fim, qtd:qtd, gabarito:gab, pdf:pdfAtual||"", professorId:profLogado.id, professorNome:profLogado.usuario, data:new Date().toLocaleString(), timestamp:Date.now()};
-  await setDoc(doc(db,"provas",id),obj,{merge:true}); alert(editandoSalaId?"✅ Atualizada!":"✅ Prova salva! Código: "+senha); cancelarEdicaoSala(); await carregarDaNuvem();
+  await setDoc(doc(db,"provas",id),obj,{merge:true}); alert("✅ Prova salva! Código: "+senha); cancelarEdicaoSala(); await carregarDaNuvem();
 }
 function renderSalas(){
   let div=listaProvas; document.getElementById('totalSalas').innerText=provas.length;
@@ -273,7 +327,7 @@ window.renderRes = function(){
  let lista=filtro=="TODAS"?resultados:resultados.filter(r=>r.provaId==filtro);
  if(!lista.length){div.innerHTML='<small>Nenhum resultado</small>';return;}
  let ord=[...lista].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
- div.innerHTML=`<table><tr><th>ALUNO (LOGIN)</th><th>NOTA</th><th>AÇÃO</th></tr>`+ord.map(r=>`<tr><td><b>${r.nome}</b><br><small>${r.loginAluno||r.codigo}</small></td><td>${r.acertos}/${r.total} ${r.nota}%</td><td><button class="btn-edit" onclick="editarResultado('${r.id}')">✏️</button><button class="btn-red" onclick="apagarResultado('${r.id}')">🗑️</button></td></tr>`).join('')+`</table>`;
+ div.innerHTML=`<table><tr><th>ALUNO</th><th>NOTA</th><th>AÇÃO</th></tr>`+ord.map(r=>`<tr><td><b>${r.nome}</b><br><small>${r.loginAluno}</small></td><td>${r.acertos}/${r.total} ${r.nota}%</td><td><button class="btn-edit" onclick="editarResultado('${r.id}')">✏️</button><button class="btn-red" onclick="apagarResultado('${r.id}')">🗑️</button></td></tr>`).join('')+`</table>`;
 }
 window.apagarResultado = async function(id){if(!confirm("Apagar?"))return; await deleteDoc(doc(db,"resultados",id)); await carregarDaNuvem();}
 window.baixar = function(){
@@ -284,7 +338,7 @@ window.baixar = function(){
  let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download=`RESULTADOS_${profLogado.usuario}.csv`; a.click();
 }
 let salvo=localStorage.getItem('prof_logado');
-if(salvo){try{profLogado=JSON.parse(salvo); nomeProfLogado.innerText=profLogado.usuario; idProfLogado.innerText="ID: "+profLogado.id; badgeAdmin.innerHTML=profLogado.isAdmin?'<span class="badge badge-admin">MASTER</span>':'<span class="badge badge-prof">PROF</span>'; loginProf.style.display='none'; areaProf.style.display='block'; document.getElementById('areaAdmin').style.display=(profLogado.isAdmin)?'block':'none'; if(profLogado.isAdmin) listarProfessores(); carregarDaNuvem();}catch{}}
+if(salvo){try{profLogado=JSON.parse(salvo); nomeProfLogado.innerText=profLogado.usuario; idProfLogado.innerText="ID: "+profLogado.id; badgeAdmin.innerHTML=profLogado.isAdmin?'<span class="badge badge-admin">MASTER</span>':'<span class="badge badge-prof">PROF</span>'; loginProf.style.display='none'; areaProf.style.display='block'; document.getElementById('areaAdmin').style.display=(profLogado.isAdmin)?'block':'none'; if(profLogado.isAdmin){listarProfessores(); listarAlunosAdmin();} carregarDaNuvem();}catch{}}
 carregarSalasParaAluno();
 </script>
 </body>
