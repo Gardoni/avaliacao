@@ -12,9 +12,7 @@ button{border:none;padding:9px 14px;font-weight:800;border-radius:30px;margin:3p
 .btn-go{background:#00ff88;color:#000}.btn-blue{background:#2962ff;color:#fff}.btn-red{background:#b71c1c;color:#fff}.btn-excel{background:#00c853;color:#fff}.btn-sec{background:#333;color:#fff}.btn-edit{background:#ffca28;color:#000}.btn-admin{background:#ff1744;color:#fff}.btn-block{background:#ff9100;color:#000}.btn-unblock{background:#00e676;color:#000}
 .tab{display:flex;max-width:750px;margin:10px auto;background:#222;border-radius:30px;padding:4px}
 .tab button{flex:1;background:transparent;color:#888;padding:12px}.tab button.active{background:#00ff88;color:#000}
-.subtab{display:flex;gap:6px;margin:10px 0}
-.subtab button{flex:1;padding:10px;font-size:12px}
-.subtab button.activeSub{background:#ff1744;color:#fff}
+.subtab{display:flex;gap:6px;margin:10px 0}.subtab button{flex:1;padding:10px;font-size:12px}.subtab button.activeSub{background:#ff1744;color:#fff}
 .q-item{background:#222;padding:12px;border-radius:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
 .opt{width:44px;height:44px;border:2px solid #555;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin:0 4px;cursor:pointer;font-weight:800}
 .opt.sel{background:#00ff88;color:#000;border-color:#00ff88}
@@ -54,38 +52,39 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
       <button id="btnSubProf" class="activeSub" onclick="showSubAdmin('prof')">👨‍🏫 Professores</button>
       <button id="btnSubAlunos" onclick="showSubAdmin('alunos')">👨‍🎓 Alunos</button>
     </div>
-
     <div id="adminProf">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="novoProfNome" placeholder="Novo professor"><input id="novoProfSenha" type="password" placeholder="Senha"></div>
       <button class="btn-admin" onclick="criarProfessor()" style="width:100%">+ CRIAR PROFESSOR</button>
       <hr style="border-color:#333;margin:12px 0"><div id="listaProfessores"></div>
     </div>
-
     <div id="adminAlunos" style="display:none">
-      <h4 style="color:#2962ff;margin:5px 0">Alunos Cadastrados (<span id="totalAlunosAdmin">0</span>) - MASTER pode criar senha de sala</h4>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <input id="novoAlunoLogin" placeholder="Login aluno ex: joao.8a">
-        <input id="novoAlunoSenha" type="password" placeholder="Senha do aluno">
-      </div>
-      <button class="btn-blue" onclick="criarAlunoPeloMaster()" style="width:100%">+ CRIAR ALUNO / SENHA DE SALA</button>
-      <hr style="border-color:#333;margin:12px 0">
-      <div id="listaAlunosAdmin"></div>
+      <h4 style="color:#2962ff;margin:5px 0">Alunos Cadastrados (<span id="totalAlunosAdmin">0</span>)</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="novoAlunoLogin" placeholder="Login aluno"><input id="novoAlunoSenha" type="password" placeholder="Senha"></div>
+      <button class="btn-blue" onclick="criarAlunoPeloMaster()" style="width:100%">+ CRIAR ALUNO / SENHA</button>
+      <hr style="border-color:#333;margin:12px 0"><div id="listaAlunosAdmin"></div>
     </div>
   </div>
 
   <div class="card">
     <h3 style="color:#00ff88;margin:0 0 8px" id="tituloFormSala">+ Nova Prova - Código da Sala</h3>
-    <input id="nomeProva" placeholder="Ex: 8º ANO A - AV1"><input id="senhaUnica" placeholder="CÓDIGO DA PROVA ex: MAT8A - aluno digita isso">
+    <input id="nomeProva" placeholder="Ex: 8º ANO A - AV1"><input id="senhaUnica" placeholder="CÓDIGO DA PROVA ex: MAT8A">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><small>INÍCIO</small><input id="dataInicio" type="datetime-local"></div><div><small>FIM</small><input id="dataFim" type="datetime-local"></div></div>
     <input id="qtdQuestoes" type="number" placeholder="Nº questões"><textarea id="gabaritoProf" rows="2" placeholder="Gabarito: A,B,C,D..."></textarea>
     <input type="file" id="pdfFile" accept="application/pdf" onchange="loadPDF(this)"><div id="pdfInfo" style="color:#00ff88;font-size:12px"></div>
     <div style="display:flex;gap:6px"><button class="btn-go" onclick="salvarProva()" style="flex:1" id="btnSalvarSala">💾 SALVAR PROVA</button><button class="btn-sec" onclick="cancelarEdicaoSala()" style="display:none" id="btnCancelarSala">CANCELAR</button></div>
   </div>
+
   <div class="card"><h3>Minhas Salas (<span id="totalSalas">0</span>)</h3><div id="listaProvas"></div></div>
-  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h3 style="margin:0">Resultados</h3><select id="filtroSala" onchange="renderRes()" style="width:auto;max-width:180px"></select></div><div id="tabRes" style="margin-top:10px"></div><button class="btn-excel" onclick="baixar()" style="width:100%;margin-top:8px">📊 BAIXAR EXCEL</button></div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap"><h3 style="margin:0">Resultados - só último envio</h3><select id="filtroSala" onchange="renderRes()" style="width:auto;max-width:180px"></select></div>
+    <button class="btn-sec" onclick="limparDuplicados()" style="width:100%;margin:10px 0;background:#ff9100;color:#000">🧹 LIMPAR DUPLICADOS - DEIXAR SÓ ÚLTIMO</button>
+    <div id="tabRes" style="margin-top:10px"></div>
+    <button class="btn-excel" onclick="baixar()" style="width:100%;margin-top:8px">📊 BAIXAR EXCEL</button>
+  </div>
 </div>
 
-<div id="modalEditar" class="modal"><div class="card" style="max-width:500px;width:100%"><h3 style="color:#ffca28;margin-top:0">✏️ EDITAR</h3><input type="hidden" id="editId"><input id="editNome" placeholder="Nome"><input id="editCodigo" placeholder="Sala"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="editAcertos" type="number" placeholder="Acertos"><input id="editTotal" type="number" placeholder="Total"></div><input id="editNota" type="number" step="0.1" placeholder="Nota"><input id="editRespostas" placeholder="Respostas"><div style="display:flex;gap:8px;margin-top:10px"><button class="btn-go" onclick="salvarEdicaoResultado()" style="flex:1">💾 SALVAR</button><button class="btn-sec" onclick="fecharModal()" style="flex:1">CANCELAR</button></div></div></div>
+<div id="modalEditar" class="modal"><div class="card" style="max-width:500px;width:100%"><h3 style="color:#ffca28;margin-top:0">✏️ EDITAR</h3><input type="hidden" id="editId"><input id="editNome" placeholder="Nome"><input id="editCodigo" placeholder="Login"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="editAcertos" type="number" placeholder="Acertos"><input id="editTotal" type="number" placeholder="Total"></div><input id="editNota" type="number" step="0.1" placeholder="Nota"><input id="editRespostas" placeholder="Respostas"><div style="display:flex;gap:8px;margin-top:10px"><button class="btn-go" onclick="salvarEdicaoResultado()" style="flex:1">💾 SALVAR</button><button class="btn-sec" onclick="fecharModal()" style="flex:1">CANCELAR</button></div></div></div>
 
 <div id="areaAluno" style="display:none">
   <div id="alunoLogin" class="card" style="max-width:420px">
@@ -94,7 +93,6 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
       <input id="alunoLoginInput" placeholder="Login"><input id="alunoSenhaAluno" type="password" placeholder="Senha">
       <button class="btn-blue" onclick="loginAluno()" style="width:100%;padding:14px">ENTRAR / CADASTRAR</button>
       <p id="msgAluno" style="text-align:center;font-size:12px;color:#ff5252"></p>
-      <small style="color:#666">Primeira vez? Digite login e crie senha. Ou peça para o MASTER criar sua senha de sala.</small>
     </div>
     <div id="stepCodigoProva" class="step">
       <h4 style="color:#00ff88;margin:0">Olá <span id="nomeAlunoLogado"></span> 👋</h4><hr style="border-color:#333">
@@ -115,7 +113,7 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
       <div id="pdfViewerDesktop" style="margin-top:10px"><iframe id="pdfView" class="pdf-viewer"></iframe></div>
     </div>
     <h4 style="color:#00ff88">Gabarito:</h4><div id="qs"></div>
-    <button class="btn-go" onclick="enviar()" style="width:100%;margin-top:15px">✅ ENVIAR</button>
+    <button class="btn-go" onclick="enviar()" style="width:100%;margin-top:15px">✅ ENVIAR - SALVA SÓ O ÚLTIMO</button>
   </div>
   <div id="resAl" class="card" style="display:none"></div>
 </div>
@@ -147,7 +145,6 @@ window.showSubAdmin = function(t){
   document.getElementById('btnSubAlunos').classList.toggle('activeSub', t=='alunos');
   if(t=='alunos') listarAlunosAdmin();
 }
-
 async function carregarSalasParaAluno(){
   try{
     let snap=await getDocs(collection(db,"provas"));
@@ -158,13 +155,11 @@ async function carregarSalasParaAluno(){
     }
   }catch(e){ document.getElementById('statusFirebase').innerText="❌ Erro: "+e.message; }
 }
-
 window.showTab = function(t){
   if(t=='prof'){if(!profLogado){loginProf.style.display='block'; areaProf.style.display='none';}else{loginProf.style.display='none'; areaProf.style.display='block';} areaAluno.style.display='none';}
   else{areaAluno.style.display='block'; areaProf.style.display='none'; loginProf.style.display='none'; carregarSalasParaAluno(); verificarAlunoLogado();}
   tabProf.classList.toggle('active', t=='prof'); tabAluno.classList.toggle('active', t=='aluno');
 }
-
 function verificarAlunoLogado(){
   let salvo=localStorage.getItem('aluno_logado');
   if(salvo){
@@ -174,8 +169,6 @@ function verificarAlunoLogado(){
     document.getElementById('stepCodigoProva').classList.add('active');
   }
 }
-
-// ALUNO LOGIN
 window.loginAluno = async function(){
   let login=alunoLoginInput.value.trim().toLowerCase(), senha=alunoSenhaAluno.value.trim();
   if(login.length<3||senha.length<3){msgAluno.innerText="Login e senha min 3";return;}
@@ -188,7 +181,7 @@ window.loginAluno = async function(){
     localStorage.setItem('aluno_logado', JSON.stringify(alunoLogado));
   }else{
     let dados=snap.data();
-    if(dados.bloqueado){msgAluno.innerText="⛔ Usuário Bloqueado";return;}
+    if(dados.bloqueado){msgAluno.innerText="⛔ Bloqueado";return;}
     if(dados.senha!=senha){msgAluno.innerText="Senha incorreta";return;}
     alunoLogado=dados;
     localStorage.setItem('aluno_logado', JSON.stringify(alunoLogado));
@@ -199,37 +192,35 @@ window.loginAluno = async function(){
   await carregarSalasParaAluno();
 }
 window.sairAluno = function(){alunoLogado=null; localStorage.removeItem('aluno_logado'); document.getElementById('stepCodigoProva').classList.remove('active'); document.getElementById('stepLoginAluno').classList.add('active');}
-
-// MASTER CRIA ALUNO
 window.criarAlunoPeloMaster = async function(){
   if(profLogado.id!==ADMIN_USER){alert("Só MASTER");return;}
   let login=novoAlunoLogin.value.trim().toLowerCase(), senha=novoAlunoSenha.value.trim();
   if(login.length<3||senha.length<3){alert("Min 3");return;}
   let id=norm(login);
   await setDoc(doc(db,"alunos",id),{id:id, login:login, nome:login.toUpperCase(), senha:senha, bloqueado:false, criadoPor:profLogado.usuario, criadoEm:new Date().toLocaleString(), timestamp:Date.now()},{merge:true});
-  alert("✅ Aluno "+login+" criado! Senha: "+senha); novoAlunoLogin.value=""; novoAlunoSenha.value=""; listarAlunosAdmin();
+  alert("✅ Aluno "+login+" criado!"); novoAlunoLogin.value=""; novoAlunoSenha.value=""; listarAlunosAdmin();
 }
 async function listarAlunosAdmin(){
-  if(profLogado.id!==ADMIN_USER) return;
+  if(!profLogado || profLogado.id!==ADMIN_USER) return;
   let snap=await getDocs(collection(db,"alunos")); let lista=[]; snap.forEach(d=>lista.push(d.data()));
   lista.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
   document.getElementById('totalAlunosAdmin').innerText=lista.length;
   document.getElementById('listaAlunosAdmin').innerHTML=lista.map(a=>`
     <div style="background:#222;padding:10px;border-radius:10px;margin-bottom:8px;border-left:4px solid ${a.bloqueado?'#ff3d00':'#2962ff'}">
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap">
-        <div><b>${a.login}</b> ${a.bloqueado?'<span class="badge badge-blocked">BLOQUEADO</span>':'<span class="badge badge-active">ATIVO</span>'}<br><small>${a.criadoPor||''} - ${a.criadoEm||''}</small></div>
+        <div><b>${a.login}</b> ${a.bloqueado?'<span class="badge badge-blocked">BLOQUEADO</span>':'<span class="badge badge-active">ATIVO</span>'}<br><small>${a.criadoEm||''}</small></div>
         <div style="display:flex;gap:4px;margin-top:6px">
-          ${a.bloqueado?`<button class="btn-unblock" onclick="desbloquearAluno('${a.id}')">🔓 DESBLOQUEAR</button>`:`<button class="btn-block" onclick="bloquearAluno('${a.id}')">🚫 BLOQUEAR</button>`}
-          <button class="btn-edit" onclick="resetarSenhaAluno('${a.id}')">🔑 SENHA</button>
+          ${a.bloqueado?`<button class="btn-unblock" onclick="desbloquearAluno('${a.id}')">🔓</button>`:`<button class="btn-block" onclick="bloquearAluno('${a.id}')">🚫</button>`}
+          <button class="btn-edit" onclick="resetarSenhaAluno('${a.id}')">🔑</button>
           <button class="btn-red" onclick="apagarAluno('${a.id}')">🗑️</button>
         </div>
       </div>
     </div>`).join('') || "<small>Nenhum aluno</small>";
 }
-window.bloquearAluno = async function(id){let snap=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...snap.data(), bloqueado:true},{merge:true}); listarAlunosAdmin();}
-window.desbloquearAluno = async function(id){let snap=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...snap.data(), bloqueado:false},{merge:true}); listarAlunosAdmin();}
-window.apagarAluno = async function(id){if(!confirm("Deletar aluno "+id+"?"))return; await deleteDoc(doc(db,"alunos",id)); listarAlunosAdmin();}
-window.resetarSenhaAluno = async function(id){let nova=prompt("Nova senha para "+id+":"); if(!nova||nova.length<3)return; let snap=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...snap.data(), senha:nova},{merge:true}); alert("Senha alterada para: "+nova);}
+window.bloquearAluno = async function(id){let s=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...s.data(), bloqueado:true},{merge:true}); listarAlunosAdmin();}
+window.desbloquearAluno = async function(id){let s=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...s.data(), bloqueado:false},{merge:true}); listarAlunosAdmin();}
+window.apagarAluno = async function(id){if(!confirm("Deletar "+id+"?"))return; await deleteDoc(doc(db,"alunos",id)); listarAlunosAdmin();}
+window.resetarSenhaAluno = async function(id){let n=prompt("Nova senha para "+id+":"); if(!n||n.length<3)return; let s=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...s.data(), senha:n},{merge:true}); alert("Senha: "+n);}
 
 window.abrirProvaComCodigo = function(){
   let codigo=codigoProvaAluno.value.trim().toLowerCase();
@@ -274,7 +265,7 @@ window.loginProfessor = async function(){
   let snap=await getDoc(doc(db,"professores",id));
   if(id===ADMIN_USER &&!snap.exists()){await setDoc(doc(db,"professores",ADMIN_USER),{id:ADMIN_USER, usuario:"gardoni", senha:ADMIN_PASS, isAdmin:true, bloqueado:false, timestamp:Date.now()}); snap=await getDoc(doc(db,"professores",ADMIN_USER));}
   if(!snap.exists()){msgLogin.innerText="Usuário não encontrado";return;}
-  let dados=snap.data(); if(dados.bloqueado){msgLogin.innerText="⛔ Usuário Bloqueado";return;} if(dados.senha!=s){msgLogin.innerText="Senha incorreta";return;}
+  let dados=snap.data(); if(dados.bloqueado){msgLogin.innerText="⛔ Bloqueado";return;} if(dados.senha!=s){msgLogin.innerText="Senha incorreta";return;}
   profLogado=dados; localStorage.setItem('prof_logado', JSON.stringify(profLogado));
   nomeProfLogado.innerText=profLogado.usuario; idProfLogado.innerText="ID: "+profLogado.id; badgeAdmin.innerHTML=profLogado.isAdmin?'<span class="badge badge-admin">MASTER</span>':'<span class="badge badge-prof">PROF</span>';
   loginProf.style.display='none'; areaProf.style.display='block'; document.getElementById('areaAdmin').style.display=(profLogado.isAdmin)?'block':'none'; if(profLogado.isAdmin){listarProfessores(); listarAlunosAdmin();} carregarDaNuvem();
@@ -313,28 +304,82 @@ window.fecharModal = function(){document.getElementById('modalEditar').style.dis
 window.salvarEdicaoResultado = async function(){let id=editId.value; let obj={nome:editNome.value.toUpperCase(), codigo:editCodigo.value.toUpperCase(), acertos:parseInt(editAcertos.value), total:parseInt(editTotal.value), nota:parseFloat(editNota.value).toFixed(1), respostas:editRespostas.value.toUpperCase(), data:new Date().toLocaleString()+" (editado)", timestamp:Date.now()}; let r=resultados.find(x=>x.id==id); await setDoc(doc(db,"resultados",id),{...r,...obj},{merge:true}); fecharModal(); await carregarDaNuvem();}
 window.abrirPDFNovaAba = function(){if(provaAtual && provaAtual.pdf) window.open(provaAtual.pdf, '_blank');}
 window.marcar = function(q,l){respostas[q]=l; ['A','B','C','D'].forEach(x=>document.getElementById(`q${q}${x}`).classList.toggle('sel',x==l));}
+
+// *** CORREÇÃO PRINCIPAL: SÓ SALVA ÚLTIMO ENVIO ***
 window.enviar = async function(){
  if(timerInterval) clearInterval(timerInterval);
  let ac=0; for(let i=0;i<provaAtual.qtd;i++) if(respostas[i]==provaAtual.gabarito[i]) ac++;
  let perc=(ac/provaAtual.qtd*100).toFixed(1);
- let idResultado=`${provaAtual.id}_${norm(alunoLogado.login)}_${Date.now()}`;
- let novo={id:idResultado, provaId:provaAtual.id, provaNome:provaAtual.nome, professorId:provaAtual.professorId, professorNome:provaAtual.professorNome, nome:alunoLogado.login.toUpperCase(), loginAluno:alunoLogado.login, codigo:alunoLogado.login, acertos:ac, total:provaAtual.qtd, nota:perc, respostas:respostas.join(','), data:new Date().toLocaleString(), timestamp:Date.now()};
+
+ // ID FIXO = prova + login do aluno (sem timestamp = sobrescreve)
+ let idResultado=`${provaAtual.id}_${norm(alunoLogado.login)}`;
+
+ let snapExistente = null;
+ try { snapExistente = await getDoc(doc(db,"resultados",idResultado)); } catch(e){}
+
+ let tentativas = 1;
+ if(snapExistente && snapExistente.exists()){
+   tentativas = (snapExistente.data().tentativas || 1) + 1;
+ }
+
+ let novo={
+   id:idResultado,
+   provaId:provaAtual.id,
+   provaNome:provaAtual.nome,
+   professorId:provaAtual.professorId,
+   professorNome:provaAtual.professorNome,
+   nome:alunoLogado.login.toUpperCase(),
+   loginAluno:alunoLogado.login,
+   codigo:alunoLogado.login,
+   acertos:ac,
+   total:provaAtual.qtd,
+   nota:perc,
+   respostas:respostas.join(','),
+   data:new Date().toLocaleString() + (tentativas>1? ` (tentativa ${tentativas} - último)` : ''),
+   timestamp:Date.now(),
+   tentativas:tentativas
+ };
+
  await setDoc(doc(db,"resultados",idResultado),novo,{merge:true});
- areaProva.style.display='none'; resAl.style.display='block'; resAl.innerHTML=`<h3 style="color:#00ff88">✅ Enviado!</h3><b>${alunoLogado.login}</b> - ${ac}/${provaAtual.qtd} = ${perc}%<br><br><button class="btn-blue" onclick="location.reload()" style="width:100%">Sair</button>`;
+ areaProva.style.display='none'; resAl.style.display='block';
+ resAl.innerHTML=`<h3 style="color:#00ff88">✅ Enviado!</h3><b>${alunoLogado.login}</b> - ${ac}/${provaAtual.qtd} = ${perc}%<br><small>${tentativas>1?'Atualizado - tentativa '+tentativas:'Primeiro envio'}</small><br><br><button class="btn-blue" onclick="location.reload()" style="width:100%">Sair</button>`;
 }
+
+// LIMPAR DUPLICADOS ANTIGOS
+window.limparDuplicados = async function(){
+  if(!profLogado){alert("Faça login");return;}
+  if(!confirm("Apagar duplicados e deixar só o último de cada aluno por prova?"))return;
+  let snap=await getDocs(collection(db,"resultados"));
+  let mapa={}; let deletar=[];
+  snap.forEach(d=>{
+    let r=d.data();
+    if(r.professorId!=profLogado.id && profLogado.id!=ADMIN_USER) return;
+    let chave=r.provaId+"_"+norm(r.loginAluno||r.nome||r.codigo);
+    if(!mapa[chave] || (r.timestamp||0) > (mapa[chave].timestamp||0)){
+      if(mapa[chave]) deletar.push(mapa[chave].id);
+      mapa[chave]=r;
+    } else {
+      deletar.push(r.id);
+    }
+  });
+  for(let id of deletar){ await deleteDoc(doc(db,"resultados",id)); }
+  alert(`✅ Limpeza feita! ${deletar.length} duplicados apagados. Agora só ficou o último de cada aluno.`);
+  await carregarDaNuvem();
+}
+
 window.renderRes = function(){
  let div=tabRes; let filtro=document.getElementById('filtroSala')?.value || "TODAS";
  let lista=filtro=="TODAS"?resultados:resultados.filter(r=>r.provaId==filtro);
  if(!lista.length){div.innerHTML='<small>Nenhum resultado</small>';return;}
  let ord=[...lista].sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
- div.innerHTML=`<table><tr><th>ALUNO</th><th>NOTA</th><th>AÇÃO</th></tr>`+ord.map(r=>`<tr><td><b>${r.nome}</b><br><small>${r.loginAluno}</small></td><td>${r.acertos}/${r.total} ${r.nota}%</td><td><button class="btn-edit" onclick="editarResultado('${r.id}')">✏️</button><button class="btn-red" onclick="apagarResultado('${r.id}')">🗑️</button></td></tr>`).join('')+`</table>`;
+ div.innerHTML=`<table><tr><th>ALUNO</th><th>NOTA</th><th>AÇÃO</th></tr>`+ord.map(r=>`<tr><td><b>${r.nome}</b><br><small>${r.loginAluno} ${r.tentativas>1?`(${r.tentativas}x)`:""}</small></td><td>${r.acertos}/${r.total} ${r.nota}%</td><td><button class="btn-edit" onclick="editarResultado('${r.id}')">✏️</button><button class="btn-red" onclick="apagarResultado('${r.id}')">🗑️</button></td></tr>`).join('')+`</table>`;
 }
 window.apagarResultado = async function(id){if(!confirm("Apagar?"))return; await deleteDoc(doc(db,"resultados",id)); await carregarDaNuvem();}
 window.baixar = function(){
  let filtro=document.getElementById('filtroSala')?.value || "TODAS"; let lista=filtro=="TODAS"?resultados:resultados.filter(r=>r.provaId==filtro);
  if(!lista.length){alert('Vazio');return;}
- let csv='PROFESSOR;PROVA;LOGIN_ALUNO;ACERTOS;TOTAL;NOTA;RESPOSTAS;DATA\n';
- lista.forEach(r=>csv+=`${r.professorNome};${r.provaNome};${r.loginAluno||r.nome};${r.acertos};${r.total};${r.nota}%;${r.respostas};${r.data}\n`);
+ let csv='PROFESSOR;PROVA;LOGIN_ALUNO;ACERTOS;TOTAL;NOTA;TENTATIVAS;RESPOSTAS;DATA\n';
+ lista.forEach(r=>csv+=`${r.professorNome};${r.provaNome};${r.loginAluno||r.nome};${r.acertos};${r.total};${r.nota}%;${r.tentativas||1};${r.respostas};${r.data}\n`);
  let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download=`RESULTADOS_${profLogado.usuario}.csv`; a.click();
 }
 let salvo=localStorage.getItem('prof_logado');
