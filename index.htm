@@ -60,7 +60,7 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
   <div class="card">
     <h3 style="color:#00ff88;margin:0 0 8px" id="tituloFormSala">+ Nova Sala</h3>
     <input id="nomeProva" placeholder="Ex: 8º ANO A - AV1">
-    <input id="senhaUnica" placeholder="Senha única da sala">
+    <input id="senhaUnica" placeholder="Senha única da sala (ex: 8a2024)">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
       <div><small>INÍCIO</small><input id="dataInicio" type="datetime-local"></div>
       <div><small>FIM</small><input id="dataFim" type="datetime-local"></div>
@@ -109,11 +109,12 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
 <div id="areaAluno" style="display:none">
   <div class="card">
     <h3 style="color:#2962ff">Aluno</h3>
-    <div id="statusProvaAluno"></div>
+    <div id="statusProvaAluno" style="margin-bottom:8px"></div>
     <input id="alunoNome" placeholder="Nome completo">
     <input id="alunoCodigo" placeholder="Sala">
     <input id="alunoSenha" type="password" placeholder="Senha da sala">
     <button class="btn-blue" onclick="abrir()" style="width:100%">ABRIR</button>
+    <div id="debugSenha" style="font-size:10px;color:#666;margin-top:6px"></div>
   </div>
   <div id="areaProva" class="card" style="display:none;max-width:900px">
     <h3 id="titProva"></h3><p id="infoAl" style="color:#888"></p>
@@ -146,12 +147,31 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let profLogado=null, provas=[], resultados=[], pdfAtual=null, provaAtual=null, respostas=[], timerInterval=null, editandoSalaId=null;
+window.todasProvas=[];
 const ADMIN_USER = "gardoni";
 const ADMIN_PASS = "Rga@193319";
 function norm(s){return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'_');}
+
+// CARREGA SALAS PARA ALUNO SEM PRECISAR LOGIN - CORREÇÃO DO BUG
+async function carregarSalasParaAluno(){
+  try{
+    let snap=await getDocs(collection(db,"provas"));
+    window.todasProvas=[];
+    snap.forEach(d=>window.todasProvas.push(d.data()));
+    mostrarStatusAluno();
+    document.getElementById('statusFirebase').innerText="✅ Conectado - "+window.todasProvas.length+" salas encontradas";
+    if(window.todasProvas.length>0){
+      let listaSenhas = window.todasProvas.map(p=>p.senha).join(', ');
+      document.getElementById('debugSenha').innerText="Senhas disponíveis: "+listaSenhas+" (teste digitar igual)";
+    }
+  }catch(e){
+    document.getElementById('statusFirebase').innerText="❌ Erro Firebase: "+e.message;
+  }
+}
+
 window.showTab = function(t){
   if(t=='prof'){if(!profLogado){loginProf.style.display='block'; areaProf.style.display='none';}else{loginProf.style.display='none'; areaProf.style.display='block';} areaAluno.style.display='none';}
-  else{areaAluno.style.display='block'; areaProf.style.display='none'; loginProf.style.display='none'; mostrarStatusAluno();}
+  else{areaAluno.style.display='block'; areaProf.style.display='none'; loginProf.style.display='none'; carregarSalasParaAluno();}
   tabProf.classList.toggle('active', t=='prof'); tabAluno.classList.toggle('active', t=='aluno');
 }
 window.criarProfessor = async function(){
@@ -196,9 +216,6 @@ window.loginProfessor = async function(){
   let dados=snap.data();
   if(dados.bloqueado){msgLogin.innerText=`⛔ Usuário Bloqueado`;return;}
   if(dados.senha!=s){msgLogin.innerText="Senha incorreta";return;}
-  if(id===ADMIN_USER && dados.senha!==ADMIN_PASS && s===ADMIN_PASS){
-    await setDoc(doc(db,"professores",ADMIN_USER),{...dados, senha:ADMIN_PASS},{merge:true});
-  }
   profLogado=dados; localStorage.setItem('prof_logado', JSON.stringify(profLogado));
   nomeProfLogado.innerText=profLogado.usuario; idProfLogado.innerText="ID: "+profLogado.id;
   badgeAdmin.innerHTML=profLogado.isAdmin?'<span class="badge badge-admin">MASTER</span>':'<span class="badge badge-prof">PROF</span>';
@@ -213,7 +230,7 @@ async function carregarDaNuvem(){
   let snapProvas=await getDocs(collection(db,"provas")); provas=[]; snapProvas.forEach(d=>{let p=d.data(); if(p.professorId==profLogado.id) provas.push(p);});
   let snapRes=await getDocs(collection(db,"resultados")); let meusIds=new Set(provas.map(p=>p.id)); resultados=[]; snapRes.forEach(d=>{let r=d.data(); if(meusIds.has(r.provaId)) resultados.push(r);});
   renderSalas(); renderRes();
-  let snapTodas=await getDocs(collection(db,"provas")); window.todasProvas=[]; snapTodas.forEach(d=>window.todasProvas.push(d.data())); mostrarStatusAluno();
+  await carregarSalasParaAluno();
 }
 window.editarSala = function(id){let p=provas.find(x=>x.id==id); if(!p) return; editandoSalaId=id; nomeProva.value=p.nome; senhaUnica.value=p.senha; dataInicio.value=p.inicio; dataFim.value=p.fim; qtdQuestoes.value=p.qtd; gabaritoProf.value=p.gabarito.join(','); pdfAtual=p.pdf; tituloFormSala.innerText="✏️ Editando: "+p.nome; btnSalvarSala.innerText="💾 ATUALIZAR"; btnCancelarSala.style.display="block"; window.scrollTo({top:0, behavior:'smooth'});}
 window.cancelarEdicaoSala = function(){editandoSalaId=null; nomeProva.value=""; senhaUnica.value=""; dataInicio.value=""; dataFim.value=""; qtdQuestoes.value=""; gabaritoProf.value=""; pdfAtual=null; pdfInfo.innerText=""; tituloFormSala.innerText="+ Nova Sala"; btnSalvarSala.innerText="💾 SALVAR"; btnCancelarSala.style.display="none";}
@@ -240,12 +257,22 @@ window.editarResultado = function(id){let r=resultados.find(x=>x.id==id); editId
 window.fecharModal = function(){document.getElementById('modalEditar').style.display='none';}
 window.salvarEdicaoResultado = async function(){let id=editId.value; let obj={nome:editNome.value.toUpperCase(), codigo:editCodigo.value.toUpperCase(), acertos:parseInt(editAcertos.value), total:parseInt(editTotal.value), nota:parseFloat(editNota.value).toFixed(1), respostas:editRespostas.value.toUpperCase(), data:new Date().toLocaleString()+" (editado)", timestamp:Date.now()}; let r=resultados.find(x=>x.id==id); await setDoc(doc(db,"resultados",id),{...r,...obj},{merge:true}); fecharModal(); await carregarDaNuvem();}
 window.abrirPDFNovaAba = function(){if(provaAtual && provaAtual.pdf) window.open(provaAtual.pdf, '_blank');}
-window.mostrarStatusAluno = function(){let div=statusProvaAluno; let lista=window.todasProvas||[]; div.innerHTML=lista.length?`<small style="color:#00ff88">${lista.length} salas ativas</small>`:'<small>Nenhuma sala</small>';}
+window.mostrarStatusAluno = function(){let div=statusProvaAluno; let lista=window.todasProvas||[]; div.innerHTML=lista.length?`<small style="color:#00ff88">${lista.length} salas ativas encontradas</small>`:'<small style="color:#ff5252">Nenhuma sala - verifique Firebase</small>';}
+
 window.abrir = function(){
-  let nome=alunoNome.value.trim().toUpperCase(), cod=alunoCodigo.value.trim(), senha=alunoSenha.value.trim();
-  if(!nome||!cod||!senha){alert("Preencha");return;}
-  let lista=window.todasProvas||[]; let p=lista.find(x=>x.senha==senha); if(!p){alert("Senha não encontrada");return;}
-  let agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim); if(agora<ini||agora>fim){alert("Fora do horário");return;}
+  let nome=alunoNome.value.trim().toUpperCase(), cod=alunoCodigo.value.trim(), senhaInput=alunoSenha.value.trim();
+  let senha=senhaInput.toLowerCase();
+  if(!nome||!cod||!senha){alert("Preencha tudo");return;}
+  let lista=window.todasProvas||[];
+  console.log("Procurando senha:", senha, "em:", lista.map(p=>p.senha));
+  let p=lista.find(x=> x.senha.trim().toLowerCase() == senha);
+  if(!p){
+    alert("Senha '"+senhaInput+"' não encontrada. Salas disponíveis: "+lista.map(x=>x.senha).join(', '));
+    return;
+  }
+  let agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim);
+  if(agora<ini){alert("Ainda não começou: "+p.inicio);return;}
+  if(agora>fim){alert("Já encerrou: "+p.fim);return;}
   provaAtual=p; respostas=new Array(p.qtd).fill(''); titProva.innerText=`${p.nome} | Prof: ${p.professorNome}`; infoAl.innerText=`Aluno: ${nome} | Sala: ${cod}`;
   if(p.pdf){document.getElementById('nomePDF').innerText=p.nome+".pdf"; let btn=document.getElementById('btnBaixarPDF'); btn.href=p.pdf; btn.download=`${p.nome}.pdf`; pdfView.src=p.pdf;}
   let c=qs; c.innerHTML=''; for(let i=0;i<p.qtd;i++){c.innerHTML+=`<div class="q-item"><b>${i+1}</b><div><span class="opt" id="q${i}A" onclick="marcar(${i},'A')">A</span><span class="opt" id="q${i}B" onclick="marcar(${i},'B')">B</span><span class="opt" id="q${i}C" onclick="marcar(${i},'C')">C</span><span class="opt" id="q${i}D" onclick="marcar(${i},'D')">D</span></div></div>`;}
@@ -280,7 +307,8 @@ window.baixar = function(){
 }
 let salvo=localStorage.getItem('prof_logado');
 if(salvo){try{profLogado=JSON.parse(salvo); nomeProfLogado.innerText=profLogado.usuario; idProfLogado.innerText="ID: "+profLogado.id; badgeAdmin.innerHTML=profLogado.isAdmin?'<span class="badge badge-admin">MASTER</span>':'<span class="badge badge-prof">PROF</span>'; loginProf.style.display='none'; areaProf.style.display='block'; document.getElementById('areaAdmin').style.display=(profLogado.isAdmin)?'block':'none'; if(profLogado.isAdmin) listarProfessores(); carregarDaNuvem();}catch{}}
-document.getElementById('statusFirebase').innerText="✅ Conectado";
+// CARREGA PARA ALUNO AO ABRIR A PAGINA
+carregarSalasParaAluno();
 </script>
 </body>
 </html>
