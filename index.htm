@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AVALIACAO - Aplicador de Avaliações</title>
 <style>
-body{font-family:system-ui;background:#0a0a0a;color:#fff;text-align:center;padding:10px;margin:0;-webkit-user-select:none;user-select:none}
+body{font-family:system-ui;background:#0a0a0a;color:#fff;text-align:center;padding:10px;margin:0}
 .card{background:#1a1a1a;padding:16px;border-radius:16px;max-width:750px;margin:10px auto;text-align:left;border:1px solid #333}
 input,textarea,select{width:100%;padding:12px;margin:6px 0;border-radius:12px;border:none;font-size:15px;box-sizing:border-box;background:#fff;color:#000}
 button{border:none;padding:9px 14px;font-weight:800;border-radius:30px;margin:3px;cursor:pointer;font-size:11px}
@@ -16,11 +16,11 @@ button{border:none;padding:9px 14px;font-weight:800;border-radius:30px;margin:3p
 .q-item{background:#222;padding:12px;border-radius:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
 .opt{width:44px;height:44px;border:2px solid #555;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin:0 4px;cursor:pointer;font-weight:800}
 .opt.sel{background:#00ff88;color:#000;border-color:#00ff88}
-.pdf-viewer{width:100%;height:500px;border:2px solid #ff1744;border-radius:12px;background:#fff}
+.pdf-viewer{width:100%;height:500px;border:2px solid #00ff88;border-radius:12px;background:#fff}
 table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{padding:6px;border-bottom:1px solid #333;text-align:left}
 .badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:800;margin:2px}
 .badge-green{background:#00ff88;color:#000}.badge-admin{background:#ff1744;color:#fff}.badge-prof{background:#2962ff;color:#fff}.badge-blocked{background:#ff3d00;color:#fff}.badge-active{background:#00e676;color:#000}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;z-index:99;padding:15px}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:99;padding:15px}
 .step{display:none}.step.active{display:block}
 </style>
 </head>
@@ -98,23 +98,15 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
   <div id="areaProva" class="card" style="display:none;max-width:900px">
     <h3 id="titProva"></h3><p id="infoAl" style="color:#888"></p>
     <div id="cronometro" style="font-size:20px;color:#00ff88;font-weight:900;text-align:center;background:#000;padding:8px;border-radius:10px">⏰ --:--:--</div>
-    <div id="areaPDF" style="background:#000;padding:10px;border-radius:12px;margin:15px 0;text-align:center;border:2px solid #ff1744">
-      <h4 style="color:#ff5252;margin:0 0 10px">🔒 MODO PROVA SEGURA - SEM DOWNLOAD</h4>
-      <p id="nomePDF" style="font-size:12px;color:#888"></p>
-      <button class="btn-red" onclick="abrirTelaCheia()" style="width:100%;padding:16px;font-size:14px">🔍 ABRIR PROVA EM TELA CHEIA</button>
+    <div id="areaPDF" style="background:#222;padding:15px;border-radius:12px;margin:15px 0;text-align:center;border:2px dashed #00ff88">
+      <h4 style="color:#00ff88;margin:0 0 10px">📄 PROVA EM PDF</h4><p id="nomePDF" style="font-size:12px;color:#888"></p>
+      <a id="btnBaixarPDF" href="#" download="prova.pdf" target="_blank" style="text-decoration:none;display:block"><button class="btn-go" style="width:100%;padding:16px">📥 BAIXAR PROVA / ABRIR EM TELA CHEIA</button></a>
       <div id="pdfViewerDesktop" style="margin-top:10px"><iframe id="pdfView" class="pdf-viewer"></iframe></div>
-      <small style="color:#ff5252;display:block;margin-top:8px">⚠️ Não saia da tela! 2 fugas = envio automático!</small>
     </div>
     <h4 style="color:#00ff88">Gabarito:</h4><div id="qs"></div>
     <button class="btn-go" onclick="enviar()" style="width:100%;margin-top:15px">✅ ENVIAR</button>
   </div>
   <div id="resAl" class="card" style="display:none"></div>
-</div>
-<div id="modalPDF" class="modal" style="z-index:99999;padding:0;background:#000">
-  <div style="width:100%;height:100%;background:#000;display:flex;flex-direction:column">
-    <div style="padding:10px;display:flex;justify-content:space-between;background:#111;align-items:center"><b style="color:#ff5252;font-size:12px">🔒 MODO FOCO - NÃO SAIA DA TELA</b><button class="btn-sec" onclick="fecharTelaCheia()">VOLTAR</button></div>
-    <iframe id="pdfViewFull" style="width:100%;height:100%;border:none;background:#fff"></iframe>
-  </div>
 </div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -217,35 +209,7 @@ window.bloquearAluno = async function(id){let s=await getDoc(doc(db,"alunos",id)
 window.desbloquearAluno = async function(id){let s=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...s.data(), bloqueado:false},{merge:true}); listarAlunosAdmin();}
 window.apagarAluno = async function(id){if(!confirm("Deletar "+id+"?"))return; await deleteDoc(doc(db,"alunos",id)); listarAlunosAdmin();}
 window.resetarSenhaAluno = async function(id){let n=prompt("Nova senha para "+id+":"); if(!n||n.length<3)return; let s=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...s.data(), senha:n},{merge:true}); alert("Senha: "+n);}
-let tentativasDeFuga = 0;
-let provaTravada = false;
-window.abrirTelaCheia = function(){
-  let modal = document.getElementById('modalPDF');
-  modal.style.display='flex';
-  if(modal.requestFullscreen) modal.requestFullscreen().catch(()=>{});
-}
-window.fecharTelaCheia = function(){
-  document.getElementById('modalPDF').style.display='none';
-  if(document.fullscreenElement) document.exitFullscreen();
-}
-window.abrirPDFNovaAba = function(){ abrirTelaCheia(); }
-function iniciarAntiCola(){
-  provaTravada = true;
-  tentativasDeFuga = 0;
-  document.addEventListener('contextmenu', e=>{ if(provaTravada) e.preventDefault(); });
-  document.addEventListener('visibilitychange', ()=>{
-    if(!provaTravada ||!provaAtual) return;
-    if(document.hidden){
-      tentativasDeFuga++;
-      if(tentativasDeFuga >= 2){
-        alert(`⛔ VOCÊ SAIU DA PROVA ${tentativasDeFuga} VEZES!\nSua prova será enviada automaticamente!`);
-        enviar();
-      }else{
-        alert(`⚠️ VOLTE PARA A PROVA! Você saiu da tela! Na próxima sua prova será enviada!\nFuga: ${tentativasDeFuga}/2`);
-      }
-    }
-  });
-}
+
 window.abrirProvaComCodigo = async function(){
   let codigo=codigoProvaAluno.value.trim().toLowerCase();
   if(!codigo){alert("Digite o código");return;}
@@ -254,8 +218,8 @@ window.abrirProvaComCodigo = async function(){
   if(!p){alert("Código '"+codigoProvaAluno.value+"' não encontrado");return;}
   let agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim);
   function formatarData(d){ return d.toLocaleDateString('pt-BR') + " às " + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
-  if(agora < ini){ alert(`⏰ CALMA! Essa prova ainda não começou.\n\n📝 Prova: ${p.nome}\n▶️ Início: ${formatarData(ini)}\n⏹️ Fim: ${formatarData(fim)}`); return; }
-  if(agora > fim){ alert(`⛔ ENCERRADA!\n\n📝 Prova: ${p.nome}\n▶️ Começou: ${formatarData(ini)}\n⏹️ Terminou: ${formatarData(fim)}`); return; }
+  if(agora < ini){ alert(`⏰ CALMA! Essa prova ainda não começou.\n\n📝 Prova: ${p.nome}\n▶️ Início: ${formatarData(ini)}\n⏹️ Fim: ${formatarData(fim)}\n\nVolte no horário marcado!`); return; }
+  if(agora > fim){ alert(`⛔ ENCERRADA! Essa prova já terminou.\n\n📝 Prova: ${p.nome}\n▶️ Começou: ${formatarData(ini)}\n⏹️ Terminou: ${formatarData(fim)}`); return; }
   let maxPermitido = p.maxTentativas;
   if(maxPermitido === undefined) maxPermitido = 0;
   if(maxPermitido!== 0){
@@ -274,7 +238,6 @@ window.abrirProvaComCodigo = async function(){
             <p>Sua última nota: <b>${snap.data().acertos}/${snap.data().total} - ${snap.data().nota}%</b></p>
             <br>
             <button class="btn-red" onclick="location.reload()" style="width:100%;padding:14px">🚪 SAIR</button>
-            <button class="btn-sec" onclick="sairAluno(); location.reload()" style="width:100%;padding:14px;margin-top:6px">TROCAR DE ALUNO</button>
           `;
           return;
         }
@@ -282,17 +245,12 @@ window.abrirProvaComCodigo = async function(){
     }catch(e){}
   }
   provaAtual=p; respostas=new Array(p.qtd).fill('');
-  let maxTxt = (p.maxTentativas===0 || p.maxTentativas===undefined)? "♾️ INFINITO" : `${p.maxTentativas}x`;
-  titProva.innerText=`${p.nome} | Código: ${p.senha} | ${maxTxt}`;
+  let maxTxt = (p.maxTentativas===0 || p.maxTentativas===undefined)? "Tentativas: INFINITAS até o fim" : `Tentativas: até ${p.maxTentativas}x`;
+  titProva.innerText=`${p.nome} | Código: ${p.senha} | Prof: ${p.professorNome} | ${maxTxt}`;
   infoAl.innerText=`Aluno: ${alunoLogado.login}`;
-  if(p.pdf){
-    document.getElementById('nomePDF').innerText=p.nome+" - MODO SEGURO";
-    document.getElementById('pdfView').src = p.pdf + "#toolbar=0&navpanes=0&scrollbar=0";
-    document.getElementById('pdfViewFull').src = p.pdf + "#toolbar=0&navpanes=0&scrollbar=0";
-  }
+  if(p.pdf){document.getElementById('nomePDF').innerText=p.nome+".pdf"; let btn=document.getElementById('btnBaixarPDF'); btn.href=p.pdf; btn.download=`${p.nome}.pdf`; pdfView.src=p.pdf;}
   let c=qs; c.innerHTML=''; for(let i=0;i<p.qtd;i++){c.innerHTML+=`<div class="q-item"><b>${i+1}</b><div><span class="opt" id="q${i}A" onclick="marcar(${i},'A')">A</span><span class="opt" id="q${i}B" onclick="marcar(${i},'B')">B</span><span class="opt" id="q${i}C" onclick="marcar(${i},'C')">C</span><span class="opt" id="q${i}D" onclick="marcar(${i},'D')">D</span></div></div>`;}
   document.getElementById('alunoLogin').style.display='none'; areaProva.style.display='block';
-  iniciarAntiCola();
   if(timerInterval) clearInterval(timerInterval);
   timerInterval=setInterval(()=>{let d=fim-new Date(); if(d<=0){clearInterval(timerInterval); enviar(); return;} let h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000), s=Math.floor((d%60000)/1000); cronometro.innerText=`⏰ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;},1000);
 }
@@ -363,9 +321,6 @@ window.fecharModal = function(){document.getElementById('modalEditar').style.dis
 window.salvarEdicaoResultado = async function(){let id=editId.value; let obj={nome:editNome.value.toUpperCase(), codigo:editCodigo.value.toUpperCase(), acertos:parseInt(editAcertos.value), total:parseInt(editTotal.value), nota:parseFloat(editNota.value).toFixed(1), respostas:editRespostas.value.toUpperCase(), data:new Date().toLocaleString()+" (editado)", timestamp:Date.now()}; let r=resultados.find(x=>x.id==id); await setDoc(doc(db,"resultados",id),{...r,...obj},{merge:true}); fecharModal(); await carregarDaNuvem();}
 window.marcar = function(q,l){respostas[q]=l; ['A','B','C','D'].forEach(x=>document.getElementById(`q${q}${x}`).classList.toggle('sel',x==l));}
 window.enviar = async function(){
- provaTravada = false;
- if(document.fullscreenElement) document.exitFullscreen();
- document.getElementById('modalPDF').style.display='none';
  if(timerInterval) clearInterval(timerInterval);
  let idResultado=`${provaAtual.id}_${norm(alunoLogado.login)}`;
  let snapExistente = null;
