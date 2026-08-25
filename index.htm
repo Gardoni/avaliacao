@@ -100,7 +100,7 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
     <div id="cronometro" style="font-size:20px;color:#00ff88;font-weight:900;text-align:center;background:#000;padding:8px;border-radius:10px">⏰ --:--:--</div>
     <div id="areaPDF" style="background:#222;padding:15px;border-radius:12px;margin:15px 0;text-align:center;border:2px dashed #00ff88">
       <h4 style="color:#00ff88;margin:0 0 10px">📄 PROVA EM PDF</h4><p id="nomePDF" style="font-size:12px;color:#888"></p>
-      <a id="btnBaixarPDF" href="#" download="prova.pdf" target="_blank" style="text-decoration:none;display:block"><button class="btn-go" style="width:100%;padding:16px">📥 BAIXAR PROVA / ABRIR EM TELA CHEIA</button></a>
+      <a id="btnBaixarPDF" href="#" download="prova.pdf" target="_blank" style="text-decoration:none;display:block"><button class="btn-go" style="width:100%;padding:16px">📥 BAIXAR PROVA</button></a>
       <div id="pdfViewerDesktop" style="margin-top:10px"><iframe id="pdfView" class="pdf-viewer"></iframe></div>
     </div>
     <h4 style="color:#00ff88">Gabarito:</h4><div id="qs"></div>
@@ -126,6 +126,15 @@ window.todasProvas=[];
 const ADMIN_USER = "gardoni";
 const ADMIN_PASS = "Rga@193319";
 function norm(s){return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'_');}
+function parseDataLocal(str){
+  if(!str) return null;
+  try{
+    let [data, hora] = str.split('T');
+    let [ano, mes, dia] = data.split('-').map(Number);
+    let [h, m] = hora.split(':').map(Number);
+    return new Date(ano, mes-1, dia, h, m);
+  }catch{ return new Date(str); }
+}
 window.showSubAdmin = function(t){
   document.getElementById('adminProf').style.display = t=='prof'?'block':'none';
   document.getElementById('adminAlunos').style.display = t=='alunos'?'block':'none';
@@ -216,10 +225,19 @@ window.abrirProvaComCodigo = async function(){
   let lista=window.todasProvas||[];
   let p=lista.find(x=> x.senha.trim().toLowerCase() == codigo);
   if(!p){alert("Código '"+codigoProvaAluno.value+"' não encontrado");return;}
-  let agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim);
+  let agora=new Date();
+  let ini=parseDataLocal(p.inicio);
+  let fim=parseDataLocal(p.fim);
+  if(!ini||!fim){alert("Prova sem horário configurado");return;}
   function formatarData(d){ return d.toLocaleDateString('pt-BR') + " às " + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
-  if(agora < ini){ alert(`⏰ CALMA! Essa prova ainda não começou.\n\n📝 Prova: ${p.nome}\n▶️ Início: ${formatarData(ini)}\n⏹️ Fim: ${formatarData(fim)}\n\nVolte no horário marcado!`); return; }
-  if(agora > fim){ alert(`⛔ ENCERRADA! Essa prova já terminou.\n\n📝 Prova: ${p.nome}\n▶️ Começou: ${formatarData(ini)}\n⏹️ Terminou: ${formatarData(fim)}`); return; }
+  if(agora < ini){
+    alert(`⏰ CALMA! Essa prova ainda não começou.\n\n📝 Prova: ${p.nome}\n▶️ Início: ${formatarData(ini)}\n⏹️ Fim: ${formatarData(fim)}\n\nAgora: ${formatarData(agora)}\n\nVolte no horário marcado!`);
+    return;
+  }
+  if(agora > fim){
+    alert(`⛔ ENCERRADA! Essa prova já terminou.\n\n📝 Prova: ${p.nome}\n▶️ Começou: ${formatarData(ini)}\n⏹️ Terminou: ${formatarData(fim)}\n\nAgora: ${formatarData(agora)}`);
+    return;
+  }
   let maxPermitido = p.maxTentativas;
   if(maxPermitido === undefined) maxPermitido = 0;
   if(maxPermitido!== 0){
@@ -245,8 +263,8 @@ window.abrirProvaComCodigo = async function(){
     }catch(e){}
   }
   provaAtual=p; respostas=new Array(p.qtd).fill('');
-  let maxTxt = (p.maxTentativas===0 || p.maxTentativas===undefined)? "Tentativas: INFINITAS até o fim" : `Tentativas: até ${p.maxTentativas}x`;
-  titProva.innerText=`${p.nome} | Código: ${p.senha} | Prof: ${p.professorNome} | ${maxTxt}`;
+  let maxTxt = (p.maxTentativas===0 || p.maxTentativas===undefined)? "♾️ INFINITO" : `${p.maxTentativas}x`;
+  titProva.innerText=`${p.nome} | Código: ${p.senha} | ${maxTxt}`;
   infoAl.innerText=`Aluno: ${alunoLogado.login}`;
   if(p.pdf){document.getElementById('nomePDF').innerText=p.nome+".pdf"; let btn=document.getElementById('btnBaixarPDF'); btn.href=p.pdf; btn.download=`${p.nome}.pdf`; pdfView.src=p.pdf;}
   let c=qs; c.innerHTML=''; for(let i=0;i<p.qtd;i++){c.innerHTML+=`<div class="q-item"><b>${i+1}</b><div><span class="opt" id="q${i}A" onclick="marcar(${i},'A')">A</span><span class="opt" id="q${i}B" onclick="marcar(${i},'B')">B</span><span class="opt" id="q${i}C" onclick="marcar(${i},'C')">C</span><span class="opt" id="q${i}D" onclick="marcar(${i},'D')">D</span></div></div>`;}
@@ -254,6 +272,7 @@ window.abrirProvaComCodigo = async function(){
   if(timerInterval) clearInterval(timerInterval);
   timerInterval=setInterval(()=>{let d=fim-new Date(); if(d<=0){clearInterval(timerInterval); enviar(); return;} let h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000), s=Math.floor((d%60000)/1000); cronometro.innerText=`⏰ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;},1000);
 }
+
 window.criarProfessor = async function(){
   if(profLogado.id!==ADMIN_USER){alert("Só MASTER");return;}
   let u=novoProfNome.value.trim(), s=novoProfSenha.value.trim();
@@ -327,6 +346,17 @@ window.enviar = async function(){
  try { snapExistente = await getDoc(doc(db,"resultados",idResultado)); } catch(e){}
  let maxPermitido = provaAtual.maxTentativas;
  if(maxPermitido === undefined) maxPermitido = 0;
+
+ // TRAVA EXTRA DE HORÁRIO NO ENVIO
+ let agoraCheck = new Date();
+ let fimCheck = parseDataLocal(provaAtual.fim);
+ if(agoraCheck > fimCheck){
+   areaProva.style.display='none';
+   resAl.style.display='block';
+   resAl.innerHTML = `<h3 style="color:#ff3d00">⛔ FORA DO HORÁRIO</h3><p>Tempo esgotado às ${fimCheck.toLocaleString('pt-BR')}</p><br><button class="btn-red" onclick="location.reload()" style="width:100%;padding:14px">🚪 SAIR</button>`;
+   return;
+ }
+
  if(maxPermitido!== 0 && snapExistente && snapExistente.exists()){
    let tentativasAtuais = snapExistente.data().tentativas || 1;
    if(tentativasAtuais >= maxPermitido){
