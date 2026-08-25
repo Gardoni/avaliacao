@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AVALIACAO - Aplicador de Avaliações</title>
 <style>
-body{font-family:system-ui;background:#0a0a0a;color:#fff;text-align:center;padding:10px;margin:0}
+body{font-family:system-ui;background:#0a0a0a;color:#fff;text-align:center;padding:10px;margin:0;-webkit-user-select:none;user-select:none}
 .card{background:#1a1a1a;padding:16px;border-radius:16px;max-width:750px;margin:10px auto;text-align:left;border:1px solid #333}
 input,textarea,select{width:100%;padding:12px;margin:6px 0;border-radius:12px;border:none;font-size:15px;box-sizing:border-box;background:#fff;color:#000}
 button{border:none;padding:9px 14px;font-weight:800;border-radius:30px;margin:3px;cursor:pointer;font-size:11px}
@@ -16,38 +16,34 @@ button{border:none;padding:9px 14px;font-weight:800;border-radius:30px;margin:3p
 .q-item{background:#222;padding:12px;border-radius:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
 .opt{width:44px;height:44px;border:2px solid #555;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin:0 4px;cursor:pointer;font-weight:800}
 .opt.sel{background:#00ff88;color:#000;border-color:#00ff88}
-.pdf-viewer{width:100%;height:500px;border:2px solid #00ff88;border-radius:12px;background:#fff}
+.pdf-viewer{width:100%;height:500px;border:2px solid #ff1744;border-radius:12px;background:#fff}
 table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{padding:6px;border-bottom:1px solid #333;text-align:left}
 .badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:800;margin:2px}
 .badge-green{background:#00ff88;color:#000}.badge-admin{background:#ff1744;color:#fff}.badge-prof{background:#2962ff;color:#fff}.badge-blocked{background:#ff3d00;color:#fff}.badge-active{background:#00e676;color:#000}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:99;padding:15px}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;z-index:99;padding:15px}
 .step{display:none}.step.active{display:block}
 </style>
 </head>
 <body>
 <h2 style="color:#00ff88">📝 Aplicador de Avaliações</h2>
 <div id="statusFirebase" style="font-size:12px;color:#888">Conectando...</div>
-
 <div class="tab">
   <button id="tabProf" class="active" onclick="showTab('prof')">👨‍🏫 PROFESSOR</button>
   <button id="tabAluno" onclick="showTab('aluno')">👨‍🎓 ALUNO</button>
 </div>
-
 <div id="loginProf" class="card" style="max-width:420px">
   <h3 style="text-align:center;color:#00ff88">🔒 LOGIN PROFESSOR</h3>
   <input id="profNome" placeholder="Usuário"><input id="profSenha" type="password" placeholder="Senha">
   <button class="btn-go" onclick="loginProfessor()" style="width:100%;padding:14px">ENTRAR</button>
   <p id="msgLogin" style="text-align:center;font-size:13px;color:#ff5252"></p>
 </div>
-
 <div id="areaProf" style="display:none">
   <div class="card" style="display:flex;justify-content:space-between;align-items:center">
     <div><h3 style="color:#00ff88;margin:0">Prof: <span id="nomeProfLogado"></span> <span id="badgeAdmin"></span></h3><small id="idProfLogado" style="color:#888"></small></div>
     <button class="btn-red" onclick="sair()">SAIR</button>
   </div>
-
   <div id="areaAdmin" class="card" style="display:none;border:2px solid #ff1744">
-    <h3 style="color:#ff1744;margin:0 0 8px">👑 MASTER - Gerenciar Sistema</h3>
+    <h3 style="color:#ff1744;margin:0 0 8px">👑 MASTER</h3>
     <div class="subtab">
       <button id="btnSubProf" class="activeSub" onclick="showSubAdmin('prof')">👨‍🏫 Professores</button>
       <button id="btnSubAlunos" onclick="showSubAdmin('alunos')">👨‍🎓 Alunos</button>
@@ -58,15 +54,14 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
       <hr style="border-color:#333;margin:12px 0"><div id="listaProfessores"></div>
     </div>
     <div id="adminAlunos" style="display:none">
-      <h4 style="color:#2962ff;margin:5px 0">Alunos Cadastrados (<span id="totalAlunosAdmin">0</span>)</h4>
+      <h4 style="color:#2962ff;margin:5px 0">Alunos (<span id="totalAlunosAdmin">0</span>)</h4>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="novoAlunoLogin" placeholder="Login aluno"><input id="novoAlunoSenha" type="password" placeholder="Senha"></div>
-      <button class="btn-blue" onclick="criarAlunoPeloMaster()" style="width:100%">+ CRIAR ALUNO / SENHA</button>
+      <button class="btn-blue" onclick="criarAlunoPeloMaster()" style="width:100%">+ CRIAR ALUNO</button>
       <hr style="border-color:#333;margin:12px 0"><div id="listaAlunosAdmin"></div>
     </div>
   </div>
-
   <div class="card">
-    <h3 style="color:#00ff88;margin:0 0 8px" id="tituloFormSala">+ Nova Prova - Código da Sala</h3>
+    <h3 style="color:#00ff88;margin:0 0 8px" id="tituloFormSala">+ Nova Prova</h3>
     <input id="nomeProva" placeholder="Ex: 8º ANO A - AV1"><input id="senhaUnica" placeholder="CÓDIGO DA PROVA ex: MAT8A">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><small>INÍCIO</small><input id="dataInicio" type="datetime-local"></div><div><small>FIM</small><input id="dataFim" type="datetime-local"></div></div>
     <input id="qtdQuestoes" type="number" placeholder="Nº questões"><textarea id="gabaritoProf" rows="2" placeholder="Gabarito: A,B,C,D..."></textarea>
@@ -74,25 +69,21 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
     <input type="file" id="pdfFile" accept="application/pdf" onchange="loadPDF(this)"><div id="pdfInfo" style="color:#00ff88;font-size:12px"></div>
     <div style="display:flex;gap:6px"><button class="btn-go" onclick="salvarProva()" style="flex:1" id="btnSalvarSala">💾 SALVAR PROVA</button><button class="btn-sec" onclick="cancelarEdicaoSala()" style="display:none" id="btnCancelarSala">CANCELAR</button></div>
   </div>
-
   <div class="card"><h3>Minhas Salas (<span id="totalSalas">0</span>)</h3><div id="listaProvas"></div></div>
-
   <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap"><h3 style="margin:0">Resultados - só último envio</h3><select id="filtroSala" onchange="renderRes()" style="width:auto;max-width:180px"></select></div>
-    <button class="btn-sec" onclick="limparDuplicados()" style="width:100%;margin:10px 0;background:#ff9100;color:#000">🧹 LIMPAR DUPLICADOS - DEIXAR SÓ ÚLTIMO</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap"><h3 style="margin:0">Resultados</h3><select id="filtroSala" onchange="renderRes()" style="width:auto;max-width:180px"></select></div>
+    <button class="btn-sec" onclick="limparDuplicados()" style="width:100%;margin:10px 0;background:#ff9100;color:#000">🧹 LIMPAR DUPLICADOS</button>
     <div id="tabRes" style="margin-top:10px"></div>
     <button class="btn-excel" onclick="baixar()" style="width:100%;margin-top:8px">📊 BAIXAR EXCEL</button>
   </div>
 </div>
-
 <div id="modalEditar" class="modal"><div class="card" style="max-width:500px;width:100%"><h3 style="color:#ffca28;margin-top:0">✏️ EDITAR</h3><input type="hidden" id="editId"><input id="editNome" placeholder="Nome"><input id="editCodigo" placeholder="Login"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="editAcertos" type="number" placeholder="Acertos"><input id="editTotal" type="number" placeholder="Total"></div><input id="editNota" type="number" step="0.1" placeholder="Nota"><input id="editRespostas" placeholder="Respostas"><div style="display:flex;gap:8px;margin-top:10px"><button class="btn-go" onclick="salvarEdicaoResultado()" style="flex:1">💾 SALVAR</button><button class="btn-sec" onclick="fecharModal()" style="flex:1">CANCELAR</button></div></div></div>
-
 <div id="areaAluno" style="display:none">
   <div id="alunoLogin" class="card" style="max-width:420px">
     <h3 style="color:#2962ff;text-align:center">👨‍🎓 LOGIN ALUNO</h3>
     <div id="stepLoginAluno" class="step active">
       <input id="alunoLoginInput" placeholder="Login"><input id="alunoSenhaAluno" type="password" placeholder="Senha">
-      <button class="btn-blue" onclick="loginAluno()" style="width:100%;padding:14px">ENTRAR / CADASTRAR</button>
+      <button class="btn-blue" onclick="loginAluno()" style="width:100%;padding:14px">ENTRAR</button>
       <p id="msgAluno" style="text-align:center;font-size:12px;color:#ff5252"></p>
     </div>
     <div id="stepCodigoProva" class="step">
@@ -107,18 +98,24 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
   <div id="areaProva" class="card" style="display:none;max-width:900px">
     <h3 id="titProva"></h3><p id="infoAl" style="color:#888"></p>
     <div id="cronometro" style="font-size:20px;color:#00ff88;font-weight:900;text-align:center;background:#000;padding:8px;border-radius:10px">⏰ --:--:--</div>
-    <div id="areaPDF" style="background:#222;padding:15px;border-radius:12px;margin:15px 0;text-align:center;border:2px dashed #00ff88">
-      <h4 style="color:#00ff88;margin:0 0 10px">📄 PROVA</h4><p id="nomePDF" style="font-size:12px;color:#888"></p>
-      <a id="btnBaixarPDF" href="#" download="prova.pdf" target="_blank" style="text-decoration:none;display:block"><button class="btn-go" style="width:100%;padding:16px">📥 BAIXAR PROVA</button></a>
-      <button class="btn-blue" onclick="abrirPDFNovaAba()" style="width:100%;margin-top:8px">👁️ ABRIR EM NOVA ABA</button>
+    <div id="areaPDF" style="background:#000;padding:10px;border-radius:12px;margin:15px 0;text-align:center;border:2px solid #ff1744">
+      <h4 style="color:#ff5252;margin:0 0 10px">🔒 MODO PROVA SEGURA - SEM DOWNLOAD</h4>
+      <p id="nomePDF" style="font-size:12px;color:#888"></p>
+      <button class="btn-red" onclick="abrirTelaCheia()" style="width:100%;padding:16px;font-size:14px">🔍 ABRIR PROVA EM TELA CHEIA</button>
       <div id="pdfViewerDesktop" style="margin-top:10px"><iframe id="pdfView" class="pdf-viewer"></iframe></div>
+      <small style="color:#ff5252;display:block;margin-top:8px">⚠️ Não saia da tela! 2 fugas = envio automático!</small>
     </div>
     <h4 style="color:#00ff88">Gabarito:</h4><div id="qs"></div>
     <button class="btn-go" onclick="enviar()" style="width:100%;margin-top:15px">✅ ENVIAR</button>
   </div>
   <div id="resAl" class="card" style="display:none"></div>
 </div>
-
+<div id="modalPDF" class="modal" style="z-index:99999;padding:0;background:#000">
+  <div style="width:100%;height:100%;background:#000;display:flex;flex-direction:column">
+    <div style="padding:10px;display:flex;justify-content:space-between;background:#111;align-items:center"><b style="color:#ff5252;font-size:12px">🔒 MODO FOCO - NÃO SAIA DA TELA</b><button class="btn-sec" onclick="fecharTelaCheia()">VOLTAR</button></div>
+    <iframe id="pdfViewFull" style="width:100%;height:100%;border:none;background:#fff"></iframe>
+  </div>
+</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, getDocs, collection, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -132,13 +129,11 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 let profLogado=null, provas=[], resultados=[], pdfAtual=null, provaAtual=null, respostas=[], timerInterval=null, editandoSalaId=null, alunoLogado=null;
 window.todasProvas=[];
 const ADMIN_USER = "gardoni";
 const ADMIN_PASS = "Rga@193319";
 function norm(s){return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'_');}
-
 window.showSubAdmin = function(t){
   document.getElementById('adminProf').style.display = t=='prof'?'block':'none';
   document.getElementById('adminAlunos').style.display = t=='alunos'?'block':'none';
@@ -222,40 +217,85 @@ window.bloquearAluno = async function(id){let s=await getDoc(doc(db,"alunos",id)
 window.desbloquearAluno = async function(id){let s=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...s.data(), bloqueado:false},{merge:true}); listarAlunosAdmin();}
 window.apagarAluno = async function(id){if(!confirm("Deletar "+id+"?"))return; await deleteDoc(doc(db,"alunos",id)); listarAlunosAdmin();}
 window.resetarSenhaAluno = async function(id){let n=prompt("Nova senha para "+id+":"); if(!n||n.length<3)return; let s=await getDoc(doc(db,"alunos",id)); await setDoc(doc(db,"alunos",id),{...s.data(), senha:n},{merge:true}); alert("Senha: "+n);}
-
-window.abrirProvaComCodigo = function(){
+let tentativasDeFuga = 0;
+let provaTravada = false;
+window.abrirTelaCheia = function(){
+  let modal = document.getElementById('modalPDF');
+  modal.style.display='flex';
+  if(modal.requestFullscreen) modal.requestFullscreen().catch(()=>{});
+}
+window.fecharTelaCheia = function(){
+  document.getElementById('modalPDF').style.display='none';
+  if(document.fullscreenElement) document.exitFullscreen();
+}
+window.abrirPDFNovaAba = function(){ abrirTelaCheia(); }
+function iniciarAntiCola(){
+  provaTravada = true;
+  tentativasDeFuga = 0;
+  document.addEventListener('contextmenu', e=>{ if(provaTravada) e.preventDefault(); });
+  document.addEventListener('visibilitychange', ()=>{
+    if(!provaTravada ||!provaAtual) return;
+    if(document.hidden){
+      tentativasDeFuga++;
+      if(tentativasDeFuga >= 2){
+        alert(`⛔ VOCÊ SAIU DA PROVA ${tentativasDeFuga} VEZES!\nSua prova será enviada automaticamente!`);
+        enviar();
+      }else{
+        alert(`⚠️ VOLTE PARA A PROVA! Você saiu da tela! Na próxima sua prova será enviada!\nFuga: ${tentativasDeFuga}/2`);
+      }
+    }
+  });
+}
+window.abrirProvaComCodigo = async function(){
   let codigo=codigoProvaAluno.value.trim().toLowerCase();
   if(!codigo){alert("Digite o código");return;}
   let lista=window.todasProvas||[];
   let p=lista.find(x=> x.senha.trim().toLowerCase() == codigo);
   if(!p){alert("Código '"+codigoProvaAluno.value+"' não encontrado");return;}
-
   let agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim);
-
-  function formatarData(d){
-    return d.toLocaleDateString('pt-BR') + " às " + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  function formatarData(d){ return d.toLocaleDateString('pt-BR') + " às " + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+  if(agora < ini){ alert(`⏰ CALMA! Essa prova ainda não começou.\n\n📝 Prova: ${p.nome}\n▶️ Início: ${formatarData(ini)}\n⏹️ Fim: ${formatarData(fim)}`); return; }
+  if(agora > fim){ alert(`⛔ ENCERRADA!\n\n📝 Prova: ${p.nome}\n▶️ Começou: ${formatarData(ini)}\n⏹️ Terminou: ${formatarData(fim)}`); return; }
+  let maxPermitido = p.maxTentativas;
+  if(maxPermitido === undefined) maxPermitido = 0;
+  if(maxPermitido!== 0){
+    let idResultado=`${p.id}_${norm(alunoLogado.login)}`;
+    try{
+      let snap = await getDoc(doc(db,"resultados",idResultado));
+      if(snap.exists()){
+        let tentativasAtuais = snap.data().tentativas || 1;
+        if(tentativasAtuais >= maxPermitido){
+          document.getElementById('alunoLogin').style.display='none';
+          document.getElementById('areaProva').style.display='none';
+          resAl.style.display='block';
+          resAl.innerHTML = `
+            <h3 style="color:#ff3d00">⛔ LIMITE ATINGIDO</h3>
+            <p>Você já fez <b>${tentativasAtuais} de ${maxPermitido}</b> tentativas na prova <b>${p.nome}</b>.</p>
+            <p>Sua última nota: <b>${snap.data().acertos}/${snap.data().total} - ${snap.data().nota}%</b></p>
+            <br>
+            <button class="btn-red" onclick="location.reload()" style="width:100%;padding:14px">🚪 SAIR</button>
+            <button class="btn-sec" onclick="sairAluno(); location.reload()" style="width:100%;padding:14px;margin-top:6px">TROCAR DE ALUNO</button>
+          `;
+          return;
+        }
+      }
+    }catch(e){}
   }
-
-  if(agora < ini){
-    alert(`⏰ CALMA! Essa prova ainda não começou.\n\n📝 Prova: ${p.nome}\n▶️ Início: ${formatarData(ini)}\n⏹️ Fim: ${formatarData(fim)}\n\nVolte no horário marcado!`);
-    return;
-  }
-  if(agora > fim){
-    alert(`⛔ ENCERRADA! Essa prova já terminou.\n\n📝 Prova: ${p.nome}\n▶️ Começou: ${formatarData(ini)}\n⏹️ Terminou: ${formatarData(fim)}`);
-    return;
-  }
-
   provaAtual=p; respostas=new Array(p.qtd).fill('');
-  let maxTxt = (p.maxTentativas===0 || p.maxTentativas===undefined)? "Tentativas: INFINITAS até o fim" : `Tentativas: até ${p.maxTentativas}x`;
-  titProva.innerText=`${p.nome} | Código: ${p.senha} | Prof: ${p.professorNome} | ${maxTxt}`;
+  let maxTxt = (p.maxTentativas===0 || p.maxTentativas===undefined)? "♾️ INFINITO" : `${p.maxTentativas}x`;
+  titProva.innerText=`${p.nome} | Código: ${p.senha} | ${maxTxt}`;
   infoAl.innerText=`Aluno: ${alunoLogado.login}`;
-  if(p.pdf){document.getElementById('nomePDF').innerText=p.nome+".pdf"; let btn=document.getElementById('btnBaixarPDF'); btn.href=p.pdf; btn.download=`${p.nome}.pdf`; pdfView.src=p.pdf;}
+  if(p.pdf){
+    document.getElementById('nomePDF').innerText=p.nome+" - MODO SEGURO";
+    document.getElementById('pdfView').src = p.pdf + "#toolbar=0&navpanes=0&scrollbar=0";
+    document.getElementById('pdfViewFull').src = p.pdf + "#toolbar=0&navpanes=0&scrollbar=0";
+  }
   let c=qs; c.innerHTML=''; for(let i=0;i<p.qtd;i++){c.innerHTML+=`<div class="q-item"><b>${i+1}</b><div><span class="opt" id="q${i}A" onclick="marcar(${i},'A')">A</span><span class="opt" id="q${i}B" onclick="marcar(${i},'B')">B</span><span class="opt" id="q${i}C" onclick="marcar(${i},'C')">C</span><span class="opt" id="q${i}D" onclick="marcar(${i},'D')">D</span></div></div>`;}
   document.getElementById('alunoLogin').style.display='none'; areaProva.style.display='block';
+  iniciarAntiCola();
   if(timerInterval) clearInterval(timerInterval);
   timerInterval=setInterval(()=>{let d=fim-new Date(); if(d<=0){clearInterval(timerInterval); enviar(); return;} let h=Math.floor(d/3600000), m=Math.floor((d%3600000)/60000), s=Math.floor((d%60000)/1000); cronometro.innerText=`⏰ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;},1000);
 }
-
 window.criarProfessor = async function(){
   if(profLogado.id!==ADMIN_USER){alert("Só MASTER");return;}
   let u=novoProfNome.value.trim(), s=novoProfSenha.value.trim();
@@ -321,10 +361,11 @@ window.apagarSala = async function(id){if(!confirm("Apagar?"))return; await dele
 window.editarResultado = function(id){let r=resultados.find(x=>x.id==id); editId.value=r.id; editNome.value=r.nome; editCodigo.value=r.codigo; editAcertos.value=r.acertos; editTotal.value=r.total; editNota.value=r.nota; editRespostas.value=r.respostas; document.getElementById('modalEditar').style.display='flex';}
 window.fecharModal = function(){document.getElementById('modalEditar').style.display='none';}
 window.salvarEdicaoResultado = async function(){let id=editId.value; let obj={nome:editNome.value.toUpperCase(), codigo:editCodigo.value.toUpperCase(), acertos:parseInt(editAcertos.value), total:parseInt(editTotal.value), nota:parseFloat(editNota.value).toFixed(1), respostas:editRespostas.value.toUpperCase(), data:new Date().toLocaleString()+" (editado)", timestamp:Date.now()}; let r=resultados.find(x=>x.id==id); await setDoc(doc(db,"resultados",id),{...r,...obj},{merge:true}); fecharModal(); await carregarDaNuvem();}
-window.abrirPDFNovaAba = function(){if(provaAtual && provaAtual.pdf) window.open(provaAtual.pdf, '_blank');}
 window.marcar = function(q,l){respostas[q]=l; ['A','B','C','D'].forEach(x=>document.getElementById(`q${q}${x}`).classList.toggle('sel',x==l));}
-
 window.enviar = async function(){
+ provaTravada = false;
+ if(document.fullscreenElement) document.exitFullscreen();
+ document.getElementById('modalPDF').style.display='none';
  if(timerInterval) clearInterval(timerInterval);
  let idResultado=`${provaAtual.id}_${norm(alunoLogado.login)}`;
  let snapExistente = null;
@@ -334,7 +375,15 @@ window.enviar = async function(){
  if(maxPermitido!== 0 && snapExistente && snapExistente.exists()){
    let tentativasAtuais = snapExistente.data().tentativas || 1;
    if(tentativasAtuais >= maxPermitido){
-     alert(`⛔ Você já atingiu o limite de ${maxPermitido} tentativa(s)!`);
+     areaProva.style.display='none';
+     resAl.style.display='block';
+     resAl.innerHTML = `
+       <h3 style="color:#ff3d00">⛔ LIMITE ATINGIDO</h3>
+       <p>Você já atingiu <b>${maxPermitido} tentativas</b>!</p>
+       <p>Última nota: <b>${snapExistente.data().acertos}/${snapExistente.data().total} - ${snapExistente.data().nota}%</b></p>
+       <br>
+       <button class="btn-red" onclick="location.reload()" style="width:100%;padding:14px">🚪 SAIR</button>
+     `;
      return;
    }
  }
@@ -364,9 +413,11 @@ window.enviar = async function(){
  await setDoc(doc(db,"resultados",idResultado),novo,{merge:true});
  areaProva.style.display='none'; resAl.style.display='block';
  let msgTent = maxPermitido===0? `Tentativa ${tentativas} - Pode refazer até acabar o tempo ♾️` : `Tentativa ${tentativas} de ${maxPermitido}`;
- resAl.innerHTML=`<h3 style="color:#00ff88">✅ Enviado!</h3><b>${alunoLogado.login}</b> - ${ac}/${provaAtual.qtd} = ${perc}%<br><small>${msgTent}</small><br><br><button class="btn-blue" onclick="location.reload()" style="width:100%">Fazer Novamente / Sair</button>`;
+ let podeRefazer = (maxPermitido===0 || tentativas < maxPermitido);
+ resAl.innerHTML=`<h3 style="color:#00ff88">✅ Enviado!</h3><b>${alunoLogado.login}</b> - ${ac}/${provaAtual.qtd} = ${perc}%<br><small>${msgTent}</small><br><br>
+ ${podeRefazer? `<button class="btn-go" onclick="location.reload()" style="width:100%;padding:14px">🔄 FAZER NOVAMENTE</button>` : `<button class="btn-red" style="width:100%;padding:14px" disabled>⛔ LIMITE ATINGIDO</button>`}
+ <button class="btn-sec" onclick="location.reload()" style="width:100%;padding:14px;margin-top:6px">🚪 SAIR</button>`;
 }
-
 window.limparDuplicados = async function(){
   if(!profLogado){alert("Faça login");return;}
   if(!confirm("Apagar duplicados e deixar só o último de cada aluno por prova?"))return;
@@ -387,7 +438,6 @@ window.limparDuplicados = async function(){
   alert(`✅ Limpeza feita! ${deletar.length} duplicados apagados.`);
   await carregarDaNuvem();
 }
-
 window.renderRes = function(){
  let div=tabRes; let filtro=document.getElementById('filtroSala')?.value || "TODAS";
  let lista=filtro=="TODAS"?resultados:resultados.filter(r=>r.provaId==filtro);
