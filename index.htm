@@ -70,6 +70,7 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
     <input id="nomeProva" placeholder="Ex: 8º ANO A - AV1"><input id="senhaUnica" placeholder="CÓDIGO DA PROVA ex: MAT8A">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><small>INÍCIO</small><input id="dataInicio" type="datetime-local"></div><div><small>FIM</small><input id="dataFim" type="datetime-local"></div></div>
     <input id="qtdQuestoes" type="number" placeholder="Nº questões"><textarea id="gabaritoProf" rows="2" placeholder="Gabarito: A,B,C,D..."></textarea>
+    <input id="maxTentativas" type="number" placeholder="TENTATIVAS - 0 ou vazio = INFINITO">
     <input type="file" id="pdfFile" accept="application/pdf" onchange="loadPDF(this)"><div id="pdfInfo" style="color:#00ff88;font-size:12px"></div>
     <div style="display:flex;gap:6px"><button class="btn-go" onclick="salvarProva()" style="flex:1" id="btnSalvarSala">💾 SALVAR PROVA</button><button class="btn-sec" onclick="cancelarEdicaoSala()" style="display:none" id="btnCancelarSala">CANCELAR</button></div>
   </div>
@@ -113,7 +114,7 @@ table{width:100%;font-size:11px;border-collapse:collapse}th{color:#00ff88}td,th{
       <div id="pdfViewerDesktop" style="margin-top:10px"><iframe id="pdfView" class="pdf-viewer"></iframe></div>
     </div>
     <h4 style="color:#00ff88">Gabarito:</h4><div id="qs"></div>
-    <button class="btn-go" onclick="enviar()" style="width:100%;margin-top:15px">✅ ENVIAR - SALVA SÓ O ÚLTIMO</button>
+    <button class="btn-go" onclick="enviar()" style="width:100%;margin-top:15px">✅ ENVIAR</button>
   </div>
   <div id="resAl" class="card" style="display:none"></div>
 </div>
@@ -228,11 +229,25 @@ window.abrirProvaComCodigo = function(){
   let lista=window.todasProvas||[];
   let p=lista.find(x=> x.senha.trim().toLowerCase() == codigo);
   if(!p){alert("Código '"+codigoProvaAluno.value+"' não encontrado");return;}
+
   let agora=new Date(), ini=new Date(p.inicio), fim=new Date(p.fim);
-  if(agora<ini){alert("Ainda não começou");return;}
-  if(agora>fim){alert("Já encerrou");return;}
+
+  function formatarData(d){
+    return d.toLocaleDateString('pt-BR') + " às " + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  }
+
+  if(agora < ini){
+    alert(`⏰ CALMA! Essa prova ainda não começou.\n\n📝 Prova: ${p.nome}\n▶️ Início: ${formatarData(ini)}\n⏹️ Fim: ${formatarData(fim)}\n\nVolte no horário marcado!`);
+    return;
+  }
+  if(agora > fim){
+    alert(`⛔ ENCERRADA! Essa prova já terminou.\n\n📝 Prova: ${p.nome}\n▶️ Começou: ${formatarData(ini)}\n⏹️ Terminou: ${formatarData(fim)}`);
+    return;
+  }
+
   provaAtual=p; respostas=new Array(p.qtd).fill('');
-  titProva.innerText=`${p.nome} | Código: ${p.senha} | Prof: ${p.professorNome}`;
+  let maxTxt = (p.maxTentativas===0 || p.maxTentativas===undefined)? "Tentativas: INFINITAS até o fim" : `Tentativas: até ${p.maxTentativas}x`;
+  titProva.innerText=`${p.nome} | Código: ${p.senha} | Prof: ${p.professorNome} | ${maxTxt}`;
   infoAl.innerText=`Aluno: ${alunoLogado.login}`;
   if(p.pdf){document.getElementById('nomePDF').innerText=p.nome+".pdf"; let btn=document.getElementById('btnBaixarPDF'); btn.href=p.pdf; btn.download=`${p.nome}.pdf`; pdfView.src=p.pdf;}
   let c=qs; c.innerHTML=''; for(let i=0;i<p.qtd;i++){c.innerHTML+=`<div class="q-item"><b>${i+1}</b><div><span class="opt" id="q${i}A" onclick="marcar(${i},'A')">A</span><span class="opt" id="q${i}B" onclick="marcar(${i},'B')">B</span><span class="opt" id="q${i}C" onclick="marcar(${i},'C')">C</span><span class="opt" id="q${i}D" onclick="marcar(${i},'D')">D</span></div></div>`;}
@@ -278,14 +293,17 @@ async function carregarDaNuvem(){
   let snapRes=await getDocs(collection(db,"resultados")); let meusIds=new Set(provas.map(p=>p.id)); resultados=[]; snapRes.forEach(d=>{let r=d.data(); if(meusIds.has(r.provaId)) resultados.push(r);});
   renderSalas(); renderRes(); await carregarSalasParaAluno();
 }
-window.editarSala = function(id){let p=provas.find(x=>x.id==id); if(!p) return; editandoSalaId=id; nomeProva.value=p.nome; senhaUnica.value=p.senha; dataInicio.value=p.inicio; dataFim.value=p.fim; qtdQuestoes.value=p.qtd; gabaritoProf.value=p.gabarito.join(','); pdfAtual=p.pdf; tituloFormSala.innerText="✏️ Editando: "+p.nome; btnSalvarSala.innerText="💾 ATUALIZAR"; btnCancelarSala.style.display="block"; window.scrollTo({top:0, behavior:'smooth'});}
-window.cancelarEdicaoSala = function(){editandoSalaId=null; nomeProva.value=""; senhaUnica.value=""; dataInicio.value=""; dataFim.value=""; qtdQuestoes.value=""; gabaritoProf.value=""; pdfAtual=null; pdfInfo.innerText=""; tituloFormSala.innerText="+ Nova Prova - Código da Sala"; btnSalvarSala.innerText="💾 SALVAR PROVA"; btnCancelarSala.style.display="none";}
+window.editarSala = function(id){let p=provas.find(x=>x.id==id); if(!p) return; editandoSalaId=id; nomeProva.value=p.nome; senhaUnica.value=p.senha; dataInicio.value=p.inicio; dataFim.value=p.fim; qtdQuestoes.value=p.qtd; gabaritoProf.value=p.gabarito.join(','); pdfAtual=p.pdf; document.getElementById('maxTentativas').value=p.maxTentativas===0?'':p.maxTentativas; tituloFormSala.innerText="✏️ Editando: "+p.nome; btnSalvarSala.innerText="💾 ATUALIZAR"; btnCancelarSala.style.display="block"; window.scrollTo({top:0, behavior:'smooth'});}
+window.cancelarEdicaoSala = function(){editandoSalaId=null; nomeProva.value=""; senhaUnica.value=""; dataInicio.value=""; dataFim.value=""; qtdQuestoes.value=""; gabaritoProf.value=""; pdfAtual=null; pdfInfo.innerText=""; document.getElementById('maxTentativas').value=""; tituloFormSala.innerText="+ Nova Prova - Código da Sala"; btnSalvarSala.innerText="💾 SALVAR PROVA"; btnCancelarSala.style.display="none";}
 window.salvarProva = async function(){
   let nome=nomeProva.value.trim(), senha=senhaUnica.value.trim(), ini=dataInicio.value, fim=dataFim.value, qtd=parseInt(qtdQuestoes.value), gab=gabaritoProf.value.split(',').map(s=>s.trim().toUpperCase()).filter(s=>s);
   if(!nome||!senha||!ini||!fim||!qtd||!gab.length){alert("Preencha tudo");return;}
   let id=editandoSalaId||`${profLogado.id}_${norm(senha)}`;
-  let obj={id:id, nome:nome, senha:senha, inicio:ini, fim:fim, qtd:qtd, gabarito:gab, pdf:pdfAtual||"", professorId:profLogado.id, professorNome:profLogado.usuario, data:new Date().toLocaleString(), timestamp:Date.now()};
-  await setDoc(doc(db,"provas",id),obj,{merge:true}); alert("✅ Prova salva! Código: "+senha); cancelarEdicaoSala(); await carregarDaNuvem();
+  let valorCampo=document.getElementById('maxTentativas').value;
+  let maxTent = valorCampo===""? 0 : parseInt(valorCampo);
+  if(isNaN(maxTent)) maxTent=0;
+  let obj={id:id, nome:nome, senha:senha, inicio:ini, fim:fim, qtd:qtd, gabarito:gab, pdf:pdfAtual||"", professorId:profLogado.id, professorNome:profLogado.usuario, data:new Date().toLocaleString(), timestamp:Date.now(), maxTentativas:maxTent};
+  await setDoc(doc(db,"provas",id),obj,{merge:true}); alert("✅ Prova salva! Código: "+senha+" | Tentativas: "+(maxTent===0?"INFINITAS":maxTent)); cancelarEdicaoSala(); await carregarDaNuvem();
 }
 function renderSalas(){
   let div=listaProvas; document.getElementById('totalSalas').innerText=provas.length;
@@ -295,7 +313,8 @@ function renderSalas(){
   if(atual) filtro.value=atual;
   div.innerHTML=provas.map(p=>{
     let qtdAlunos=resultados.filter(r=>r.provaId==p.id).length;
-    return `<div style="background:#222;padding:10px;border-radius:10px;margin-bottom:8px"><div style="display:flex;justify-content:space-between"><div><b style="color:#00ff88">${p.nome}</b> <span class="badge badge-green">${qtdAlunos} alunos</span><br><small>Código: <b style="color:#ffeb3b">${p.senha}</b></small></div><div><button class="btn-edit" onclick="editarSala('${p.id}')">✏️</button><button class="btn-red" onclick="apagarSala('${p.id}')">🗑️</button></div></div></div>`;
+    let tentTxt = (p.maxTentativas===0 || p.maxTentativas===undefined)? "♾️ INFINITO" : p.maxTentativas+"x";
+    return `<div style="background:#222;padding:10px;border-radius:10px;margin-bottom:8px"><div style="display:flex;justify-content:space-between"><div><b style="color:#00ff88">${p.nome}</b> <span class="badge badge-green">${qtdAlunos} alunos</span> <span class="badge badge-prof">${tentTxt}</span><br><small>Código: <b style="color:#ffeb3b">${p.senha}</b></small></div><div><button class="btn-edit" onclick="editarSala('${p.id}')">✏️</button><button class="btn-red" onclick="apagarSala('${p.id}')">🗑️</button></div></div></div>`;
   }).join('');
 }
 window.apagarSala = async function(id){if(!confirm("Apagar?"))return; await deleteDoc(doc(db,"provas",id)); await carregarDaNuvem();}
@@ -305,23 +324,26 @@ window.salvarEdicaoResultado = async function(){let id=editId.value; let obj={no
 window.abrirPDFNovaAba = function(){if(provaAtual && provaAtual.pdf) window.open(provaAtual.pdf, '_blank');}
 window.marcar = function(q,l){respostas[q]=l; ['A','B','C','D'].forEach(x=>document.getElementById(`q${q}${x}`).classList.toggle('sel',x==l));}
 
-// *** CORREÇÃO PRINCIPAL: SÓ SALVA ÚLTIMO ENVIO ***
 window.enviar = async function(){
  if(timerInterval) clearInterval(timerInterval);
- let ac=0; for(let i=0;i<provaAtual.qtd;i++) if(respostas[i]==provaAtual.gabarito[i]) ac++;
- let perc=(ac/provaAtual.qtd*100).toFixed(1);
-
- // ID FIXO = prova + login do aluno (sem timestamp = sobrescreve)
  let idResultado=`${provaAtual.id}_${norm(alunoLogado.login)}`;
-
  let snapExistente = null;
  try { snapExistente = await getDoc(doc(db,"resultados",idResultado)); } catch(e){}
-
+ let maxPermitido = provaAtual.maxTentativas;
+ if(maxPermitido === undefined) maxPermitido = 0;
+ if(maxPermitido!== 0 && snapExistente && snapExistente.exists()){
+   let tentativasAtuais = snapExistente.data().tentativas || 1;
+   if(tentativasAtuais >= maxPermitido){
+     alert(`⛔ Você já atingiu o limite de ${maxPermitido} tentativa(s)!`);
+     return;
+   }
+ }
+ let ac=0; for(let i=0;i<provaAtual.qtd;i++) if(respostas[i]==provaAtual.gabarito[i]) ac++;
+ let perc=(ac/provaAtual.qtd*100).toFixed(1);
  let tentativas = 1;
  if(snapExistente && snapExistente.exists()){
    tentativas = (snapExistente.data().tentativas || 1) + 1;
  }
-
  let novo={
    id:idResultado,
    provaId:provaAtual.id,
@@ -335,17 +357,16 @@ window.enviar = async function(){
    total:provaAtual.qtd,
    nota:perc,
    respostas:respostas.join(','),
-   data:new Date().toLocaleString() + (tentativas>1? ` (tentativa ${tentativas} - último)` : ''),
+   data:new Date().toLocaleString() + (maxPermitido===0? ` (tentativa ${tentativas} - ♾️)` : ` (tentativa ${tentativas}/${maxPermitido})`),
    timestamp:Date.now(),
    tentativas:tentativas
  };
-
  await setDoc(doc(db,"resultados",idResultado),novo,{merge:true});
  areaProva.style.display='none'; resAl.style.display='block';
- resAl.innerHTML=`<h3 style="color:#00ff88">✅ Enviado!</h3><b>${alunoLogado.login}</b> - ${ac}/${provaAtual.qtd} = ${perc}%<br><small>${tentativas>1?'Atualizado - tentativa '+tentativas:'Primeiro envio'}</small><br><br><button class="btn-blue" onclick="location.reload()" style="width:100%">Sair</button>`;
+ let msgTent = maxPermitido===0? `Tentativa ${tentativas} - Pode refazer até acabar o tempo ♾️` : `Tentativa ${tentativas} de ${maxPermitido}`;
+ resAl.innerHTML=`<h3 style="color:#00ff88">✅ Enviado!</h3><b>${alunoLogado.login}</b> - ${ac}/${provaAtual.qtd} = ${perc}%<br><small>${msgTent}</small><br><br><button class="btn-blue" onclick="location.reload()" style="width:100%">Fazer Novamente / Sair</button>`;
 }
 
-// LIMPAR DUPLICADOS ANTIGOS
 window.limparDuplicados = async function(){
   if(!profLogado){alert("Faça login");return;}
   if(!confirm("Apagar duplicados e deixar só o último de cada aluno por prova?"))return;
@@ -363,7 +384,7 @@ window.limparDuplicados = async function(){
     }
   });
   for(let id of deletar){ await deleteDoc(doc(db,"resultados",id)); }
-  alert(`✅ Limpeza feita! ${deletar.length} duplicados apagados. Agora só ficou o último de cada aluno.`);
+  alert(`✅ Limpeza feita! ${deletar.length} duplicados apagados.`);
   await carregarDaNuvem();
 }
 
