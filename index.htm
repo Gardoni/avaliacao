@@ -1,35 +1,264 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Provas - testeapi-1ad07</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Provas - testeapi-1ad07</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<header><h1>📚 Sistema de Provas - NUVEM</h1><div id="statusNuvem" style="font-size:13px;margin-top:8px">☁️ Conectando testeapi-1ad07...</div></header>
-<nav class="menu"><button class="btn-primary" onclick="mostrar('inicio')">🏠 Início</button><button class="btn-primary" onclick="mostrar('aluno')">👨‍🎓 Área do Aluno</button><button class="btn-secondary" onclick="abrirLogin()">👨‍🏫 Professor</button></nav>
-<main class="container">
-<section id="inicio"><div class="card" style="text-align:center"><h2>📚 Sistema de Provas em Nuvem</h2><p>Conectado no Firebase testeapi-1ad07 - 120 alunos centralizados</p><div class="opcoes"><div class="opcao" onclick="mostrar('aluno')"><div style="font-size:45px">👨‍🎓</div><h3>Área do Aluno</h3></div><div class="opcao" onclick="abrirLogin()"><div style="font-size:45px">👨‍🏫</div><h3>Área do Professor</h3></div></div></div></section>
-<section id="aluno" class="hidden"><div class="card login-box"><h2>👨‍🎓 Acesso do Aluno</h2><label>Nome completo</label><input id="loginAlunoNome" placeholder="Nome completo"><label>Senha</label><input id="loginAlunoSenha" type="password" placeholder="Sua senha"><button class="btn-primary" style="width:100%" onclick="loginAluno()">🔓 Entrar</button><button class="btn-success" style="width:100%;margin-top:8px" onclick="abrirCadastroAluno()">📝 Primeiro acesso — Cadastrar aluno</button><p id="erroLoginAluno" style="color:red;text-align:center;font-weight:bold;margin-top:10px"></p></div></section>
-<section id="cadastroAluno" class="hidden"><div class="card login-box"><h2>📝 Cadastro do Aluno</h2><label>Nome completo</label><input id="cadAlunoNome" placeholder="Ex: Paulo Loz"><label>Usuário (para login)</label><input id="cadAlunoUsuario" placeholder="Ex: paulo (sem espaço)"><label>Senha</label><input id="cadAlunoSenha" type="password" placeholder="Mínimo 4 caracteres"><label>Confirmar senha</label><input id="cadAlunoSenha2" type="password" placeholder="Repita a senha"><p id="erroCadastroAluno" style="color:red;font-weight:bold;text-align:center;background:#fee2e2;padding:10px;border-radius:7px;display:none"></p><button class="btn-success" style="width:100%" onclick="cadastrarAluno()">✅ Criar meu cadastro</button><button class="btn-secondary" style="width:100%;margin-top:8px" onclick="mostrar('aluno')">← Voltar</button></div></section>
-<section id="fazerProva" class="hidden"><div class="card"><div class="topo-prova"><div><h2 id="tituloProva"></h2><p id="dadosAluno"></p></div><div id="cronometro" class="cronometro">00:00</div></div><div id="statusSeguranca"></div><div id="questoesAluno"></div><button class="btn-success" style="width:100%;margin-top:20px" onclick="finalizarProva()">✅ FINALIZAR</button></div></section>
-<section id="resultado" class="hidden"><div class="card"><h2 style="text-align:center">🎉 Resultado</h2><div id="resultadoConteudo"></div><button class="btn-primary" onclick="mostrar('aluno')">← Voltar</button></div></section>
-<section id="login" class="hidden"><div class="card login-box"><h2 style="text-align:center">🔐 Login Professor/Master</h2><label>Usuário</label><input id="usuarioLogin"><label>Senha</label><input id="senhaLogin" type="password"><button class="btn-primary" style="width:100%" onclick="login()">🔓 Entrar</button><button class="btn-secondary" style="width:100%;margin-top:8px" onclick="mostrar('inicio')">Cancelar</button><p id="erroLogin" style="color:red;text-align:center;font-weight:bold;margin-top:10px"></p><div class="info-box">master / 1234</div></div></section>
-<section id="professor" class="hidden">
-<div class="card"><div id="usuarioLogado" class="info-box"></div><div id="infoNuvem" class="nuvem-box"></div><button class="btn-danger" onclick="sair()">🚪 Sair</button></div>
-<div class="card"><div class="painel-menu"><button class="btn-primary" onclick="painelProfessor('provas')">📝 Avaliações</button><button class="btn-primary" onclick="painelProfessor('questoes')">❓ Questões</button><button class="btn-primary" onclick="painelProfessor('resultados')">📊 Resultados</button><button class="btn-purple" onclick="painelProfessor('senha')">🔑 Minha Senha</button><button id="botaoMaster" class="btn-dark hidden" onclick="painelProfessor('professores')">👨‍🏫 Professores</button><button id="botaoAlunosMaster" class="btn-dark hidden" onclick="painelProfessor('alunos')">👨‍🎓 Alunos</button></div></div>
-<div id="painelSenha" class="card hidden"><h2>🔑 Minha Senha</h2><label>Atual</label><input id="senhaAtual" type="password"><label>Nova</label><input id="novaSenha" type="password"><label>Confirmar</label><input id="confirmarSenha" type="password"><button class="btn-primary" onclick="alterarMinhaSenha()">💾 Alterar</button></div>
-<div id="painelProfessores" class="card hidden"><h2>👨‍🏫 Professores</h2><div class="grid-2"><div><label>Nome</label><input id="novoProfessorNome"></div><div><label>Usuário</label><input id="novoProfessorUsuario"></div></div><label>Senha</label><input id="novoProfessorSenha" type="password"><button class="btn-success" onclick="cadastrarProfessor()">➕ Cadastrar</button><hr><div id="listaProfessores"></div></div>
-<div id="painelAlunos" class="card hidden"><h2>👨‍🎓 Alunos - Nuvem testeapi-1ad07</h2><div class="grid-2"><div><label>Nome</label><input id="novoAlunoNome"></div><div><label>Usuário</label><input id="novoAlunoUsuario"></div></div><label>Senha</label><input id="novoAlunoSenha" type="password"><button class="btn-success" onclick="cadastrarAlunoMaster()">➕ Cadastrar Aluno</button><hr><div style="display:flex;gap:8px;margin-bottom:12px"><input id="buscaAluno" placeholder="🔍 Buscar" oninput="listarAlunosMaster()" style="flex:1"><button class="btn-secondary btn-sm" onclick="document.getElementById('buscaAluno').value='';listarAlunosMaster()">Limpar</button><button class="btn-success btn-sm" onclick="exportarAlunosExcel()">📥 Excel Alunos</button></div><div id="listaAlunosMaster"></div></div>
-<div id="painelProvas" class="card"><h2 id="tituloProvaProfessor">📝 Criar Avaliação</h2><label>Nome</label><input id="nomeProva"><label>Descrição</label><textarea id="descricaoProva"></textarea><div class="grid-3"><div><label>⏱️ Tempo</label><input id="tempo" type="number" value="60"></div><div><label>Nota mínima</label><input id="notaMinima" type="number" value="6"></div><div><label>🔁 Tentativas</label><input id="maxTentativas" type="number" min="1" max="10" value="1"></div></div><h3>📅 Agendamento</h3><div class="grid-2"><div><label>Início</label><input id="dataInicio" type="datetime-local"></div><div><label>Final</label><input id="dataFim" type="datetime-local"></div></div><div class="security-box"><div class="security-title">🔒 Segurança</div><label><input type="checkbox" id="segAtivo"> Ativar modo seguro</label><div id="segOpcoes" class="hidden"><div class="security-grid"><div class="security-item"><label><input type="checkbox" id="segFullscreen" checked> Tela cheia</label></div><div class="security-item"><label><input type="checkbox" id="segSaida" checked> Detectar saída</label></div><div class="security-item"><label><input type="checkbox" id="segImpressao" checked> Bloquear impressão</label></div><div class="security-item"><label><input type="checkbox" id="segAtalhos" checked> Bloquear atalhos</label></div><div class="security-item"><label><input type="checkbox" id="segCopia" checked> Bloquear copiar</label></div><div class="security-item"><label><input type="checkbox" id="segContexto" checked> Botão direito</label></div><div class="security-item"><label><input type="checkbox" id="segPrintScreen" checked> Print</label></div><div class="security-item"><label><input type="checkbox" id="segSelecao" checked> Seleção</label></div></div><div class="grid-2"><div><label>Máx ocorrências</label><input id="segMax" type="number" value="3"></div><div><label>Ação</label><select id="segAcao"><option value="encerrar">Encerrar</option><option value="bloquear">Bloquear</option><option value="registrar">Registrar</option></select></div></div></div></div><div class="acoes"><button class="btn-primary" onclick="criarProva()">💾 Salvar na Nuvem</button><button class="btn-secondary" onclick="limparProva()">Limpar</button></div><hr><h2>📚 Minhas Avaliações (Nuvem)</h2><div id="listaProfessor"></div></div>
-<div id="painelQuestoes" class="card hidden"><h2 id="tituloQuestao">❓ Questões</h2><label>Avaliação</label><select id="selectProva"></select><label>Enunciado</label><textarea id="enunciado"></textarea><h3>🖼️ Imagem</h3><input id="imagemQuestao" type="file" accept="image/*" onchange="carregarImagem(event)"><div id="previewImagem" class="preview-imagem hidden"><img id="imagemPreview"><br><br><button class="btn-danger" onclick="removerImagem()">🗑️ Remover</button></div><div class="grid-2"><div><label>Largura</label><input id="imagemLargura" type="number" value="500" oninput="atualizarPreviewImagem()"></div><div><label>Altura</label><input id="imagemAltura" type="number" value="300" oninput="atualizarPreviewImagem()"></div></div><label>A</label><input id="a"><label>B</label><input id="b"><label>C</label><input id="c"><label>D</label><input id="d"><label>Correta</label><select id="correta"><option value="">Selecione</option><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select><div class="acoes"><button class="btn-primary" onclick="salvarQuestao()">💾 Salvar na Nuvem</button><button class="btn-secondary" onclick="limparQuestao()">Limpar</button></div><hr><div id="listaQuestoes"></div></div>
-<div id="painelResultados" class="card hidden"><h2>📊 Resultados - testeapi-1ad07</h2><div id="resultados"></div></div>
-</section>
-</main>
-<div id="watermark" class="watermark"></div>
-<div id="warningOverlay" class="warning-overlay"><div class="warning-box"><h2>⚠️ ATENÇÃO!</h2><p id="warningText"></p><div class="warning-count" id="warningCount"></div><button class="btn-danger" onclick="fecharAviso()">ENTENDI</button></div></div>
-<div id="lockOverlay" class="lock-overlay"><div><h1>🔒 AVALIAÇÃO ENCERRADA</h1><p id="lockText"></p></div></div>
-<script type="module" src="app.js"></script>
+    <header>
+        <h1>📚 Sistema de Provas - NUVEM</h1>
+        <div id="statusNuvem" style="font-size:13px;margin-top:8px">☁️ Conectando testeapi-1ad07...</div>
+    </header>
+    <nav class="menu"><button class="btn-primary" onclick="mostrar('inicio')">🏠 Início</button><button
+            class="btn-primary" onclick="mostrar('aluno')">👨‍🎓 Área do Aluno</button><button class="btn-secondary"
+            onclick="abrirLogin()">👨‍🏫 Professor</button></nav>
+    <main class="container">
+        <section id="inicio">
+            <div class="card" style="text-align:center">
+                <h2>📚 Sistema de Provas em Nuvem</h2>
+                <p>Conectado no Firebase testeapi-1ad07 - 120 alunos centralizados</p>
+                <div class="opcoes">
+                    <div class="opcao" onclick="mostrar('aluno')">
+                        <div style="font-size:45px">👨‍🎓</div>
+                        <h3>Área do Aluno</h3>
+                    </div>
+                    <div class="opcao" onclick="abrirLogin()">
+                        <div style="font-size:45px">👨‍🏫</div>
+                        <h3>Área do Professor</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="aluno" class="hidden">
+            <div class="card login-box">
+                <h2>👨‍🎓 Acesso do Aluno</h2><label>Nome completo</label><input id="loginAlunoNome"
+                    placeholder="Nome completo"><label>Senha</label><input id="loginAlunoSenha" type="password"
+                    placeholder="Sua senha"><button class="btn-primary" style="width:100%" onclick="loginAluno()">🔓
+                    Entrar</button><button class="btn-success" style="width:100%;margin-top:8px"
+                    onclick="abrirCadastroAluno()">📝 Primeiro acesso — Cadastrar aluno</button>
+                <p id="erroLoginAluno" style="color:red;text-align:center;font-weight:bold;margin-top:10px"></p>
+            </div>
+        </section>
+        <section id="cadastroAluno" class="hidden">
+            <div class="card login-box">
+                <h2>📝 Cadastro do Aluno</h2><label>Nome completo</label><input id="cadAlunoNome"
+                    placeholder="Ex: Paulo Loz"><label>Usuário (para login)</label><input id="cadAlunoUsuario"
+                    placeholder="Ex: paulo (sem espaço)"><label>Senha</label><input id="cadAlunoSenha" type="password"
+                    placeholder="Mínimo 4 caracteres"><label>Confirmar senha</label><input id="cadAlunoSenha2"
+                    type="password" placeholder="Repita a senha">
+                <p id="erroCadastroAluno"
+                    style="color:red;font-weight:bold;text-align:center;background:#fee2e2;padding:10px;border-radius:7px;display:none">
+                </p><button class="btn-success" style="width:100%" onclick="cadastrarAluno()">✅ Criar meu
+                    cadastro</button><button class="btn-secondary" style="width:100%;margin-top:8px"
+                    onclick="mostrar('aluno')">← Voltar</button>
+            </div>
+        </section>
+        <section id="fazerProva" class="hidden">
+            <div class="card">
+                <div class="topo-prova">
+                    <div>
+                        <h2 id="tituloProva"></h2>
+                        <p id="dadosAluno"></p>
+                    </div>
+                    <div id="cronometro" class="cronometro">00:00</div>
+                </div>
+                <div id="statusSeguranca"></div>
+                <div id="questoesAluno"></div><button class="btn-success" style="width:100%;margin-top:20px"
+                    onclick="finalizarProva()">✅ FINALIZAR</button>
+            </div>
+        </section>
+        <section id="resultado" class="hidden">
+            <div class="card">
+                <h2 style="text-align:center">🎉 Resultado</h2>
+                <div id="resultadoConteudo"></div><button class="btn-primary" onclick="mostrar('aluno')">←
+                    Voltar</button>
+            </div>
+        </section>
+        <section id="login" class="hidden">
+            <div class="card login-box">
+                <h2 style="text-align:center">🔐 Login Professor/Master</h2><label>Usuário</label><input
+                    id="usuarioLogin"><label>Senha</label><input id="senhaLogin" type="password"><button
+                    class="btn-primary" style="width:100%" onclick="login()">🔓 Entrar</button><button
+                    class="btn-secondary" style="width:100%;margin-top:8px"
+                    onclick="mostrar('inicio')">Cancelar</button>
+                <p id="erroLogin" style="color:red;text-align:center;font-weight:bold;margin-top:10px"></p>
+                <div class="info-box">master / 1234</div>
+            </div>
+        </section>
+        <section id="professor" class="hidden">
+            <div class="card">
+                <div id="usuarioLogado" class="info-box"></div>
+                <div id="infoNuvem" class="nuvem-box"></div><button class="btn-danger" onclick="sair()">🚪 Sair</button>
+            </div>
+            <div class="card">
+                <div class="painel-menu"><button class="btn-primary" onclick="painelProfessor('provas')">📝
+                        Avaliações</button><button class="btn-primary" onclick="painelProfessor('questoes')">❓
+                        Questões</button><button class="btn-primary" onclick="painelProfessor('resultados')">📊
+                        Resultados</button><button class="btn-purple" onclick="painelProfessor('senha')">🔑 Minha
+                        Senha</button><button id="botaoMaster" class="btn-dark hidden"
+                        onclick="painelProfessor('professores')">👨‍🏫 Professores</button><button
+                        id="botaoAlunosMaster" class="btn-dark hidden" onclick="painelProfessor('alunos')">👨‍🎓
+                        Alunos</button><button id="botaoBancoMaster" class="btn-danger hidden"
+                        onclick="painelProfessor('banco')">🗄️ Banco de Dados</button></div>
+            </div>
+            <div id="painelSenha" class="card hidden">
+                <h2>🔑 Minha Senha</h2><label>Atual</label><input id="senhaAtual"
+                    type="password"><label>Nova</label><input id="novaSenha"
+                    type="password"><label>Confirmar</label><input id="confirmarSenha" type="password"><button
+                    class="btn-primary" onclick="alterarMinhaSenha()">💾 Alterar</button>
+            </div>
+            <div id="painelProfessores" class="card hidden">
+                <h2>👨‍🏫 Professores</h2>
+                <div class="grid-2">
+                    <div><label>Nome</label><input id="novoProfessorNome"></div>
+                    <div><label>Usuário</label><input id="novoProfessorUsuario"></div>
+                </div><label>Senha</label><input id="novoProfessorSenha" type="password"><button class="btn-success"
+                    onclick="cadastrarProfessor()">➕ Cadastrar</button>
+                <hr>
+                <div id="listaProfessores"></div>
+            </div>
+            <div id="painelAlunos" class="card hidden">
+                <h2>👨‍🎓 Alunos - Nuvem testeapi-1ad07</h2>
+                <div class="grid-2">
+                    <div><label>Nome</label><input id="novoAlunoNome"></div>
+                    <div><label>Usuário</label><input id="novoAlunoUsuario"></div>
+                </div><label>Senha</label><input id="novoAlunoSenha" type="password"><button class="btn-success"
+                    onclick="cadastrarAlunoMaster()">➕ Cadastrar Aluno</button>
+                <hr>
+                <div style="display:flex;gap:8px;margin-bottom:12px"><input id="buscaAluno" placeholder="🔍 Buscar"
+                        oninput="listarAlunosMaster()" style="flex:1"><button class="btn-secondary btn-sm"
+                        onclick="document.getElementById('buscaAluno').value='';listarAlunosMaster()">Limpar</button><button
+                        class="btn-success btn-sm" onclick="exportarAlunosExcel()">📥 Excel Alunos</button></div>
+                <div id="listaAlunosMaster"></div>
+            </div>
+            <div id="painelBanco" class="card hidden" style="border: 3px solid #dc2626;">
+                <h2>🗄️ LIMPEZA BANCO DE DADOS - MASTER</h2>
+                <div class="info-box" style="background:#fee2e2;border-color:#fca5a5"><strong>⚠️ ATENÇÃO:</strong> Apaga
+                    da nuvem testeapi-1ad07 para sempre!</div>
+                <h3>🧹 Limpar Provas</h3>
+                <div class="grid-2"><button class="btn-warning" onclick="limparTodasProvas()">🗑️ Apagar TODAS
+                        Avaliações</button><button class="btn-danger" onclick="limparQuestoesTodas()">❓ Apagar só
+                        Questões</button></div>
+                <h3 style="margin-top:20px">📊 Limpar Resultados</h3>
+                <div class="grid-2"><button class="btn-danger" onclick="limparTodosResultados()">💥 Apagar TODAS as
+                        Notas</button><button class="btn-secondary" onclick="limparResultadosProva()">🎯 Apagar Notas de
+                        uma Prova</button></div>
+                <h3 style="margin-top:20px">🔑 Resetar Senhas</h3>
+                <div class="grid-2"><button class="btn-purple" onclick="resetarSenhasAlunos()">👨‍🎓 Resetar senhas
+                        alunos para 1234</button><button class="btn-purple" onclick="resetarSenhasProfessores()">👨‍🏫
+                        Resetar senhas professores para 1234</button></div>
+                <div style="margin-top:10px"><label>Nova senha padrão</label><input id="senhaPadraoReset" value="1234">
+                </div>
+                <h3 style="margin-top:20px">💣 ZERAR TUDO</h3><button class="btn-danger"
+                    style="width:100%;padding:18px;font-size:18px" onclick="zerarBancoCompleto()">☢️ ZERAR BANCO
+                    COMPLETO</button>
+                <div id="logBanco"
+                    style="margin-top:15px;background:#111827;color:#fff;padding:12px;border-radius:8px;font-family:monospace;font-size:13px;max-height:200px;overflow:auto">
+                </div>
+            </div>
+            <div id="painelProvas" class="card">
+                <h2 id="tituloProvaProfessor">📝 Criar Avaliação</h2><label>Nome</label><input
+                    id="nomeProva"><label>Descrição</label><textarea id="descricaoProva"></textarea>
+                <div class="grid-3">
+                    <div><label>⏱️ Tempo</label><input id="tempo" type="number" value="60"></div>
+                    <div><label>Nota mínima</label><input id="notaMinima" type="number" value="6"></div>
+                    <div><label>🔁 Tentativas</label><input id="maxTentativas" type="number" min="1" max="10" value="1">
+                    </div>
+                </div>
+                <h3>📅 Agendamento</h3>
+                <div class="grid-2">
+                    <div><label>Início</label><input id="dataInicio" type="datetime-local"></div>
+                    <div><label>Final</label><input id="dataFim" type="datetime-local"></div>
+                </div>
+                <div class="security-box">
+                    <div class="security-title">🔒 Segurança</div><label><input type="checkbox" id="segAtivo"> Ativar
+                        modo seguro</label>
+                    <div id="segOpcoes" class="hidden">
+                        <div class="security-grid">
+                            <div class="security-item"><label><input type="checkbox" id="segFullscreen" checked> Tela
+                                    cheia</label></div>
+                            <div class="security-item"><label><input type="checkbox" id="segSaida" checked> Detectar
+                                    saída</label></div>
+                            <div class="security-item"><label><input type="checkbox" id="segImpressao" checked> Bloquear
+                                    impressão</label></div>
+                            <div class="security-item"><label><input type="checkbox" id="segAtalhos" checked> Bloquear
+                                    atalhos</label></div>
+                            <div class="security-item"><label><input type="checkbox" id="segCopia" checked> Bloquear
+                                    copiar</label></div>
+                            <div class="security-item"><label><input type="checkbox" id="segContexto" checked> Botão
+                                    direito</label></div>
+                            <div class="security-item"><label><input type="checkbox" id="segPrintScreen" checked>
+                                    Print</label></div>
+                            <div class="security-item"><label><input type="checkbox" id="segSelecao" checked>
+                                    Seleção</label></div>
+                        </div>
+                        <div class="grid-2">
+                            <div><label>Máx ocorrências</label><input id="segMax" type="number" value="3"></div>
+                            <div><label>Ação</label><select id="segAcao">
+                                    <option value="encerrar">Encerrar</option>
+                                    <option value="bloquear">Bloquear</option>
+                                    <option value="registrar">Registrar</option>
+                                </select></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="acoes"><button class="btn-primary" onclick="criarProva()">💾 Salvar na Nuvem</button><button
+                        class="btn-secondary" onclick="limparProva()">Limpar</button></div>
+                <hr>
+                <h2>📚 Minhas Avaliações (Nuvem)</h2>
+                <div id="listaProfessor"></div>
+            </div>
+            <div id="painelQuestoes" class="card hidden">
+                <h2 id="tituloQuestao">❓ Questões</h2><label>Avaliação</label><select
+                    id="selectProva"></select><label>Enunciado</label><textarea id="enunciado"></textarea>
+                <h3>🖼️ Imagem</h3><input id="imagemQuestao" type="file" accept="image/*"
+                    onchange="carregarImagem(event)">
+                <div id="previewImagem" class="preview-imagem hidden"><img id="imagemPreview"><br><br><button
+                        class="btn-danger" onclick="removerImagem()">🗑️ Remover</button></div>
+                <div class="grid-2">
+                    <div><label>Largura</label><input id="imagemLargura" type="number" value="500"
+                            oninput="atualizarPreviewImagem()"></div>
+                    <div><label>Altura</label><input id="imagemAltura" type="number" value="300"
+                            oninput="atualizarPreviewImagem()"></div>
+                </div><label>A</label><input id="a"><label>B</label><input id="b"><label>C</label><input
+                    id="c"><label>D</label><input id="d"><label>Correta</label><select id="correta">
+                    <option value="">Selecione</option>
+                    <option value="0">A</option>
+                    <option value="1">B</option>
+                    <option value="2">C</option>
+                    <option value="3">D</option>
+                </select>
+                <div class="acoes"><button class="btn-primary" onclick="salvarQuestao()">💾 Salvar na
+                        Nuvem</button><button class="btn-secondary" onclick="limparQuestao()">Limpar</button></div>
+                <hr>
+                <div id="listaQuestoes"></div>
+            </div>
+            <div id="painelResultados" class="card hidden">
+                <h2>📊 Resultados - testeapi-1ad07</h2>
+                <div id="resultados"></div>
+            </div>
+        </section>
+    </main>
+    <div id="watermark" class="watermark"></div>
+    <div id="warningOverlay" class="warning-overlay">
+        <div class="warning-box">
+            <h2>⚠️ ATENÇÃO!</h2>
+            <p id="warningText"></p>
+            <div class="warning-count" id="warningCount"></div><button class="btn-danger"
+                onclick="fecharAviso()">ENTENDI</button>
+        </div>
+    </div>
+    <div id="lockOverlay" class="lock-overlay">
+        <div>
+            <h1>🔒 AVALIAÇÃO ENCERRADA</h1>
+            <p id="lockText"></p>
+        </div>
+    </div>
+    <script type="module" src="app.js"></script>
 </body>
+
 </html>
