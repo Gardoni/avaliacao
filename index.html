@@ -1,0 +1,2246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sistema de Provas 4.1</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --azul: #2563eb;
+            --azul2: #1d4ed8;
+            --verde: #16a34a;
+            --vermelho: #dc2626;
+            --amarelo: #d97706;
+            --cinza: #f3f4f6;
+            --texto: #172033;
+            --card: #ffffff;
+            --borda: #dbe1ea;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--cinza);
+            color: var(--texto);
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            background: var(--azul);
+            color: #fff;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            filter: brightness(0.95);
+            transform: translateY(-1px);
+        }
+
+        button.sec {
+            background: #64748b;
+        }
+
+        button.danger {
+            background: var(--vermelho);
+        }
+
+        button.success {
+            background: var(--verde);
+        }
+
+        button.warning {
+            background: var(--amarelo);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--azul), var(--azul2));
+            color: white;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .status {
+            font-size: 13px;
+            background: #d97706;
+            padding: 7px 12px;
+            border-radius: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 12px 20px;
+            background: #fff;
+            box-shadow: 0 2px 8px #0001;
+        }
+
+        nav button {
+            background: #eef2ff;
+            color: #1e3a8a;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 22px;
+            min-height: 70vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--borda);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 3px 12px #0000000a;
+        }
+
+        .card h2,
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .form {
+            display: grid;
+            gap: 10px;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .row>* {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #fff;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--azul);
+            box-shadow: 0 0 0 3px #2563eb22;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .list {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .item {
+            background: #fff;
+            border: 1px solid var(--borda);
+            padding: 14px;
+            border-radius: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 15px;
+            background: #e2e8f0;
+            font-size: 12px;
+            margin: 2px;
+        }
+
+        .badge.ok {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge.no {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .msg {
+            padding: 10px;
+            border-radius: 8px;
+            background: #eff6ff;
+            margin: 10px 0;
+        }
+
+        .erro {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .sucesso {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .question {
+            background: #fff;
+            border: 1px solid var(--borda);
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+        }
+
+        .alt {
+            display: block;
+            padding: 9px;
+            margin: 6px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .alt:hover {
+            background: #f8fafc;
+        }
+
+        #cronometro {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--vermelho);
+        }
+
+        .fullscreen {
+            position: fixed;
+            inset: 0;
+            background: #f3f4f6;
+            z-index: 9999;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        .titulo-pequeno {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--borda);
+            padding-bottom: 10px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            color: #64748b;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .tab.active {
+            background: var(--azul);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Questão Builder */
+        .questao-builder {
+            background: #f8fafc;
+            border: 2px solid var(--borda);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .alternativa-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+        }
+
+        .alternativa-input input[type="radio"] {
+            width: auto;
+        }
+
+        .alternativa-input input[type="text"] {
+            flex: 1;
+        }
+
+        /* Tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--borda);
+        }
+
+        th {
+            background: #f8fafc;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Cronômetro Prova */
+        .timer-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--vermelho);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 28px;
+            font-weight: 800;
+            z-index: 10000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .prova-container {
+            max-width: 900px;
+            margin: 80px auto 20px;
+        }
+
+        .prova-questao {
+            background: white;
+            border: 2px solid var(--borda);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .prova-questao h3 {
+            margin-top: 0;
+            color: var(--azul);
+        }
+
+        .prova-alternativa {
+            display: block;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .prova-alternativa:hover {
+            background: #f1f5f9;
+            border-color: var(--azul);
+        }
+
+        .prova-alternativa input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .prova-alternativa.selecionada {
+            background: #eff6ff;
+            border-color: var(--azul);
+        }
+
+        .prova-alternativa.correta {
+            background: #dcfce7;
+            border-color: var(--verde);
+        }
+
+        .prova-alternativa.incorreta {
+            background: #fee2e2;
+            border-color: var(--vermelho);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--azul), var(--azul2));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 18px;
+            }
+
+            nav {
+                padding: 10px;
+            }
+
+            nav button {
+                flex: 1;
+                min-width: 120px;
+            }
+
+            main {
+                padding: 12px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .timer-display {
+                font-size: 20px;
+                padding: 10px 15px;
+                top: 10px;
+                right: 10px;
+            }
+
+            .prova-container {
+                margin-top: 100px;
+            }
+        }
+    </style>
+
+    <!-- Firebase 8 - Bibliotecas oficiais -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+</head>
+
+<body>
+
+    <header>
+
+        <h1>📚 Sistema de Provas 4.1</h1>
+
+        <div id="statusNuvem" class="status">
+            ⏳ Conectando ao Firebase...
+        </div>
+
+    </header>
+
+    <nav>
+
+        <button id="btnInicio">
+            🏠 Início
+        </button>
+
+        <button id="btnAreaAluno">
+            🎓 Área do Aluno
+        </button>
+
+        <button id="btnProfessor">
+            ‍🏫 Professor
+        </button>
+
+    </nav>
+
+    <main>
+
+        <!-- ========================= -->
+        <!-- INÍCIO -->
+        <!-- ========================= -->
+
+        <section id="inicio" class="section active">
+
+            <div class="card">
+
+                <h2>Bem-vindo</h2>
+
+                <p>
+                    Escolha uma área para continuar.
+                </p>
+
+                <div class="grid">
+
+                    <div class="card">
+
+                        <h3>🎓 Aluno</h3>
+
+                        <p>
+                            Cadastre-se, entre em uma turma e realize avaliações.
+                        </p>
+
+                        <button id="cardAluno">
+                            Entrar como aluno
+                        </button>
+
+                    </div>
+
+                    <div class="card">
+
+                        <h3>👨‍ Professor</h3>
+
+                        <p>
+                            Crie turmas, avaliações, questões e acompanhe resultados.
+                        </p>
+
+                        <button id="cardProf">
+                            Entrar como professor
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- ÁREA DO ALUNO -->
+        <!-- ========================= -->
+
+        <section id="areaAluno" class="section">
+
+            <div class="grid">
+
+                <!-- LOGIN -->
+
+                <div class="card">
+
+                    <h2>🎓 Login do aluno</h2>
+
+                    <div id="msgLoginAluno" class="msg hidden"></div>
+
+                    <div class="form">
+
+                        <label for="loginAlunoUsuario">
+                            Usuário
+                        </label>
+
+                        <input id="loginAlunoUsuario" autocomplete="username" placeholder="Digite seu usuário">
+
+                        <label for="loginAlunoSenha">
+                            Senha
+                        </label>
+
+                        <input id="loginAlunoSenha" type="password" autocomplete="current-password"
+                            placeholder="Digite sua senha">
+
+                        <button id="btnLoginAluno">
+                            Entrar
+                        </button>
+
+                        <button id="btnAbrirCadastro" class="sec">
+                            Criar cadastro
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CADASTRO -->
+
+                <div id="cadastroAlunoCard" class="card hidden">
+
+                    <h2>📝 Cadastro do aluno</h2>
+
+                    <div id="msgCadastroAluno" class="msg hidden"></div>
+
+                    <div class="form">
+
+                        <label for="cadAlunoNome">
+                            Nome completo
+                        </label>
+
+                        <input id="cadAlunoNome" placeholder="Nome completo">
+
+
+                        <label for="cadAlunoUsuario">
+                            Usuário
+                        </label>
+
+                        <input id="cadAlunoUsuario" placeholder="Crie um usuário">
+
+
+                        <label for="cadAlunoSenha">
+                            Senha
+                        </label>
+
+                        <input id="cadAlunoSenha" type="password" placeholder="Crie uma senha">
+
+
+                        <label for="cadAlunoSenha2">
+                            Confirmar senha
+                        </label>
+
+                        <input id="cadAlunoSenha2" type="password" placeholder="Digite a senha novamente">
+
+
+                        <label for="cadAlunoTurma">
+                            Turma
+                        </label>
+
+                        <select id="cadAlunoTurma">
+
+                            <option value="">
+                                Selecione uma turma...
+                            </option>
+
+                        </select>
+
+
+                        <button id="btnCadastrarAluno" class="success">
+                            Cadastrar
+                        </button>
+
+
+                        <button id="btnVoltarAluno" class="sec">
+                            Voltar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PAINEL DO ALUNO LOGADO -->
+
+            <div id="painelAluno" class="card hidden" style="margin-top: 16px;">
+
+                <h2>👋 Área do aluno</h2>
+
+                <p id="alunoNomeLogado"></p>
+
+                <div id="listaProvasAluno" class="list"></div>
+
+                <div class="actions">
+
+                    <button id="btnSairAluno" class="danger">
+                        Sair
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================= -->
+        <!-- PROFESSOR -->
+        <!-- ========================= -->
+
+        <section id="professor" class="section">
+
+            <div class="card">
+
+                <h2>👨‍ Área do Professor</h2>
+
+                <div class="tabs">
+                    <button class="tab active" data-tab="turmas"> Turmas</button>
+                    <button class="tab" data-tab="provas"> Provas</button>
+                    <button class="tab" data-tab="resultados"> Resultados</button>
+                </div>
+
+                <!-- TAB TURMAS -->
+                <div id="tab-turmas" class="tab-content active">
+                    <h3>Gerenciar Turmas</h3>
+
+                    <div class="form"
+                        style="margin-bottom: 20px; padding: 20px; background: #f8fafc; border-radius: 8px;">
+                        <div class="row">
+                            <div>
+                                <label>Nome da Turma</label>
+                                <input id="turmaNome" placeholder="Ex: Matemática - 9º Ano">
+                            </div>
+                            <div>
+                                <label>Código</label>
+                                <input id="turmaCodigo" placeholder="Ex: MAT9A">
+                            </div>
+                        </div>
+                        <button id="btnSalvarTurma" class="success">Salvar Turma</button>
+                    </div>
+
+                    <div id="listaTurmas" class="list"></div>
+                </div>
+
+                <!-- TAB PROVAS -->
+                <div id="tab-provas" class="tab-content">
+                    <h3>Gerenciar Provas</h3>
+
+                    <button id="btnNovaProva" class="success" style="margin-bottom: 20px;">
+                        ➕ Criar Nova Prova
+                    </button>
+
+                    <div id="formProva" class="card hidden" style="margin-bottom: 20px;">
+                        <h4>Nova Prova</h4>
+                        <div class="form">
+                            <label>Título da Prova</label>
+                            <input id="provaTitulo" placeholder="Ex: Avaliação de Matemática - Bimestre 1">
+
+                            <label>Descrição</label>
+                            <textarea id="provaDescricao" placeholder="Descreva o conteúdo da prova..."></textarea>
+
+                            <div class="row">
+                                <div>
+                                    <label>Turma</label>
+                                    <select id="provaTurma"></select>
+                                </div>
+                                <div>
+                                    <label>Duração (minutos)</label>
+                                    <input id="provaDuracao" type="number" min="1" value="60" placeholder="60">
+                                </div>
+                            </div>
+
+                            <hr style="margin: 20px 0; border: none; border-top: 2px solid var(--borda);">
+
+                            <h4>Questões</h4>
+                            <div id="listaQuestoes"></div>
+
+                            <button id="btnAdicionarQuestao" class="sec" style="margin: 10px 0;">
+                                ➕ Adicionar Questão
+                            </button>
+
+                            <div class="actions" style="margin-top: 20px;">
+                                <button id="btnSalvarProva" class="success">💾 Salvar Prova</button>
+                                <button id="btnCancelarProva" class="danger">❌ Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="listaProvas" class="list"></div>
+                </div>
+
+                <!-- TAB RESULTADOS -->
+                <div id="tab-resultados" class="tab-content">
+                    <h3>Resultados e Dashboard</h3>
+
+                    <div class="row" style="margin-bottom: 20px;">
+                        <div>
+                            <label>Filtrar por Prova</label>
+                            <select id="filtroProva">
+                                <option value="">Todas as provas</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Filtrar por Turma</label>
+                            <select id="filtroTurma">
+                                <option value="">Todas as turmas</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="statsDashboard" class="stats-grid hidden">
+                        <div class="stat-card">
+                            <div class="stat-label">Total de Alunos</div>
+                            <div class="stat-value" id="statTotalAlunos">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Média Geral</div>
+                            <div class="stat-value" id="statMediaGeral">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Provas Realizadas</div>
+                            <div class="stat-value" id="statProvasRealizadas">0</div>
+                        </div>
+                    </div>
+
+                    <div id="tabelaResultados">
+                        <p style="color: #64748b; text-align: center; padding: 40px;">
+                            Selecione os filtros para visualizar os resultados
+                        </p>
+                    </div>
+                </div>
+
+                <div class="actions" style="margin-top: 20px;">
+                    <button id="btnVoltarInicioProfessor" class="sec">
+                        Voltar
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        Sistema de Provas 4.1 • Firebase Realtime Database
+
+    </footer>
+
+
+    <script>
+
+        /* =====================================================
+           CONFIGURAÇÃO DO FIREBASE
+        ===================================================== */
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyCLaqaOCJnkfG4LID1Y5RoFpgEsX9nYGOM",
+
+            authDomain: "testeapi-1ad07.firebaseapp.com",
+
+            databaseURL: "https://testeapi-1ad07-default-rtdb.firebaseio.com",
+
+            projectId: "testeapi-1ad07",
+
+            storageBucket: "testeapi-1ad07.firebasestorage.app",
+
+            messagingSenderId: "323295128076",
+
+            appId: "1:323295128076:web:3af167424f75b680f19c29"
+
+        };
+
+
+        /* =====================================================
+           VARIÁVEIS GLOBAIS
+        ===================================================== */
+
+        let db = null;
+        let alunoLogado = null;
+        let questoesTemp = [];
+        let timerInterval = null;
+        let tempoRestante = 0;
+        let provaAtual = null;
+
+
+        /* =====================================================
+           INICIALIZAÇÃO DO FIREBASE
+        ===================================================== */
+
+        function iniciarFirebase() {
+
+            const status = document.getElementById("statusNuvem");
+
+            try {
+
+                if (typeof firebase === "undefined") {
+
+                    status.innerText = "❌ Firebase não carregado";
+                    status.style.backgroundColor = "#dc2626";
+                    return;
+
+                }
+
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+
+                db = firebase.database();
+
+                status.innerText = " Verificando conexão...";
+                status.style.backgroundColor = "#d97706";
+
+                db.ref(".info/connected").on("value", function (snapshot) {
+
+                    if (snapshot.val() === true) {
+                        status.innerText = "☁️ Online / Conectado";
+                        status.style.backgroundColor = "#16a34a";
+                    } else {
+                        status.innerText = "⚠️ Offline";
+                        status.style.backgroundColor = "#d97706";
+                    }
+
+                });
+
+            } catch (erro) {
+
+                console.error("Erro ao iniciar Firebase:", erro);
+                status.innerText = "❌ Erro no Firebase";
+                status.style.backgroundColor = "#dc2626";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           NAVEGAÇÃO
+        ===================================================== */
+
+        function alternarSecao(id) {
+
+            document.querySelectorAll(".section").forEach(function (secao) {
+                secao.classList.remove("active");
+            });
+
+            const secaoAlvo = document.getElementById(id);
+            if (secaoAlvo) {
+                secaoAlvo.classList.add("active");
+            }
+
+        }
+
+
+        /* =====================================================
+           TABS DO PROFESSOR
+        ===================================================== */
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                // Remove active de todas as tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                // Adiciona active na tab clicada
+                this.classList.add('active');
+                const tabId = this.dataset.tab;
+                document.getElementById('tab-' + tabId).classList.add('active');
+
+                // Carrega dados específicos da tab
+                if (tabId === 'turmas') carregarTurmasLista();
+                if (tabId === 'provas') carregarProvasLista();
+                if (tabId === 'resultados') carregarFiltrosResultados();
+            });
+        });
+
+
+        /* =====================================================
+           MENSAGENS
+        ===================================================== */
+
+        function mostrarMensagem(elemento, mensagem, tipo = "normal") {
+
+            elemento.innerText = mensagem;
+            elemento.classList.remove("hidden", "erro", "sucesso");
+
+            if (tipo === "erro") {
+                elemento.classList.add("erro");
+            }
+
+            if (tipo === "sucesso") {
+                elemento.classList.add("sucesso");
+            }
+
+        }
+
+
+        function esconderMensagem(elemento) {
+            elemento.classList.add("hidden");
+            elemento.innerText = "";
+        }
+
+
+        /* =====================================================
+           FUNÇÕES DE TURMAS
+        ===================================================== */
+
+        function carregarTurmas() {
+
+            const select = document.getElementById("cadAlunoTurma");
+            if (!db) return;
+
+            select.innerHTML = '<option value="">Carregando turmas...</option>';
+
+            db.ref("turmas").once("value").then(function (snapshot) {
+
+                select.innerHTML = '<option value="">Selecione uma turma...</option>';
+
+                if (!snapshot.exists()) {
+                    select.innerHTML += '<option value="">Nenhuma turma cadastrada</option>';
+                    return;
+                }
+
+                snapshot.forEach(function (item) {
+                    const turma = item.val() || {};
+                    const option = document.createElement("option");
+                    option.value = item.key;
+                    option.textContent = turma.nome || turma.codigo || item.key;
+                    select.appendChild(option);
+                });
+
+            }).catch(function (erro) {
+                console.error("Erro ao carregar turmas:", erro);
+                select.innerHTML = '<option value="">Erro ao carregar turmas</option>';
+            });
+
+        }
+
+
+        function carregarTurmasLista() {
+            const lista = document.getElementById("listaTurmas");
+            if (!db) return;
+
+            lista.innerHTML = "<p>Carregando turmas...</p>";
+
+            db.ref("turmas").once("value").then(function (snapshot) {
+                lista.innerHTML = "";
+
+                if (!snapshot.exists()) {
+                    lista.innerHTML = '<div class="msg">Nenhuma turma cadastrada.</div>';
+                    return;
+                }
+
+                snapshot.forEach(function (item) {
+                    const turma = item.val();
+                    const div = document.createElement("div");
+                    div.className = "item";
+                    div.innerHTML = `
+                        <strong>${escaparHTML(turma.nome)}</strong>
+                        <span class="badge">${escaparHTML(turma.codigo)}</span>
+                        <div class="actions">
+                            <button class="danger" onclick="excluirTurma('${item.key}')">🗑️ Excluir</button>
+                        </div>
+                    `;
+                    lista.appendChild(div);
+                });
+
+            }).catch(function (erro) {
+                console.error(erro);
+                lista.innerHTML = '<div class="msg erro">Erro ao carregar turmas.</div>';
+            });
+        }
+
+
+        function salvarTurma() {
+            const nome = document.getElementById("turmaNome").value.trim();
+            const codigo = document.getElementById("turmaCodigo").value.trim();
+            const msg = document.getElementById("msgLoginAluno");
+
+            if (!nome || !codigo) {
+                alert("Preencha nome e código da turma.");
+                return;
+            }
+
+            const btn = document.getElementById("btnSalvarTurma");
+            btn.disabled = true;
+            btn.innerText = "Salvando...";
+
+            db.ref("turmas").push({
+                nome: nome,
+                codigo: codigo,
+                criadoEm: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                document.getElementById("turmaNome").value = "";
+                document.getElementById("turmaCodigo").value = "";
+                carregarTurmasLista();
+                alert("Turma salva com sucesso!");
+            }).catch((erro) => {
+                console.error(erro);
+                alert("Erro ao salvar turma.");
+            }).finally(() => {
+                btn.disabled = false;
+                btn.innerText = "Salvar Turma";
+            });
+        }
+
+
+        function excluirTurma(id) {
+            if (!confirm("Tem certeza que deseja excluir esta turma?")) return;
+
+            db.ref("turmas/" + id).remove().then(() => {
+                carregarTurmasLista();
+                alert("Turma excluída!");
+            }).catch((erro) => {
+                console.error(erro);
+                alert("Erro ao excluir turma.");
+            });
+        }
+
+
+        /* =====================================================
+           FUNÇÕES DE PROVAS
+        ===================================================== */
+
+        function carregarProvasLista() {
+            const lista = document.getElementById("listaProvas");
+            if (!db) return;
+
+            lista.innerHTML = "<p>Carregando provas...</p>";
+
+            db.ref("provas").once("value").then(function (snapshot) {
+                lista.innerHTML = "";
+
+                if (!snapshot.exists()) {
+                    lista.innerHTML = '<div class="msg">Nenhuma prova cadastrada.</div>';
+                    return;
+                }
+
+                snapshot.forEach(function (item) {
+                    const prova = item.val();
+                    const div = document.createElement("div");
+                    div.className = "item";
+                    div.innerHTML = `
+                        <strong>${escaparHTML(prova.titulo)}</strong>
+                        <p class="titulo-pequeno">${escaparHTML(prova.descricao || '')}</p>
+                        <span class="badge">${prova.questoes ? prova.questoes.length : 0} questões</span>
+                        <span class="badge">${prova.duracao || 60} min</span>
+                        <div class="actions">
+                            <button class="sec" onclick="visualizarProva('${item.key}')">👁️ Visualizar</button>
+                            <button class="danger" onclick="excluirProva('${item.key}')">🗑️ Excluir</button>
+                        </div>
+                    `;
+                    lista.appendChild(div);
+                });
+
+            }).catch(function (erro) {
+                console.error(erro);
+                lista.innerHTML = '<div class="msg erro">Erro ao carregar provas.</div>';
+            });
+        }
+
+
+        function novaProva() {
+            document.getElementById("formProva").classList.remove("hidden");
+            document.getElementById("listaProvas").classList.add("hidden");
+            document.getElementById("provaTitulo").value = "";
+            document.getElementById("provaDescricao").value = "";
+            document.getElementById("provaDuracao").value = "60";
+            questoesTemp = [];
+            carregarSelectTurmasProva();
+            renderizarQuestoes();
+        }
+
+
+        function carregarSelectTurmasProva() {
+            const select = document.getElementById("provaTurma");
+            select.innerHTML = '<option value="">Selecione uma turma...</option>';
+
+            db.ref("turmas").once("value").then(function (snapshot) {
+                snapshot.forEach(function (item) {
+                    const turma = item.val();
+                    const option = document.createElement("option");
+                    option.value = item.key;
+                    option.textContent = turma.nome || turma.codigo;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+
+        function adicionarQuestao() {
+            const questao = {
+                id: Date.now(),
+                enunciado: "",
+                alternativas: ["", "", "", ""],
+                gabarito: 0,
+                pontos: 1
+            };
+            questoesTemp.push(questao);
+            renderizarQuestoes();
+        }
+
+
+        function renderizarQuestoes() {
+            const container = document.getElementById("listaQuestoes");
+            container.innerHTML = "";
+
+            questoesTemp.forEach((questao, index) => {
+                const div = document.createElement("div");
+                div.className = "questao-builder";
+                div.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <strong>Questão ${index + 1}</strong>
+                        <button class="danger" onclick="removerQuestao(${index})" style="padding:5px 10px;">🗑️</button>
+                    </div>
+                    
+                    <label>Enunciado</label>
+                    <textarea onchange="atualizarQuestao(${index}, 'enunciado', this.value)" placeholder="Digite o enunciado da questão...">${questao.enunciado}</textarea>
+                    
+                    <label style="margin-top:10px;">Alternativas (marque a correta)</label>
+                    ${questao.alternativas.map((alt, i) => `
+                        <div class="alternativa-input">
+                            <input type="radio" name="gabarito-${index}" ${i === questao.gabarito ? 'checked' : ''} onchange="atualizarGabarito(${index}, ${i})">
+                            <span>${String.fromCharCode(65 + i)})</span>
+                            <input type="text" value="${alt}" onchange="atualizarAlternativa(${index}, ${i}, this.value)" placeholder="Alternativa ${String.fromCharCode(65 + i)}">
+                        </div>
+                    `).join('')}
+                    
+                    <div style="margin-top:10px;">
+                        <label>Pontos</label>
+                        <input type="number" min="0.5" step="0.5" value="${questao.pontos}" onchange="atualizarQuestao(${index}, 'pontos', parseFloat(this.value))" style="width:100px;">
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+
+        function atualizarQuestao(index, campo, valor) {
+            questoesTemp[index][campo] = valor;
+        }
+
+
+        function atualizarAlternativa(questaoIndex, altIndex, valor) {
+            questoesTemp[questaoIndex].alternativas[altIndex] = valor;
+        }
+
+
+        function atualizarGabarito(questaoIndex, altIndex) {
+            questoesTemp[questaoIndex].gabarito = altIndex;
+        }
+
+
+        function removerQuestao(index) {
+            questoesTemp.splice(index, 1);
+            renderizarQuestoes();
+        }
+
+
+        function salvarProva() {
+            const titulo = document.getElementById("provaTitulo").value.trim();
+            const descricao = document.getElementById("provaDescricao").value.trim();
+            const turmaId = document.getElementById("provaTurma").value;
+            const duracao = parseInt(document.getElementById("provaDuracao").value) || 60;
+
+            if (!titulo || !turmaId) {
+                alert("Preencha título e selecione uma turma.");
+                return;
+            }
+
+            if (questoesTemp.length === 0) {
+                alert("Adicione pelo menos uma questão.");
+                return;
+            }
+
+            const btn = document.getElementById("btnSalvarProva");
+            btn.disabled = true;
+            btn.innerText = "Salvando...";
+
+            const prova = {
+                titulo: titulo,
+                descricao: descricao,
+                turmaId: turmaId,
+                duracao: duracao,
+                questoes: questoesTemp,
+                criadoEm: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            db.ref("provas").push(prova).then(() => {
+                document.getElementById("formProva").classList.add("hidden");
+                document.getElementById("listaProvas").classList.remove("hidden");
+                questoesTemp = [];
+                carregarProvasLista();
+                alert("Prova salva com sucesso!");
+            }).catch((erro) => {
+                console.error(erro);
+                alert("Erro ao salvar prova.");
+            }).finally(() => {
+                btn.disabled = false;
+                btn.innerText = "💾 Salvar Prova";
+            });
+        }
+
+
+        function cancelarProva() {
+            if (confirm("Deseja cancelar? Os dados serão perdidos.")) {
+                document.getElementById("formProva").classList.add("hidden");
+                document.getElementById("listaProvas").classList.remove("hidden");
+                questoesTemp = [];
+            }
+        }
+
+
+        function visualizarProva(id) {
+            db.ref("provas/" + id).once("value").then(snapshot => {
+                const prova = snapshot.val();
+                let msg = `PROVA: ${prova.titulo}\n\n`;
+                msg += `Descrição: ${prova.descricao || 'N/A'}\n`;
+                msg += `Duração: ${prova.duracao} minutos\n\n`;
+                msg += `QUESTÕES (${prova.questoes ? prova.questoes.length : 0}):\n\n`;
+
+                if (prova.questoes) {
+                    prova.questoes.forEach((q, i) => {
+                        msg += `${i + 1}) ${q.enunciado}\n`;
+                        q.alternativas.forEach((alt, j) => {
+                            const marker = j === q.gabarito ? '✓' : ' ';
+                            msg += `   ${marker} ${String.fromCharCode(65 + j)}) ${alt}\n`;
+                        });
+                        msg += `   Pontos: ${q.pontos}\n\n`;
+                    });
+                }
+
+                alert(msg);
+            });
+        }
+
+
+        function excluirProva(id) {
+            if (!confirm("Tem certeza que deseja excluir esta prova?")) return;
+
+            db.ref("provas/" + id).remove().then(() => {
+                carregarProvasLista();
+                alert("Prova excluída!");
+            }).catch((erro) => {
+                console.error(erro);
+                alert("Erro ao excluir prova.");
+            });
+        }
+
+
+        /* =====================================================
+           RESULTADOS E DASHBOARD
+        ===================================================== */
+
+        function carregarFiltrosResultados() {
+            // Carregar provas
+            const selectProva = document.getElementById("filtroProva");
+            selectProva.innerHTML = '<option value="">Todas as provas</option>';
+
+            db.ref("provas").once("value").then(snapshot => {
+                snapshot.forEach(item => {
+                    const prova = item.val();
+                    const option = document.createElement("option");
+                    option.value = item.key;
+                    option.textContent = prova.titulo;
+                    selectProva.appendChild(option);
+                });
+            });
+
+            // Carregar turmas
+            const selectTurma = document.getElementById("filtroTurma");
+            selectTurma.innerHTML = '<option value="">Todas as turmas</option>';
+
+            db.ref("turmas").once("value").then(snapshot => {
+                snapshot.forEach(item => {
+                    const turma = item.val();
+                    const option = document.createElement("option");
+                    option.value = item.key;
+                    option.textContent = turma.nome;
+                    selectTurma.appendChild(option);
+                });
+            });
+
+            // Adicionar listeners
+            document.getElementById("filtroProva").onchange = carregarResultados;
+            document.getElementById("filtroTurma").onchange = carregarResultados;
+        }
+
+
+        function carregarResultados() {
+            const provaId = document.getElementById("filtroProva").value;
+            const turmaId = document.getElementById("filtroTurma").value;
+            const container = document.getElementById("tabelaResultados");
+            const statsDiv = document.getElementById("statsDashboard");
+
+            container.innerHTML = "<p>Carregando resultados...</p>";
+            statsDiv.classList.add("hidden");
+
+            let query = db.ref("respostas");
+            if (provaId) query = query.orderByChild("provaId").equalTo(provaId);
+
+            query.once("value").then(snapshot => {
+                container.innerHTML = "";
+
+                if (!snapshot.exists()) {
+                    container.innerHTML = '<div class="msg">Nenhuma prova realizada ainda.</div>';
+                    return;
+                }
+
+                let totalAlunos = 0;
+                let somaNotas = 0;
+                let totalProvas = 0;
+                const resultados = [];
+
+                snapshot.forEach(item => {
+                    const resp = item.val();
+
+                    // Filtrar por turma se necessário
+                    if (turmaId && resp.turmaId !== turmaId) return;
+
+                    totalProvas++;
+                    if (resp.nota !== undefined) {
+                        somaNotas += resp.nota;
+                    }
+
+                    // Buscar dados do aluno
+                    db.ref("alunos/" + resp.alunoId).once("value").then(alunoSnap => {
+                        const aluno = alunoSnap.val() || {};
+                        resultados.push({
+                            aluno: aluno.nome || "N/A",
+                            prova: resp.provaTitulo || "N/A",
+                            nota: resp.nota !== undefined ? resp.nota.toFixed(1) : "Em andamento",
+                            data: resp.dataFim ? new Date(resp.dataFim).toLocaleDateString() : "Em andamento",
+                            status: resp.finalizada ? "Concluída" : "Em andamento"
+                        });
+
+                        totalAlunos++;
+
+                        // Se for o último, renderizar tabela
+                        if (resultados.length === snapshot.numChildren) {
+                            renderizarTabelaResultados(resultados);
+                            atualizarStats(totalAlunos, somaNotas, totalProvas);
+                        }
+                    });
+                });
+
+                if (resultados.length === 0) {
+                    container.innerHTML = '<div class="msg">Nenhum resultado encontrado para os filtros selecionados.</div>';
+                }
+
+            }).catch(erro => {
+                console.error(erro);
+                container.innerHTML = '<div class="msg erro">Erro ao carregar resultados.</div>';
+            });
+        }
+
+
+        function renderizarTabelaResultados(resultados) {
+            const container = document.getElementById("tabelaResultados");
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>Prova</th>
+                            <th>Nota</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            resultados.forEach(r => {
+                const notaClass = r.nota !== "Em andamento" ? (parseFloat(r.nota) >= 7 ? "ok" : "no") : "";
+                html += `
+                    <tr>
+                        <td>${escaparHTML(r.aluno)}</td>
+                        <td>${escaparHTML(r.prova)}</td>
+                        <td><span class="badge ${notaClass}">${r.nota}</span></td>
+                        <td>${r.data}</td>
+                        <td><span class="badge">${r.status}</span></td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+
+        function atualizarStats(totalAlunos, somaNotas, totalProvas) {
+            const statsDiv = document.getElementById("statsDashboard");
+            statsDiv.classList.remove("hidden");
+
+            document.getElementById("statTotalAlunos").textContent = totalAlunos;
+            document.getElementById("statProvasRealizadas").textContent = totalProvas;
+
+            const media = totalProvas > 0 ? (somaNotas / totalProvas).toFixed(1) : "0";
+            document.getElementById("statMediaGeral").textContent = media;
+        }
+
+
+        /* =====================================================
+           TELA DE PROVA (FULLSCREEN)
+        ===================================================== */
+
+        function iniciarProva(id) {
+            if (!db) {
+                alert("Firebase indisponível.");
+                return;
+            }
+
+            db.ref("provas/" + id).once("value").then(function (snapshot) {
+                if (!snapshot.exists()) {
+                    alert("Avaliação não encontrada.");
+                    return;
+                }
+
+                const prova = snapshot.val();
+                provaAtual = {
+                    id: id,
+                    ...prova,
+                    respostas: {},
+                    inicio: Date.now()
+                };
+
+                // Verificar se já existe resposta em andamento
+                db.ref("respostas")
+                    .orderByChild("alunoId")
+                    .equalTo(alunoLogado.id)
+                    .once("value")
+                    .then(respostasSnap => {
+                        let provaEmAndamento = null;
+
+                        respostasSnap.forEach(item => {
+                            const resp = item.val();
+                            if (resp.provaId === id && !resp.finalizada) {
+                                provaEmAndamento = { key: item.key, ...resp };
+                            }
+                        });
+
+                        if (provaEmAndamento) {
+                            if (confirm("Você já tem esta prova em andamento. Deseja continuar?")) {
+                                provaAtual.respostas = provaEmAndamento.respostas || {};
+                                provaAtual.respostasKey = provaEmAndamento.key;
+                            } else {
+                                return;
+                            }
+                        }
+
+                        abrirTelaProva();
+                    });
+
+            }).catch(function (erro) {
+                console.error(erro);
+                alert("Não foi possível abrir a prova.");
+            });
+        }
+
+
+        function abrirTelaProva() {
+            // Criar elemento fullscreen
+            const fullscreen = document.createElement("div");
+            fullscreen.className = "fullscreen";
+            fullscreen.id = "telaProvaFullscreen";
+
+            // Timer
+            tempoRestante = provaAtual.duracao * 60; // converter para segundos
+
+            const timerDiv = document.createElement("div");
+            timerDiv.className = "timer-display";
+            timerDiv.id = "timerProva";
+            timerDiv.textContent = formatarTempo(tempoRestante);
+            fullscreen.appendChild(timerDiv);
+
+            // Container da prova
+            const container = document.createElement("div");
+            container.className = "prova-container";
+
+            // Cabeçalho
+            const header = document.createElement("div");
+            header.className = "card";
+            header.style.marginBottom = "20px";
+            header.innerHTML = `
+                <h2>${escaparHTML(provaAtual.titulo)}</h2>
+                <p>${escaparHTML(provaAtual.descricao || "")}</p>
+                <p><strong>Duração:</strong> ${provaAtual.duracao} minutos</p>
+                <p><strong>Questões:</strong> ${provaAtual.questoes ? provaAtual.questoes.length : 0}</p>
+            `;
+            container.appendChild(header);
+
+            // Questões
+            if (provaAtual.questoes) {
+                provaAtual.questoes.forEach((questao, index) => {
+                    const questaoDiv = document.createElement("div");
+                    questaoDiv.className = "prova-questao";
+
+                    let html = `
+                        <h3>Questão ${index + 1} (${questao.pontos} pontos)</h3>
+                        <p style="margin-bottom: 15px;">${escaparHTML(questao.enunciado)}</p>
+                    `;
+
+                    questao.alternativas.forEach((alt, altIndex) => {
+                        const letra = String.fromCharCode(65 + altIndex);
+                        const selecionada = provaAtual.respostas[questao.id] === altIndex ? "selecionada" : "";
+
+                        html += `
+                            <label class="prova-alternativa ${selecionada}" onclick="selecionarAlternativa(this, '${questao.id}', ${altIndex})">
+                                <input type="radio" name="questao-${questao.id}" ${selecionada ? 'checked' : ''}>
+                                <strong>${letra})</strong> ${escaparHTML(alt)}
+                            </label>
+                        `;
+                    });
+
+                    questaoDiv.innerHTML = html;
+                    container.appendChild(questaoDiv);
+                });
+            }
+
+            // Botões de ação
+            const actions = document.createElement("div");
+            actions.className = "actions";
+            actions.style.marginTop = "20px";
+            actions.innerHTML = `
+                <button id="btnFinalizarProva" class="success" style="font-size: 18px; padding: 15px 30px;">
+                    ✅ Finalizar Prova
+                </button>
+                <button id="btnCancelarProva" class="danger" style="font-size: 18px; padding: 15px 30px;">
+                    ❌ Cancelar
+                </button>
+            `;
+            container.appendChild(actions);
+
+            fullscreen.appendChild(container);
+            document.body.appendChild(fullscreen);
+
+            // Iniciar timer
+            timerInterval = setInterval(atualizarTimer, 1000);
+
+            // Auto-save a cada 30 segundos
+            setInterval(salvarRespostasParciais, 30000);
+
+            // Event listeners
+            document.getElementById("btnFinalizarProva").onclick = finalizarProva;
+            document.getElementById("btnCancelarProva").onclick = cancelarTelaProva;
+
+            // Prevenir saída acidental
+            window.onbeforeunload = function () {
+                return "Você tem uma prova em andamento. Deseja realmente sair?";
+            };
+        }
+
+
+        function formatarTempo(segundos) {
+            const h = Math.floor(segundos / 3600);
+            const m = Math.floor((segundos % 3600) / 60);
+            const s = segundos % 60;
+
+            if (h > 0) {
+                return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+
+        function atualizarTimer() {
+            tempoRestante--;
+            document.getElementById("timerProva").textContent = formatarTempo(tempoRestante);
+
+            if (tempoRestante <= 0) {
+                clearInterval(timerInterval);
+                alert("Tempo esgotado! A prova será finalizada automaticamente.");
+                finalizarProva();
+            }
+
+            // Alerta quando faltam 5 minutos
+            if (tempoRestante === 300) {
+                alert("Atenção! Faltam 5 minutos para o término da prova.");
+            }
+        }
+
+
+        function selecionarAlternativa(element, questaoId, alternativaIndex) {
+            // Remover seleção anterior da questão
+            const alternativas = element.parentElement.querySelectorAll(".prova-alternativa");
+            alternativas.forEach(alt => alt.classList.remove("selecionada"));
+
+            // Adicionar seleção atual
+            element.classList.add("selecionada");
+
+            // Marcar radio button
+            const radio = element.querySelector("input[type='radio']");
+            radio.checked = true;
+
+            // Salvar resposta
+            provaAtual.respostas[questaoId] = alternativaIndex;
+        }
+
+
+        function salvarRespostasParciais() {
+            if (!provaAtual || !provaAtual.respostasKey) {
+                // Criar novo registro
+                db.ref("respostas").push({
+                    alunoId: alunoLogado.id,
+                    alunoNome: alunoLogado.nome,
+                    provaId: provaAtual.id,
+                    provaTitulo: provaAtual.titulo,
+                    turmaId: alunoLogado.turmaId,
+                    respostas: provaAtual.respostas,
+                    finalizada: false,
+                    dataInicio: provaAtual.inicio,
+                    ultimaAtualizacao: firebase.database.ServerValue.TIMESTAMP
+                }).then(snapshot => {
+                    provaAtual.respostasKey = snapshot.key;
+                });
+            } else {
+                // Atualizar existente
+                db.ref("respostas/" + provaAtual.respostasKey).update({
+                    respostas: provaAtual.respostas,
+                    ultimaAtualizacao: firebase.database.ServerValue.TIMESTAMP
+                });
+            }
+        }
+
+
+        function finalizarProva() {
+            if (!confirm("Deseja finalizar a prova? Não será possível alterar as respostas.")) {
+                return;
+            }
+
+            clearInterval(timerInterval);
+            window.onbeforeunload = null;
+
+            // Calcular nota
+            let notaTotal = 0;
+            let pontosTotais = 0;
+            const questoes = provaAtual.questoes;
+            const respostas = provaAtual.respostas;
+
+            questoes.forEach(questao => {
+                pontosTotais += questao.pontos;
+                if (respostas[questao.id] === questao.gabarito) {
+                    notaTotal += questao.pontos;
+                }
+            });
+
+            const notaFinal = pontosTotais > 0 ? (notaTotal / pontosTotais) * 10 : 0;
+
+            // Salvar resultado final
+            const dadosFinais = {
+                alunoId: alunoLogado.id,
+                alunoNome: alunoLogado.nome,
+                provaId: provaAtual.id,
+                provaTitulo: provaAtual.titulo,
+                turmaId: alunoLogado.turmaId,
+                respostas: respostas,
+                nota: notaFinal,
+                pontosObtidos: notaTotal,
+                pontosTotais: pontosTotais,
+                finalizada: true,
+                dataInicio: provaAtual.inicio,
+                dataFim: Date.now(),
+                tempoGasto: Math.floor((Date.now() - provaAtual.inicio) / 1000)
+            };
+
+            const ref = provaAtual.respostasKey ?
+                db.ref("respostas/" + provaAtual.respostasKey) :
+                db.ref("respostas").push();
+
+            ref.set(dadosFinais).then(() => {
+                cancelarTelaProva();
+
+                // Mostrar resultado
+                setTimeout(() => {
+                    alert(`Prova finalizada!\n\nSua nota: ${notaFinal.toFixed(1)}\nAcertos: ${notaTotal} de ${pontosTotais} pontos`);
+                }, 500);
+
+            }).catch(erro => {
+                console.error(erro);
+                alert("Erro ao salvar prova. Tente novamente.");
+                window.onbeforeunload = function () { return "Prova não salva!"; };
+            });
+        }
+
+
+        function cancelarTelaProva() {
+            clearInterval(timerInterval);
+            window.onbeforeunload = null;
+
+            const fullscreen = document.getElementById("telaProvaFullscreen");
+            if (fullscreen) {
+                fullscreen.remove();
+            }
+
+            provaAtual = null;
+        }
+
+
+        /* =====================================================
+           CADASTRAR ALUNO
+        ===================================================== */
+
+        function cadastrarAluno() {
+
+            const msg = document.getElementById("msgCadastroAluno");
+
+            const nome = document.getElementById("cadAlunoNome").value.trim();
+            const usuario = document.getElementById("cadAlunoUsuario").value.trim().toLowerCase();
+            const senha = document.getElementById("cadAlunoSenha").value;
+            const senha2 = document.getElementById("cadAlunoSenha2").value;
+            const turma = document.getElementById("cadAlunoTurma").value;
+
+            esconderMensagem(msg);
+
+            if (!db) {
+                mostrarMensagem(msg, "Firebase não está conectado.", "erro");
+                return;
+            }
+
+            if (!nome) {
+                mostrarMensagem(msg, "Digite o nome completo.", "erro");
+                return;
+            }
+
+            if (!usuario) {
+                mostrarMensagem(msg, "Digite um usuário.", "erro");
+                return;
+            }
+
+            if (usuario.length < 3) {
+                mostrarMensagem(msg, "O usuário deve ter pelo menos 3 caracteres.", "erro");
+                return;
+            }
+
+            if (!senha) {
+                mostrarMensagem(msg, "Digite uma senha.", "erro");
+                return;
+            }
+
+            if (senha.length < 6) {
+                mostrarMensagem(msg, "A senha deve ter pelo menos 6 caracteres.", "erro");
+                return;
+            }
+
+            if (senha !== senha2) {
+                mostrarMensagem(msg, "As senhas não são iguais.", "erro");
+                return;
+            }
+
+            const btn = document.getElementById("btnCadastrarAluno");
+            btn.disabled = true;
+            btn.innerText = "Cadastrando...";
+
+            db.ref("alunos")
+                .orderByChild("usuario")
+                .equalTo(usuario)
+                .once("value")
+                .then(function (snapshot) {
+
+                    if (snapshot.exists()) {
+                        throw new Error("Este usuário já está cadastrado.");
+                    }
+
+                    const novoAlunoRef = db.ref("alunos").push();
+
+                    const aluno = {
+                        id: novoAlunoRef.key,
+                        nome: nome,
+                        usuario: usuario,
+                        senha: senha,
+                        turmaId: turma,
+                        criadoEm: firebase.database.ServerValue.TIMESTAMP
+                    };
+
+                    return novoAlunoRef.set(aluno);
+
+                })
+                .then(function () {
+
+                    mostrarMensagem(msg, "Cadastro realizado com sucesso!", "sucesso");
+
+                    document.getElementById("cadAlunoNome").value = "";
+                    document.getElementById("cadAlunoUsuario").value = "";
+                    document.getElementById("cadAlunoSenha").value = "";
+                    document.getElementById("cadAlunoSenha2").value = "";
+                    document.getElementById("cadAlunoTurma").value = "";
+
+                    setTimeout(function () {
+                        document.getElementById("cadastroAlunoCard").classList.add("hidden");
+                    }, 1200);
+
+                })
+                .catch(function (erro) {
+
+                    console.error("Erro no cadastro:", erro);
+                    mostrarMensagem(msg, erro.message || "Não foi possível realizar o cadastro.", "erro");
+
+                })
+                .finally(function () {
+
+                    btn.disabled = false;
+                    btn.innerText = "Cadastrar";
+
+                });
+
+        }
+
+
+        /* =====================================================
+           LOGIN DO ALUNO
+        ===================================================== */
+
+        function loginAluno() {
+
+            const msg = document.getElementById("msgLoginAluno");
+
+            const usuario = document.getElementById("loginAlunoUsuario").value.trim().toLowerCase();
+            const senha = document.getElementById("loginAlunoSenha").value;
+
+            esconderMensagem(msg);
+
+            if (!db) {
+                mostrarMensagem(msg, "Firebase não está conectado.", "erro");
+                return;
+            }
+
+            if (!usuario || !senha) {
+                mostrarMensagem(msg, "Digite usuário e senha.", "erro");
+                return;
+            }
+
+            const btn = document.getElementById("btnLoginAluno");
+            btn.disabled = true;
+            btn.innerText = "Entrando...";
+
+            db.ref("alunos")
+                .orderByChild("usuario")
+                .equalTo(usuario)
+                .once("value")
+                .then(function (snapshot) {
+
+                    if (!snapshot.exists()) {
+                        throw new Error("Usuário ou senha incorretos.");
+                    }
+
+                    let alunoEncontrado = null;
+
+                    snapshot.forEach(function (item) {
+                        const aluno = item.val();
+                        if (aluno && aluno.senha === senha) {
+                            alunoEncontrado = { ...aluno, id: item.key };
+                        }
+                    });
+
+                    if (!alunoEncontrado) {
+                        throw new Error("Usuário ou senha incorretos.");
+                    }
+
+                    alunoLogado = alunoEncontrado;
+                    mostrarPainelAluno();
+
+                })
+                .catch(function (erro) {
+
+                    console.error("Erro no login:", erro);
+                    mostrarMensagem(msg, erro.message || "Não foi possível entrar.", "erro");
+
+                })
+                .finally(function () {
+
+                    btn.disabled = false;
+                    btn.innerText = "Entrar";
+
+                });
+
+        }
+
+
+        /* =====================================================
+           MOSTRAR PAINEL DO ALUNO
+        ===================================================== */
+
+        function mostrarPainelAluno() {
+
+            const loginCard = document.querySelector("#areaAluno .grid");
+            const painel = document.getElementById("painelAluno");
+            const nome = document.getElementById("alunoNomeLogado");
+
+            loginCard.classList.add("hidden");
+            painel.classList.remove("hidden");
+
+            nome.innerHTML = "Aluno: <strong>" + escaparHTML(alunoLogado.nome) + "</strong>";
+
+            carregarProvasAluno();
+
+        }
+
+
+        /* =====================================================
+           PROVAS DO ALUNO
+        ===================================================== */
+
+        function carregarProvasAluno() {
+
+            const lista = document.getElementById("listaProvasAluno");
+            lista.innerHTML = "<p>Carregando avaliações...</p>";
+
+            if (!db) {
+                lista.innerHTML = '<div class="msg erro">Firebase indisponível.</div>';
+                return;
+            }
+
+            db.ref("provas").once("value").then(function (snapshot) {
+
+                lista.innerHTML = "";
+
+                if (!snapshot.exists()) {
+                    lista.innerHTML = '<div class="msg">Nenhuma avaliação disponível.</div>';
+                    return;
+                }
+
+                let encontrou = false;
+
+                snapshot.forEach(function (item) {
+
+                    const prova = item.val() || {};
+
+                    if (prova.turmaId && alunoLogado.turmaId && prova.turmaId !== alunoLogado.turmaId) {
+                        return;
+                    }
+
+                    // Verificar se aluno já fez esta prova
+                    db.ref("respostas")
+                        .orderByChild("alunoId")
+                        .equalTo(alunoLogado.id)
+                        .once("value")
+                        .then(respostasSnap => {
+                            let jaFez = false;
+                            let nota = null;
+
+                            respostasSnap.forEach(respItem => {
+                                const resp = respItem.val();
+                                if (resp.provaId === item.key && resp.finalizada) {
+                                    jaFez = true;
+                                    nota = resp.nota;
+                                }
+                            });
+
+                            encontrou = true;
+
+                            const div = document.createElement("div");
+                            div.className = "item";
+
+                            let statusHtml = "";
+                            let buttonHtml = "";
+
+                            if (jaFez) {
+                                statusHtml = `<span class="badge ok">Nota: ${nota.toFixed(1)}</span>`;
+                                buttonHtml = `<button disabled>✅ Prova realizada</button>`;
+                            } else {
+                                buttonHtml = `
+                                    <button class="btnIniciarProva" data-id="${item.key}">
+                                        📝 Iniciar prova
+                                    </button>
+                                `;
+                            }
+
+                            div.innerHTML = `
+                                <strong>${escaparHTML(prova.titulo || "Avaliação")}</strong>
+                                <p class="titulo-pequeno">${escaparHTML(prova.descricao || "Sem descrição.")}</p>
+                                <p class="titulo-pequeno">⏱️ Duração: ${prova.duracao || 60} minutos</p>
+                                <p class="titulo-pequeno">📋 ${prova.questoes ? prova.questoes.length : 0} questões</p>
+                                ${statusHtml}
+                                <div class="actions" style="margin-top: 10px;">
+                                    ${buttonHtml}
+                                </div>
+                            `;
+
+                            lista.appendChild(div);
+
+                            if (!jaFez) {
+                                div.querySelector(".btnIniciarProva").addEventListener("click", function () {
+                                    iniciarProva(this.dataset.id);
+                                });
+                            }
+                        });
+
+                });
+
+                setTimeout(() => {
+                    if (!encontrou) {
+                        lista.innerHTML = '<div class="msg">Nenhuma avaliação disponível para sua turma.</div>';
+                    }
+                }, 1000);
+
+            }).catch(function (erro) {
+
+                console.error(erro);
+                lista.innerHTML = '<div class="msg erro">Erro ao carregar avaliações.</div>';
+
+            });
+
+        }
+
+
+        /* =====================================================
+           SAIR DO ALUNO
+        ===================================================== */
+
+        function sairAluno() {
+
+            alunoLogado = null;
+
+            document.getElementById("painelAluno").classList.add("hidden");
+            document.querySelector("#areaAluno .grid").classList.remove("hidden");
+
+            document.getElementById("loginAlunoUsuario").value = "";
+            document.getElementById("loginAlunoSenha").value = "";
+
+            esconderMensagem(document.getElementById("msgLoginAluno"));
+
+        }
+
+
+        /* =====================================================
+           SEGURANÇA BÁSICA PARA EXIBIÇÃO DE TEXTO
+        ===================================================== */
+
+        function escaparHTML(valor) {
+
+            return String(valor || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /* =====================================================
+           EVENTOS
+        ===================================================== */
+
+        document.getElementById("btnInicio").addEventListener("click", function () {
+            alternarSecao("inicio");
+        });
+
+        document.getElementById("btnAreaAluno").addEventListener("click", function () {
+            alternarSecao("areaAluno");
+            carregarTurmas();
+        });
+
+        document.getElementById("cardAluno").addEventListener("click", function () {
+            alternarSecao("areaAluno");
+            carregarTurmas();
+        });
+
+        document.getElementById("btnProfessor").addEventListener("click", function () {
+            alternarSecao("professor");
+        });
+
+        document.getElementById("cardProf").addEventListener("click", function () {
+            alternarSecao("professor");
+        });
+
+        document.getElementById("btnVoltarInicioProfessor").addEventListener("click", function () {
+            alternarSecao("inicio");
+        });
+
+        document.getElementById("btnAbrirCadastro").addEventListener("click", function () {
+            document.getElementById("cadastroAlunoCard").classList.remove("hidden");
+            carregarTurmas();
+        });
+
+        document.getElementById("btnVoltarAluno").addEventListener("click", function () {
+            document.getElementById("cadastroAlunoCard").classList.add("hidden");
+        });
+
+        document.getElementById("btnCadastrarAluno").addEventListener("click", cadastrarAluno);
+
+        document.getElementById("btnLoginAluno").addEventListener("click", loginAluno);
+
+        document.getElementById("btnSairAluno").addEventListener("click", sairAluno);
+
+        // Eventos do Professor
+        document.getElementById("btnSalvarTurma").addEventListener("click", salvarTurma);
+        document.getElementById("btnNovaProva").addEventListener("click", novaProva);
+        document.getElementById("btnAdicionarQuestao").addEventListener("click", adicionarQuestao);
+        document.getElementById("btnSalvarProva").addEventListener("click", salvarProva);
+        document.getElementById("btnCancelarProva").addEventListener("click", cancelarProva);
+
+        // Enter no login
+        document.getElementById("loginAlunoSenha").addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                loginAluno();
+            }
+        });
+
+
+        /* =====================================================
+           INICIAR SISTEMA
+        ===================================================== */
+
+        iniciarFirebase();
+
+    </script>
+
+</body>
+
+</html>
