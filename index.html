@@ -4,12 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Sistema de Provas 4.1</title>
-
+    <title>Sistema de Provas 4.1 - Corrigido</title>
     <style>
         * {
-            box-sizing: border-box;
+            box-sizing: border-box
         }
 
         :root {
@@ -20,22 +18,22 @@
             --amarelo: #d97706;
             --cinza: #f3f4f6;
             --texto: #172033;
-            --card: #ffffff;
-            --borda: #dbe1ea;
+            --card: #fff;
+            --borda: #dbe1ea
         }
 
         body {
             margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Arial, sans-serif;
             background: var(--cinza);
-            color: var(--texto);
+            color: var(--texto)
         }
 
         button,
         input,
         select,
         textarea {
-            font: inherit;
+            font: inherit
         }
 
         button {
@@ -45,35 +43,27 @@
             padding: 10px 14px;
             background: var(--azul);
             color: #fff;
-            font-weight: 700;
-            transition: 0.2s;
+            font-weight: 700
         }
 
         button:hover {
-            filter: brightness(0.95);
-            transform: translateY(-1px);
+            filter: brightness(.95)
         }
 
         button.sec {
-            background: #64748b;
+            background: #64748b
         }
 
-        button.danger {
-            background: var(--vermelho);
+        .danger {
+            background: var(--vermelho)
         }
 
-        button.success {
-            background: var(--verde);
+        .success {
+            background: var(--verde)
         }
 
-        button.warning {
-            background: var(--amarelo);
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .warning {
+            background: var(--amarelo)
         }
 
         header {
@@ -84,20 +74,19 @@
             justify-content: space-between;
             gap: 15px;
             align-items: center;
-            flex-wrap: wrap;
+            flex-wrap: wrap
         }
 
         header h1 {
             margin: 0;
-            font-size: 22px;
+            font-size: 22px
         }
 
         .status {
             font-size: 13px;
-            background: #d97706;
-            padding: 7px 12px;
-            border-radius: 20px;
-            transition: background-color 0.3s ease;
+            background: #ffffff22;
+            padding: 7px 10px;
+            border-radius: 20px
         }
 
         nav {
@@ -106,33 +95,32 @@
             flex-wrap: wrap;
             padding: 12px 20px;
             background: #fff;
-            box-shadow: 0 2px 8px #0001;
+            box-shadow: 0 2px 8px #0001
         }
 
         nav button {
             background: #eef2ff;
-            color: #1e3a8a;
+            color: #1e3a8a
         }
 
         main {
             max-width: 1200px;
             margin: auto;
-            padding: 22px;
-            min-height: 70vh;
+            padding: 22px
         }
 
         .section {
-            display: none;
+            display: none
         }
 
         .section.active {
-            display: block;
+            display: block
         }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
+            gap: 16px
         }
 
         .card {
@@ -140,28 +128,28 @@
             border: 1px solid var(--borda);
             border-radius: 14px;
             padding: 20px;
-            box-shadow: 0 3px 12px #0000000a;
+            box-shadow: 0 3px 12px #0000000a
         }
 
         .card h2,
         .card h3 {
-            margin-top: 0;
+            margin-top: 0
         }
 
         .form {
             display: grid;
-            gap: 10px;
+            gap: 10px
         }
 
         .row {
             display: flex;
             gap: 10px;
-            flex-wrap: wrap;
+            flex-wrap: wrap
         }
 
         .row>* {
             flex: 1;
-            min-width: 150px;
+            min-width: 150px
         }
 
         input,
@@ -171,49 +159,41 @@
             padding: 11px;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
-            background: #fff;
-            outline: none;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: var(--azul);
-            box-shadow: 0 0 0 3px #2563eb22;
+            background: #fff
         }
 
         textarea {
             min-height: 100px;
-            resize: vertical;
+            resize: vertical
         }
 
         label {
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 700
         }
 
         .actions {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
-            margin-top: 10px;
+            margin-top: 10px
         }
 
         .hidden {
-            display: none !important;
+            display: none !important
         }
 
         .list {
             display: grid;
             gap: 10px;
-            margin-top: 15px;
+            margin-top: 15px
         }
 
         .item {
             background: #fff;
             border: 1px solid var(--borda);
             padding: 14px;
-            border-radius: 10px;
+            border-radius: 10px
         }
 
         .badge {
@@ -222,34 +202,29 @@
             border-radius: 15px;
             background: #e2e8f0;
             font-size: 12px;
-            margin: 2px;
+            margin: 2px
         }
 
         .badge.ok {
             background: #dcfce7;
-            color: #166534;
+            color: #166534
         }
 
         .badge.no {
             background: #fee2e2;
-            color: #991b1b;
+            color: #991b1b
         }
 
         .msg {
             padding: 10px;
             border-radius: 8px;
             background: #eff6ff;
-            margin: 10px 0;
+            margin: 10px 0
         }
 
         .erro {
             background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .sucesso {
-            background: #dcfce7;
-            color: #166534;
+            color: #991b1b
         }
 
         .question {
@@ -257,7 +232,7 @@
             border: 1px solid var(--borda);
             padding: 18px;
             border-radius: 12px;
-            margin-bottom: 14px;
+            margin-bottom: 14px
         }
 
         .alt {
@@ -266,17 +241,17 @@
             margin: 6px 0;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
-            cursor: pointer;
+            cursor: pointer
         }
 
         .alt:hover {
-            background: #f8fafc;
+            background: #f8fafc
         }
 
         #cronometro {
             font-size: 24px;
             font-weight: 800;
-            color: var(--vermelho);
+            color: var(--vermelho)
         }
 
         .fullscreen {
@@ -285,1962 +260,321 @@
             background: #f3f4f6;
             z-index: 9999;
             overflow: auto;
-            padding: 20px;
-        }
-
-        .titulo-pequeno {
-            color: #64748b;
-            font-size: 13px;
+            padding: 20px
         }
 
         footer {
             text-align: center;
             padding: 20px;
             color: #64748b;
-            font-size: 12px;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--borda);
-            padding-bottom: 10px;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            background: transparent;
-            border: none;
-            color: #64748b;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 8px;
-        }
-
-        .tab.active {
-            background: var(--azul);
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Questão Builder */
-        .questao-builder {
-            background: #f8fafc;
-            border: 2px solid var(--borda);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .alternativa-input {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 8px 0;
-        }
-
-        .alternativa-input input[type="radio"] {
-            width: auto;
-        }
-
-        .alternativa-input input[type="text"] {
-            flex: 1;
-        }
-
-        /* Tabela */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th,
-        td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid var(--borda);
-        }
-
-        th {
-            background: #f8fafc;
-            font-weight: 700;
-            color: #475569;
-        }
-
-        tr:hover {
-            background: #f8fafc;
-        }
-
-        /* Cronômetro Prova */
-        .timer-display {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--vermelho);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 12px;
-            font-size: 28px;
-            font-weight: 800;
-            z-index: 10000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .prova-container {
-            max-width: 900px;
-            margin: 80px auto 20px;
-        }
-
-        .prova-questao {
-            background: white;
-            border: 2px solid var(--borda);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
-        }
-
-        .prova-questao h3 {
-            margin-top: 0;
-            color: var(--azul);
-        }
-
-        .prova-alternativa {
-            display: block;
-            padding: 12px 16px;
-            margin: 8px 0;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .prova-alternativa:hover {
-            background: #f1f5f9;
-            border-color: var(--azul);
-        }
-
-        .prova-alternativa input[type="radio"] {
-            margin-right: 10px;
-        }
-
-        .prova-alternativa.selecionada {
-            background: #eff6ff;
-            border-color: var(--azul);
-        }
-
-        .prova-alternativa.correta {
-            background: #dcfce7;
-            border-color: var(--verde);
-        }
-
-        .prova-alternativa.incorreta {
-            background: #fee2e2;
-            border-color: var(--vermelho);
-        }
-
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin: 20px 0;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, var(--azul), var(--azul2));
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 800;
-            margin: 10px 0;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        @media (max-width: 600px) {
-            header {
-                padding: 15px;
-            }
-
-            header h1 {
-                font-size: 18px;
-            }
-
-            nav {
-                padding: 10px;
-            }
-
-            nav button {
-                flex: 1;
-                min-width: 120px;
-            }
-
-            main {
-                padding: 12px;
-            }
-
-            .card {
-                padding: 16px;
-            }
-
-            .timer-display {
-                font-size: 20px;
-                padding: 10px 15px;
-                top: 10px;
-                right: 10px;
-            }
-
-            .prova-container {
-                margin-top: 100px;
-            }
+            font-size: 12px
         }
     </style>
-
-    <!-- Firebase 8 - Bibliotecas oficiais -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 </head>
 
 <body>
-
     <header>
-
         <h1>📚 Sistema de Provas 4.1</h1>
-
-        <div id="statusNuvem" class="status">
-            ⏳ Conectando ao Firebase...
-        </div>
-
+        <div id="statusNuvem" class="status">☁️ Conectando...</div>
     </header>
-
     <nav>
-
-        <button id="btnInicio">
-            🏠 Início
-        </button>
-
-        <button id="btnAreaAluno">
-            🎓 Área do Aluno
-        </button>
-
-        <button id="btnProfessor">
-            ‍🏫 Professor
-        </button>
-
+        <button id="btnInicio">🏠 Início</button>
+        <button id="btnAreaAluno">🎓 Área do Aluno</button>
+        <button id="btnProfessor">👨‍🏫 Professor</button>
     </nav>
-
     <main>
-
-        <!-- ========================= -->
-        <!-- INÍCIO -->
-        <!-- ========================= -->
-
         <section id="inicio" class="section active">
-
             <div class="card">
-
                 <h2>Bem-vindo</h2>
-
-                <p>
-                    Escolha uma área para continuar.
-                </p>
-
+                <p>Escolha uma área para continuar.</p>
                 <div class="grid">
-
                     <div class="card">
-
                         <h3>🎓 Aluno</h3>
-
-                        <p>
-                            Cadastre-se, entre em uma turma e realize avaliações.
-                        </p>
-
-                        <button id="cardAluno">
-                            Entrar como aluno
-                        </button>
-
+                        <p>Cadastre-se, entre em uma turma e realize avaliações.</p><button id="cardAluno">Entrar como
+                            aluno</button>
                     </div>
-
                     <div class="card">
-
-                        <h3>👨‍ Professor</h3>
-
-                        <p>
-                            Crie turmas, avaliações, questões e acompanhe resultados.
-                        </p>
-
-                        <button id="cardProf">
-                            Entrar como professor
-                        </button>
-
+                        <h3>👨‍🏫 Professor</h3>
+                        <p>Crie turmas, avaliações, questões e acompanhe resultados.</p><button id="cardProf">Entrar
+                            como professor</button>
                     </div>
-
                 </div>
-
             </div>
-
         </section>
-
-
-        <!-- ========================= -->
-        <!-- ÁREA DO ALUNO -->
-        <!-- ========================= -->
-
         <section id="areaAluno" class="section">
-
             <div class="grid">
-
-                <!-- LOGIN -->
-
                 <div class="card">
-
                     <h2>🎓 Login do aluno</h2>
-
-                    <div id="msgLoginAluno" class="msg hidden"></div>
-
-                    <div class="form">
-
-                        <label for="loginAlunoUsuario">
-                            Usuário
-                        </label>
-
-                        <input id="loginAlunoUsuario" autocomplete="username" placeholder="Digite seu usuário">
-
-                        <label for="loginAlunoSenha">
-                            Senha
-                        </label>
-
-                        <input id="loginAlunoSenha" type="password" autocomplete="current-password"
-                            placeholder="Digite sua senha">
-
-                        <button id="btnLoginAluno">
-                            Entrar
-                        </button>
-
-                        <button id="btnAbrirCadastro" class="sec">
-                            Criar cadastro
-                        </button>
-
-                    </div>
-
+                    <div class="form"><label>Usuário</label><input id="loginAlunoUsuario"
+                            autocomplete="username"><label>Senha</label><input id="loginAlunoSenha" type="password"
+                            autocomplete="current-password"><button id="btnLoginAluno">Entrar</button><button
+                            id="btnAbrirCadastro" class="sec">Criar cadastro</button></div>
                 </div>
-
-
-                <!-- CADASTRO -->
-
                 <div id="cadastroAlunoCard" class="card hidden">
-
-                    <h2>📝 Cadastro do aluno</h2>
-
-                    <div id="msgCadastroAluno" class="msg hidden"></div>
-
-                    <div class="form">
-
-                        <label for="cadAlunoNome">
-                            Nome completo
-                        </label>
-
-                        <input id="cadAlunoNome" placeholder="Nome completo">
-
-
-                        <label for="cadAlunoUsuario">
-                            Usuário
-                        </label>
-
-                        <input id="cadAlunoUsuario" placeholder="Crie um usuário">
-
-
-                        <label for="cadAlunoSenha">
-                            Senha
-                        </label>
-
-                        <input id="cadAlunoSenha" type="password" placeholder="Crie uma senha">
-
-
-                        <label for="cadAlunoSenha2">
-                            Confirmar senha
-                        </label>
-
-                        <input id="cadAlunoSenha2" type="password" placeholder="Digite a senha novamente">
-
-
-                        <label for="cadAlunoTurma">
-                            Turma
-                        </label>
-
-                        <select id="cadAlunoTurma">
-
-                            <option value="">
-                                Selecione uma turma...
-                            </option>
-
-                        </select>
-
-
-                        <button id="btnCadastrarAluno" class="success">
-                            Cadastrar
-                        </button>
-
-
-                        <button id="btnVoltarAluno" class="sec">
-                            Voltar
-                        </button>
-
-                    </div>
-
+                    <h2>📝 Cadastro</h2>
+                    <div class="form"><label>Nome completo</label><input id="cadAlunoNome"><label>Usuário</label><input
+                            id="cadAlunoUsuario"><label>Senha</label><input id="cadAlunoSenha"
+                            type="password"><label>Confirmar senha</label><input id="cadAlunoSenha2"
+                            type="password"><label>Turma</label><select id="cadAlunoTurma">
+                            <option value="">Selecione...</option>
+                        </select><button id="btnCadastrarAluno" class="success">Cadastrar</button><button
+                            id="btnVoltarAluno" class="sec">Voltar</button></div>
                 </div>
-
             </div>
-
-
-            <!-- PAINEL DO ALUNO LOGADO -->
-
-            <div id="painelAluno" class="card hidden" style="margin-top: 16px;">
-
-                <h2>👋 Área do aluno</h2>
-
-                <p id="alunoNomeLogado"></p>
-
-                <div id="listaProvasAluno" class="list"></div>
-
-                <div class="actions">
-
-                    <button id="btnSairAluno" class="danger">
-                        Sair
-                    </button>
-
-                </div>
-
-            </div>
-
         </section>
-
-
-        <!-- ========================= -->
-        <!-- PROFESSOR -->
-        <!-- ========================= -->
-
-        <section id="professor" class="section">
-
-            <div class="card">
-
-                <h2>👨‍ Área do Professor</h2>
-
-                <div class="tabs">
-                    <button class="tab active" data-tab="turmas"> Turmas</button>
-                    <button class="tab" data-tab="provas"> Provas</button>
-                    <button class="tab" data-tab="resultados"> Resultados</button>
+        <section id="areaProfessor" class="section">
+            <div id="loginProfessor" class="card" style="max-width:500px;margin:auto">
+                <h2>👨‍🏫 Login</h2>
+                <div class="form"><label>Usuário</label><input id="usuarioLogin"><label>Senha</label><input
+                        id="senhaLogin" type="password"><button id="btnLoginProf">Entrar</button>
+                    <p class="msg">Login inicial do Master: <b>master</b> / <b>1234</b></p>
                 </div>
-
-                <!-- TAB TURMAS -->
-                <div id="tab-turmas" class="tab-content active">
-                    <h3>Gerenciar Turmas</h3>
-
-                    <div class="form"
-                        style="margin-bottom: 20px; padding: 20px; background: #f8fafc; border-radius: 8px;">
-                        <div class="row">
-                            <div>
-                                <label>Nome da Turma</label>
-                                <input id="turmaNome" placeholder="Ex: Matemática - 9º Ano">
-                            </div>
-                            <div>
-                                <label>Código</label>
-                                <input id="turmaCodigo" placeholder="Ex: MAT9A">
-                            </div>
+            </div>
+            <div id="painelProfessor" class="hidden">
+                <div class="card">
+                    <div class="row" style="align-items:center">
+                        <div>
+                            <h2 id="tituloPainel">Painel</h2><span id="usuarioLogado"></span>
                         </div>
-                        <button id="btnSalvarTurma" class="success">Salvar Turma</button>
+                        <div class="actions"><button id="btnSair" class="danger">Sair</button></div>
                     </div>
-
+                </div>
+                <div class="actions" style="margin:15px 0"><button data-painel="provas">📝 Avaliações</button><button
+                        data-painel="questoes">❓ Questões</button><button data-painel="turmas">🏫 Turmas</button><button
+                        data-painel="resultados">📊 Resultados</button><button data-painel="alunos" id="botaoAlunos">🎓
+                        Alunos</button><button data-painel="professores" id="botaoMaster">👨‍🏫
+                        Professores</button><button data-painel="banco" id="botaoBancoMaster">💾 Banco</button><button
+                        data-painel="senha">🔑 Minha senha</button></div>
+                <div id="painelProvas" class="card painel">
+                    <h2>📝 Avaliações</h2>
+                    <div class="form"><input type="hidden" id="editarProvaId"><label>Nome da avaliação</label><input
+                            id="nomeProva"><label>Descrição</label><textarea id="descricaoProva"></textarea>
+                        <div class="row">
+                            <div><label>Tempo (minutos)</label><input id="tempo" type="number" min="1" value="60"></div>
+                            <div><label>Nota mínima</label><input id="notaMinima" type="number" min="0" max="10"
+                                    step=".1" value="6"></div>
+                            <div><label>Máx. tentativas</label><input id="maxTentativas" type="number" min="1"
+                                    value="1"></div>
+                        </div>
+                        <div class="row">
+                            <div><label>Início</label><input id="inicioProva" type="datetime-local"></div>
+                            <div><label>Término</label><input id="fimProva" type="datetime-local"></div>
+                        </div><label><input id="embaralhar" type="checkbox"> Embaralhar questões e
+                            alternativas</label><label><input id="modoSeguro" type="checkbox"> Ativar modo
+                            seguro</label>
+                        <div class="actions"><button id="btnCriarProva" class="success">Salvar avaliação</button><button
+                                id="btnCancelarProva" class="sec hidden">Cancelar edição</button></div>
+                    </div>
+                    <div id="listaProfessor" class="list"></div>
+                </div>
+                <div id="painelQuestoes" class="card painel hidden">
+                    <h2>❓ Questões</h2>
+                    <div class="form"><input type="hidden" id="editarQuestaoId"><label>Avaliação</label><select
+                            id="selectProva"></select><label>Enunciado</label><textarea id="enunciado"></textarea>
+                        <div class="row"><input id="a" placeholder="Alternativa A"><input id="b"
+                                placeholder="Alternativa B"></div>
+                        <div class="row"><input id="c" placeholder="Alternativa C"><input id="d"
+                                placeholder="Alternativa D"></div>
+                        <div class="row"><input id="e" placeholder="Alternativa E"><select id="correta">
+                                <option value="">Resposta correta...</option>
+                                <option>A</option>
+                                <option>B</option>
+                                <option>C</option>
+                                <option>D</option>
+                                <option>E</option>
+                            </select></div><label>Imagem (opcional)</label><input id="imagemQuestao" type="file"
+                            accept="image/*">
+                        <div id="previewImagem"></div>
+                        <div class="actions"><button id="btnSalvarQuestao" class="success">Salvar
+                                questão</button><button id="btnCancelarQuestao" class="sec hidden">Cancelar
+                                edição</button></div>
+                    </div>
+                    <div id="listaQuestoes" class="list"></div>
+                </div>
+                <div id="painelTurmas" class="card painel hidden">
+                    <h2>🏫 Turmas</h2>
+                    <div class="form"><input type="hidden" id="editarTurmaId">
+                        <div class="row"><input id="nomeTurma" placeholder="Ex.: 1º Ano - Sala 101"><input
+                                id="capacidadeTurma" type="number" min="1" value="40"></div>
+                        <div class="actions"><button id="btnSalvarTurma" class="success">Salvar turma</button><button
+                                id="btnCancelarTurma" class="sec hidden">Cancelar</button></div>
+                    </div>
                     <div id="listaTurmas" class="list"></div>
                 </div>
-
-                <!-- TAB PROVAS -->
-                <div id="tab-provas" class="tab-content">
-                    <h3>Gerenciar Provas</h3>
-
-                    <button id="btnNovaProva" class="success" style="margin-bottom: 20px;">
-                        ➕ Criar Nova Prova
-                    </button>
-
-                    <div id="formProva" class="card hidden" style="margin-bottom: 20px;">
-                        <h4>Nova Prova</h4>
-                        <div class="form">
-                            <label>Título da Prova</label>
-                            <input id="provaTitulo" placeholder="Ex: Avaliação de Matemática - Bimestre 1">
-
-                            <label>Descrição</label>
-                            <textarea id="provaDescricao" placeholder="Descreva o conteúdo da prova..."></textarea>
-
-                            <div class="row">
-                                <div>
-                                    <label>Turma</label>
-                                    <select id="provaTurma"></select>
-                                </div>
-                                <div>
-                                    <label>Duração (minutos)</label>
-                                    <input id="provaDuracao" type="number" min="1" value="60" placeholder="60">
-                                </div>
-                            </div>
-
-                            <hr style="margin: 20px 0; border: none; border-top: 2px solid var(--borda);">
-
-                            <h4>Questões</h4>
-                            <div id="listaQuestoes"></div>
-
-                            <button id="btnAdicionarQuestao" class="sec" style="margin: 10px 0;">
-                                ➕ Adicionar Questão
-                            </button>
-
-                            <div class="actions" style="margin-top: 20px;">
-                                <button id="btnSalvarProva" class="success">💾 Salvar Prova</button>
-                                <button id="btnCancelarProva" class="danger">❌ Cancelar</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="listaProvas" class="list"></div>
+                <div id="painelResultados" class="card painel hidden">
+                    <h2>📊 Resultados</h2>
+                    <div id="resultadosContainer" class="list"></div>
                 </div>
-
-                <!-- TAB RESULTADOS -->
-                <div id="tab-resultados" class="tab-content">
-                    <h3>Resultados e Dashboard</h3>
-
-                    <div class="row" style="margin-bottom: 20px;">
-                        <div>
-                            <label>Filtrar por Prova</label>
-                            <select id="filtroProva">
-                                <option value="">Todas as provas</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Filtrar por Turma</label>
-                            <select id="filtroTurma">
-                                <option value="">Todas as turmas</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div id="statsDashboard" class="stats-grid hidden">
-                        <div class="stat-card">
-                            <div class="stat-label">Total de Alunos</div>
-                            <div class="stat-value" id="statTotalAlunos">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Média Geral</div>
-                            <div class="stat-value" id="statMediaGeral">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Provas Realizadas</div>
-                            <div class="stat-value" id="statProvasRealizadas">0</div>
-                        </div>
-                    </div>
-
-                    <div id="tabelaResultados">
-                        <p style="color: #64748b; text-align: center; padding: 40px;">
-                            Selecione os filtros para visualizar os resultados
-                        </p>
-                    </div>
+                <div id="painelAlunos" class="card painel hidden">
+                    <h2>🎓 Alunos</h2><input id="buscaAluno" placeholder="Pesquisar aluno...">
+                    <div id="listaAlunosMaster" class="list"></div>
                 </div>
-
-                <div class="actions" style="margin-top: 20px;">
-                    <button id="btnVoltarInicioProfessor" class="sec">
-                        Voltar
-                    </button>
+                <div id="painelProfessores" class="card painel hidden">
+                    <h2>👨‍🏫 Professores</h2>
+                    <div class="form"><input type="hidden" id="editarProfessorId">
+                        <div class="row"><input id="novoProfNome" placeholder="Nome"><input id="novoProfUsuario"
+                                placeholder="Usuário"></div>
+                        <div class="row"><input id="novoProfSenha" placeholder="Senha" type="password"><select
+                                id="novoProfTipo">
+                                <option value="professor">Professor</option>
+                                <option value="master">Master</option>
+                            </select></div><button id="btnSalvarProfessor" class="success">Salvar
+                            professor</button><button id="btnCancelarProfessor" class="sec hidden">Cancelar</button>
+                    </div>
+                    <div id="listaProfessores" class="list"></div>
                 </div>
-
+                <div id="painelBanco" class="card painel hidden">
+                    <h2>💾 Banco e Backup</h2>
+                    <div class="actions"><button id="btnBackup" class="success">💾 Backup completo</button><button
+                            id="btnRestaurar" class="warning">📥 Restaurar backup</button><input id="arquivoBackup"
+                            type="file" accept=".json" class="hidden"><button id="btnApagarProvas" class="danger">Apagar
+                            avaliações</button><button id="btnApagarNotas" class="danger">Apagar
+                            resultados</button><button id="btnZerar" class="danger">Zerar banco local</button></div>
+                </div>
+                <div id="painelSenha" class="card painel hidden">
+                    <h2>🔑 Alterar senha</h2>
+                    <div class="form" style="max-width:500px"><input id="senhaAtual" type="password"
+                            placeholder="Senha atual"><input id="novaSenha" type="password"
+                            placeholder="Nova senha"><input id="confirmarSenha" type="password"
+                            placeholder="Confirmar nova senha"><button id="btnAlterarSenha">Alterar senha</button></div>
+                </div>
             </div>
-
         </section>
-
+        <section id="areaProva" class="section">
+            <div class="fullscreen" id="provaTela">
+                <div class="card">
+                    <div class="row">
+                        <div>
+                            <h2 id="tituloProva">Avaliação</h2>
+                            <div id="dadosAluno"></div>
+                        </div>
+                        <div id="cronometro">00:00</div>
+                    </div>
+                    <div id="avisoSeguro" class="msg hidden"></div>
+                    <div id="questoesAluno"></div><button id="btnFinalizar" class="success">Finalizar prova</button>
+                </div>
+            </div>
+        </section>
+        <section id="areaResultado" class="section">
+            <div class="card">
+                <h2>📊 Resultado</h2>
+                <div id="resultadoConteudo"></div><button id="btnVoltarInicio">Voltar ao início</button>
+            </div>
+        </section>
     </main>
+    <footer>Sistema de Provas 4.1 • Corrigido</footer>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        const firebaseConfig = { apiKey: "AIzaSyCLaqaOCJnkfG4LID1Y5RoFpgEsX9nYGOM", authDomain: "testeapi-1ad07.firebaseapp.com", projectId: "testeapi-1ad07", storageBucket: "testeapi-1ad07.firebasestorage.app", messagingSenderId: "323295128076", appId: "1:323295128076:web:3af167424f75b680f19c29" };
+        const app = initializeApp(firebaseConfig), db = getFirestore(app);
+        const KEYS = { usuarios: "sistemaProvasUsuarios", provas: "sistemaProvas", alunos: "sistemaProvasAlunos", turmas: "sistemaProvasTurmas", resultados: "sistemaResultados" };
+        let usuarios = load(KEYS.usuarios, []), provas = load(KEYS.provas, []), alunos = load(KEYS.alunos, []), turmas = load(KEYS.turmas, []), resultados = load(KEYS.resultados, []);
+        let usuarioAtual = null, alunoAtual = null, provaAtual = null, timer = null, tempoRestante = 0, finalizada = false, ocorrencias = 0;
+        if (!usuarios.some(u => u.tipo === "master")) { usuarios.push({ id: "master-1", nome: "Master", usuario: "master", senha: "1234", tipo: "master" }); persist(); }
+        function load(k, d) { try { return JSON.parse(localStorage.getItem(k)) || d } catch { return d } }
+        function persist() { localStorage.setItem(KEYS.usuarios, JSON.stringify(usuarios)); localStorage.setItem(KEYS.provas, JSON.stringify(provas)); localStorage.setItem(KEYS.alunos, JSON.stringify(alunos)); localStorage.setItem(KEYS.turmas, JSON.stringify(turmas)); localStorage.setItem(KEYS.resultados, JSON.stringify(resultados)) }
+        function id() { return crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random().toString(16).slice(2) }
+        function esc(v = "") { return String(v).replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m])) }
+        async function cloud(c, i, data) { try { await setDoc(doc(db, c, String(i)), data); return true } catch (e) { console.warn(e); return false } }
+        async function cloudDelete(c, i) { try { await deleteDoc(doc(db, c, String(i))) } catch (e) { console.warn(e) } }
+        function sync() { persist(); document.getElementById("statusNuvem").textContent = "☁️ Dados locais ativos" }
+        async function syncAll() { try { const maps = [["usuarios", "usuarios"], ["provas", "provas"], ["alunos", "alunos"], ["turmas", "turmas"], ["resultados", "resultados"]]; for (const [c, k] of maps) { const s = await getDocs(collection(db, c)); if (!s.empty) { const arr = s.docs.map(x => x.data()); if (k === "usuarios") usuarios = arr; if (k === "provas") provas = arr; if (k === "alunos") alunos = arr; if (k === "turmas") turmas = arr; if (k === "resultados") resultados = arr } } persist(); document.getElementById("statusNuvem").textContent = "☁️ Firebase conectado"; atualizarTudo(); } catch (e) { document.getElementById("statusNuvem").textContent = "⚠️ Offline / Firebase indisponível" } }
+        function mostrar(sec) { document.querySelectorAll(".section").forEach(x => x.classList.remove("active")); document.getElementById(sec).classList.add("active") }
+        function painel(nome) { document.querySelectorAll(".painel").forEach(x => x.classList.add("hidden")); document.getElementById("painel" + nome[0].toUpperCase() + nome.slice(1)).classList.remove("hidden"); if (nome === "provas") listarProvas(); if (nome === "questoes") { atualizarSelect(); listarQuestoes() } if (nome === "turmas") listarTurmas(); if (nome === "resultados") listarResultados(); if (nome === "alunos") listarAlunos(); if (nome === "professores") listarProfessores() }
+        function atualizarTudo() { listarProvas(); atualizarSelect(); listarTurmas(); listarAlunos(); listarProfessores(); listarResultados(); carregarTurmasCadastro() }
+        function val(id) { return document.getElementById(id).value.trim() }
+        function clear(ids) { ids.forEach(x => { const e = document.getElementById(x); if (e) e.value = "" }) }
+        btnInicio.onclick = () => mostrar("inicio"); btnAreaAluno.onclick = () => { mostrar("areaAluno"); carregarTurmasCadastro() }; btnProfessor.onclick = () => mostrar("areaProfessor"); cardAluno.onclick = () => mostrar("areaAluno"); cardProf.onclick = () => mostrar("areaProfessor");
+        btnAbrirCadastro.onclick = () => { document.getElementById("cadastroAlunoCard").classList.remove("hidden"); carregarTurmasCadastro() };
+        btnVoltarAluno.onclick = () => document.getElementById("cadastroAlunoCard").classList.add("hidden");
+        function carregarTurmasCadastro() { const s = document.getElementById("cadAlunoTurma"); s.innerHTML = '<option value="">Selecione...</option>' + turmas.filter(t => !t.bloqueada && (t.alunosIds || []).length < (t.capacidade || 9999)).map(t => `<option value="${t.id}">${esc(t.nome)} (${(t.alunosIds || []).length}/${t.capacidade})</option>`).join("") }
+        btnCadastrarAluno.onclick = async () => { const nome = val("cadAlunoNome"), usuario = val("cadAlunoUsuario"), senha = val("cadAlunoSenha"), senha2 = val("cadAlunoSenha2"), turmaId = val("cadAlunoTurma"); if (!nome || !usuario || !senha || senha !== senha2 || !turmaId) return alert("Preencha corretamente."); if (usuarios.some(u => u.usuario.toLowerCase() === usuario.toLowerCase()) || alunos.some(a => a.usuario.toLowerCase() === usuario.toLowerCase())) return alert("Usuário já existe."); const t = turmas.find(x => x.id === turmaId); if (!t || t.bloqueada || (t.alunosIds || []).length >= t.capacidade) return alert("Turma indisponível."); const a = { id: id(), nome, usuario, senha, turmaId, bloqueado: false }; alunos.push(a); t.alunosIds = [...(t.alunosIds || []), a.id]; sync(); await cloud("alunos", a.id, a); await cloud("turmas", t.id, t); alert("Cadastro realizado!"); document.getElementById("cadastroAlunoCard").classList.add("hidden"); carregarTurmasCadastro(); };
+        btnLoginAluno.onclick = () => { const u = val("loginAlunoUsuario"), s = val("loginAlunoSenha"), a = alunos.find(x => x.usuario === u && x.senha === s && !x.bloqueado); if (!a) return alert("Usuário ou senha inválidos."); alunoAtual = a; const codigo = prompt("Digite o código da avaliação:"); if (codigo) { const p = provas.find(x => x.codigo === codigo.trim().toUpperCase()); if (p) iniciarProva(p); else alert("Avaliação não encontrada."); } };
+        btnLoginProf.onclick = () => { const u = val("usuarioLogin"), s = val("senhaLogin"), x = usuarios.find(a => a.usuario === u && a.senha === s); if (!x) return alert("Usuário ou senha inválidos."); usuarioAtual = x; document.getElementById("loginProfessor").classList.add("hidden"); document.getElementById("painelProfessor").classList.remove("hidden"); document.getElementById("usuarioLogado").textContent = `Logado como ${x.nome} (${x.tipo})`; document.getElementById("botaoMaster").classList.toggle("hidden", x.tipo !== "master"); document.getElementById("botaoBancoMaster").classList.toggle("hidden", x.tipo !== "master"); painel("provas"); };
+        btnSair.onclick = () => { usuarioAtual = null; document.getElementById("painelProfessor").classList.add("hidden"); document.getElementById("loginProfessor").classList.remove("hidden"); clear(["usuarioLogin", "senhaLogin"]); mostrar("inicio") };
+        document.querySelectorAll("[data-painel]").forEach(b => b.onclick = () => painel(b.dataset.painel));
+        function gerarCodigo() { return Math.random().toString(36).slice(2, 8).toUpperCase() }
+        btnCriarProva.onclick = async () => { const edit = val("editarProvaId"), dados = { nome: val("nomeProva"), descricao: val("descricaoProva"), tempo: +val("tempo") || 60, notaMinima: +val("notaMinima") || 0, maxTentativas: +val("maxTentativas") || 1, inicio: val("inicioProva"), fim: val("fimProva"), embaralhar: document.getElementById("embaralhar").checked, modoSeguro: document.getElementById("modoSeguro").checked }; if (!dados.nome) return alert("Informe o nome."); let p = edit ? provas.find(x => x.id === edit) : null; if (p) Object.assign(p, dados); else { p = { id: id(), professorId: usuarioAtual.id, codigo: gerarCodigo(), liberada: false, questoes: [], ...dados }; provas.push(p) } sync(); await cloud("provas", p.id, p); alert(`Avaliação salva. Código: ${p.codigo}`); cancelarProva(); };
+        function cancelarProva() { clear(["editarProvaId", "nomeProva", "descricaoProva", "inicioProva", "fimProva"]); document.getElementById("tempo").value = 60; document.getElementById("notaMinima").value = 6; document.getElementById("maxTentativas").value = 1; document.getElementById("embaralhar").checked = false; document.getElementById("modoSeguro").checked = false; document.getElementById("btnCancelarProva").classList.add("hidden"); listarProvas() }
+        btnCancelarProva.onclick = cancelarProva;
+        function podeGerir(p) { return usuarioAtual?.tipo === "master" || p.professorId === usuarioAtual?.id }
+        function listarProvas() { const arr = provas.filter(podeGerir); listaProfessor.innerHTML = arr.length ? arr.map(p => `<div class="item"><b>${esc(p.nome)}</b> <span class="badge">${p.codigo}</span><span class="badge ${p.liberada ? "ok" : "no"}">${p.liberada ? "LIBERADA" : "BLOQUEADA"}</span><p>${esc(p.descricao || "")}</p><small>Tempo: ${p.tempo} min • Tentativas: ${p.maxTentativas} • Questões: ${(p.questoes || []).length}</small><div class="actions"><button data-edit-prova="${p.id}">Editar</button><button data-toggle-prova="${p.id}" class="${p.liberada ? "warning" : "success"}">${p.liberada ? "Bloquear" : "Liberar"}</button><button data-del-prova="${p.id}" class="danger">Excluir</button></div></div>`).join("") : "Nenhuma avaliação."; listaProfessor.querySelectorAll("[data-edit-prova]").forEach(b => b.onclick = () => editarProva(b.dataset.editProva)); listaProfessor.querySelectorAll("[data-toggle-prova]").forEach(b => b.onclick = () => alternarProva(b.dataset.toggleProva)); listaProfessor.querySelectorAll("[data-del-prova]").forEach(b => b.onclick = () => excluirProva(b.dataset.delProva)) }
+        function editarProva(i) { const p = provas.find(x => x.id === i); if (!p) return; editarProvaId.value = p.id; nomeProva.value = p.nome; descricaoProva.value = p.descricao || ""; tempo.value = p.tempo; notaMinima.value = p.notaMinima; maxTentativas.value = p.maxTentativas; inicioProva.value = p.inicio || ""; fimProva.value = p.fim || ""; embaralhar.checked = !!p.embaralhar; modoSeguro.checked = !!p.modoSeguro; btnCancelarProva.classList.remove("hidden") }
+        async function alternarProva(i) { const p = provas.find(x => x.id === i); p.liberada = !p.liberada; sync(); await cloud("provas", p.id, p); listarProvas() }
+        async function excluirProva(i) { if (!confirm("Excluir esta avaliação?")) return; provas = provas.filter(x => x.id !== i); sync(); await cloudDelete("provas", i); listarProvas(); atualizarSelect() }
+        function atualizarSelect() { selectProva.innerHTML = '<option value="">Selecione...</option>' + provas.filter(podeGerir).map(p => `<option value="${p.id}">${esc(p.nome)} — ${p.codigo}</option>`).join("") }
+        selectProva.onchange = listarQuestoes;
+        btnSalvarQuestao.onclick = async () => { const pid = val("selectProva"), en = val("enunciado"), corr = val("correta"); if (!pid || !en || !corr) return alert("Selecione avaliação, enunciado e resposta."); const p = provas.find(x => x.id === pid), eid = val("editarQuestaoId"), q = { id: eid || id(), enunciado: en, alternativas: { A: val("a"), B: val("b"), C: val("c"), D: val("d"), E: val("e") }, correta: corr, imagem: document.getElementById("previewImagem").dataset.src || "" }; if (eid) { const old = p.questoes.find(x => x.id === eid); if (old) Object.assign(old, q) } else p.questoes.push(q); sync(); await cloud("provas", p.id, p); alert("Questão salva."); cancelarQuestao(); listarQuestoes() };
+        function cancelarQuestao() { clear(["editarQuestaoId", "enunciado", "a", "b", "c", "d", "e"]); correta.value = ""; previewImagem.innerHTML = ""; delete previewImagem.dataset.src; btnCancelarQuestao.classList.add("hidden") }
+        btnCancelarQuestao.onclick = cancelarQuestao;
+        imagemQuestao.onchange = () => { const f = imagemQuestao.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { previewImagem.dataset.src = r.result; previewImagem.innerHTML = `<img src="${r.result}" style="max-width:300px;max-height:180px">` }; r.readAsDataURL(f) }
+        function listarQuestoes() { const p = provas.find(x => x.id === selectProva.value); listaQuestoes.innerHTML = p ? (p.questoes || []).map((q, i) => `<div class="item"><b>${i + 1}. ${esc(q.enunciado)}</b>${q.imagem ? `<br><img src="${q.imagem}" style="max-width:180px">` : ""}<div>${Object.entries(q.alternativas).map(([k, v]) => `<span class="badge ${q.correta === k ? "ok" : ""}">${k}: ${esc(v)}</span>`).join("")}</div><div class="actions"><button data-edit-q="${q.id}">Editar</button><button data-del-q="${q.id}" class="danger">Excluir</button></div></div>`).join("") : "Selecione uma avaliação."; listaQuestoes.querySelectorAll("[data-edit-q]").forEach(b => b.onclick = () => editarQuestao(b.dataset.editQ)); listaQuestoes.querySelectorAll("[data-del-q]").forEach(b => b.onclick = () => excluirQuestao(b.dataset.delQ)) }
+        function editarQuestao(qid) { const p = provas.find(x => x.id === selectProva.value), q = p?.questoes.find(x => x.id === qid); if (!q) return; editarQuestaoId.value = q.id; enunciado.value = q.enunciado; for (const k of ["A", "B", "C", "D", "E"]) document.getElementById(k.toLowerCase()).value = q.alternativas[k] || ""; correta.value = q.correta; if (q.imagem) { previewImagem.dataset.src = q.imagem; previewImagem.innerHTML = `<img src="${q.imagem}" style="max-width:300px">` }; btnCancelarQuestao.classList.remove("hidden") }
+        async function excluirQuestao(qid) { const p = provas.find(x => x.id === selectProva.value); if (!p || !confirm("Excluir questão?")) return; p.questoes = p.questoes.filter(q => q.id !== qid); sync(); await cloud("provas", p.id, p); listarQuestoes() }
+        btnSalvarTurma.onclick = async () => { const eid = val("editarTurmaId"), nome = val("nomeTurma"), cap = +val("capacidadeTurma") || 1; if (!nome) return alert("Informe o nome."); let t = eid ? turmas.find(x => x.id === eid) : null; if (t) Object.assign(t, { nome, capacidade: cap }); else { t = { id: id(), nome, capacidade: cap, bloqueada: false, alunosIds: [], professorId: usuarioAtual.id }; turmas.push(t) } sync(); await cloud("turmas", t.id, t); cancelarTurma(); listarTurmas() };
+        function cancelarTurma() { clear(["editarTurmaId", "nomeTurma"]); capacidadeTurma.value = 40; btnCancelarTurma.classList.add("hidden") }
+        btnCancelarTurma.onclick = cancelarTurma;
+        function listarTurmas() { listaTurmas.innerHTML = turmas.filter(t => usuarioAtual?.tipo === "master" || t.professorId === usuarioAtual?.id).map(t => `<div class="item"><b>${esc(t.nome)}</b> <span class="badge">${(t.alunosIds || []).length}/${t.capacidade}</span><span class="badge ${t.bloqueada ? "no" : "ok"}">${t.bloqueada ? "BLOQUEADA" : "ABERTA"}</span><div class="actions"><button data-edit-t="${t.id}">Editar</button><button data-toggle-t="${t.id}" class="${t.bloqueada ? "success" : "warning"}">${t.bloqueada ? "Desbloquear" : "Bloquear"}</button><button data-del-t="${t.id}" class="danger">Excluir</button></div></div>`).join("") || "Nenhuma turma."; listaTurmas.querySelectorAll("[data-edit-t]").forEach(b => b.onclick = () => editarTurma(b.dataset.editT)); listaTurmas.querySelectorAll("[data-toggle-t]").forEach(b => b.onclick = async () => { const t = turmas.find(x => x.id === b.dataset.toggleT); t.bloqueada = !t.bloqueada; sync(); await cloud("turmas", t.id, t); listarTurmas(); carregarTurmasCadastro() }); listaTurmas.querySelectorAll("[data-del-t]").forEach(b => b.onclick = async () => { if (!confirm("Excluir turma?")) return; turmas = turmas.filter(t => t.id !== b.dataset.delT); sync(); await cloudDelete("turmas", b.dataset.delT); listarTurmas() }) }
+        function editarTurma(i) { const t = turmas.find(x => x.id === i); if (!t) return; editarTurmaId.value = t.id; nomeTurma.value = t.nome; capacidadeTurma.value = t.capacidade; btnCancelarTurma.classList.remove("hidden") }
 
+        // FUNÇÃO CORRIGIDA DE RESULTADOS
+        function listarResultados() {
+            const el = document.getElementById("resultadosContainer");
+            const arr = usuarioAtual?.tipo === "master" ? resultados : resultados.filter(r => provas.find(p => p.id === r.provaId)?.professorId === usuarioAtual?.id);
+            if (!arr.length) { el.innerHTML = "Nenhum resultado ainda."; return; }
+            el.innerHTML = arr.sort((a, b) => new Date(b.data) - new Date(a.data)).map(r => `<div class="item"><b>${esc(r.alunoNome)}</b> — ${esc(r.provaNome)}<br>Nota: <strong style="font-size:20px">${r.nota.toFixed(2)}</strong> • ${r.acertos}/${r.total} acertos<br><small>${new Date(r.data).toLocaleString("pt-BR")}</small><div class="actions"><button data-del-r="${r.id}" class="danger">Excluir nota</button></div></div>`).join("");
+            el.querySelectorAll("[data-del-r]").forEach(b => b.onclick = async () => {
+                if (!confirm("Excluir este resultado?")) return;
+                resultados = resultados.filter(x => x.id !== b.dataset.delR);
+                sync(); await cloudDelete("resultados", b.dataset.delR);
+                listarResultados();
+            });
+        }
 
-    <footer>
-
-        Sistema de Provas 4.1 • Firebase Realtime Database
-
-    </footer>
-
-
-    <script>
-
-        /* =====================================================
-           CONFIGURAÇÃO DO FIREBASE
-        ===================================================== */
-
-        const firebaseConfig = {
-
-            apiKey: "AIzaSyCLaqaOCJnkfG4LID1Y5RoFpgEsX9nYGOM",
-
-            authDomain: "testeapi-1ad07.firebaseapp.com",
-
-            databaseURL: "https://testeapi-1ad07-default-rtdb.firebaseio.com",
-
-            projectId: "testeapi-1ad07",
-
-            storageBucket: "testeapi-1ad07.firebasestorage.app",
-
-            messagingSenderId: "323295128076",
-
-            appId: "1:323295128076:web:3af167424f75b680f19c29"
-
-        };
-
-
-        /* =====================================================
-           VARIÁVEIS GLOBAIS
-        ===================================================== */
-
-        let db = null;
-        let alunoLogado = null;
-        let questoesTemp = [];
-        let timerInterval = null;
-        let tempoRestante = 0;
-        let provaAtual = null;
-
-
-        /* =====================================================
-           INICIALIZAÇÃO DO FIREBASE
-        ===================================================== */
-
-        function iniciarFirebase() {
-
-            const status = document.getElementById("statusNuvem");
-
-            try {
-
-                if (typeof firebase === "undefined") {
-
-                    status.innerText = "❌ Firebase não carregado";
-                    status.style.backgroundColor = "#dc2626";
-                    return;
-
+        function listarAlunos() {
+            const q = val("buscaAluno").toLowerCase();
+            const el = document.getElementById("listaAlunosMaster");
+            el.innerHTML = alunos.filter(a => (a.nome + " " + a.usuario).toLowerCase().includes(q)).map(a => `<div class="item"><b>${esc(a.nome)}</b><br>Usuário: ${esc(a.usuario)}<br>Turma: ${esc(turmas.find(t => t.id === a.turmaId)?.nome || "-")}<div class="actions"><button data-bloq-a="${a.id}" class="warning">${a.bloqueado ? "Desbloquear" : "Bloquear"}</button><button data-exc-a="${a.id}" class="danger">Excluir aluno</button></div></div>`).join("") || "Nenhum aluno.";
+            el.querySelectorAll("[data-bloq-a]").forEach(b => b.onclick = async () => { const a = alunos.find(x => x.id === b.dataset.bloqA); a.bloqueado = !a.bloqueado; sync(); await cloud("alunos", a.id, a); listarAlunos() });
+            el.querySelectorAll("[data-exc-a]").forEach(b => b.onclick = async () => {
+                if (!confirm("Excluir aluno definitivamente? A vaga na turma será liberada.")) return;
+                const alunoId = b.dataset.excA;
+                const aluno = alunos.find(x => x.id === alunoId);
+                if (aluno) {
+                    const t = turmas.find(t => t.id === aluno.turmaId);
+                    if (t) { t.alunosIds = (t.alunosIds || []).filter(id => id !== alunoId); await cloud("turmas", t.id, t); }
                 }
-
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(firebaseConfig);
-                }
-
-                db = firebase.database();
-
-                status.innerText = " Verificando conexão...";
-                status.style.backgroundColor = "#d97706";
-
-                db.ref(".info/connected").on("value", function (snapshot) {
-
-                    if (snapshot.val() === true) {
-                        status.innerText = "☁️ Online / Conectado";
-                        status.style.backgroundColor = "#16a34a";
-                    } else {
-                        status.innerText = "⚠️ Offline";
-                        status.style.backgroundColor = "#d97706";
-                    }
-
-                });
-
-            } catch (erro) {
-
-                console.error("Erro ao iniciar Firebase:", erro);
-                status.innerText = "❌ Erro no Firebase";
-                status.style.backgroundColor = "#dc2626";
-
-            }
-
-        }
-
-
-        /* =====================================================
-           NAVEGAÇÃO
-        ===================================================== */
-
-        function alternarSecao(id) {
-
-            document.querySelectorAll(".section").forEach(function (secao) {
-                secao.classList.remove("active");
-            });
-
-            const secaoAlvo = document.getElementById(id);
-            if (secaoAlvo) {
-                secaoAlvo.classList.add("active");
-            }
-
-        }
-
-
-        /* =====================================================
-           TABS DO PROFESSOR
-        ===================================================== */
-
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function () {
-                // Remove active de todas as tabs
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-                // Adiciona active na tab clicada
-                this.classList.add('active');
-                const tabId = this.dataset.tab;
-                document.getElementById('tab-' + tabId).classList.add('active');
-
-                // Carrega dados específicos da tab
-                if (tabId === 'turmas') carregarTurmasLista();
-                if (tabId === 'provas') carregarProvasLista();
-                if (tabId === 'resultados') carregarFiltrosResultados();
-            });
-        });
-
-
-        /* =====================================================
-           MENSAGENS
-        ===================================================== */
-
-        function mostrarMensagem(elemento, mensagem, tipo = "normal") {
-
-            elemento.innerText = mensagem;
-            elemento.classList.remove("hidden", "erro", "sucesso");
-
-            if (tipo === "erro") {
-                elemento.classList.add("erro");
-            }
-
-            if (tipo === "sucesso") {
-                elemento.classList.add("sucesso");
-            }
-
-        }
-
-
-        function esconderMensagem(elemento) {
-            elemento.classList.add("hidden");
-            elemento.innerText = "";
-        }
-
-
-        /* =====================================================
-           FUNÇÕES DE TURMAS
-        ===================================================== */
-
-        function carregarTurmas() {
-
-            const select = document.getElementById("cadAlunoTurma");
-            if (!db) return;
-
-            select.innerHTML = '<option value="">Carregando turmas...</option>';
-
-            db.ref("turmas").once("value").then(function (snapshot) {
-
-                select.innerHTML = '<option value="">Selecione uma turma...</option>';
-
-                if (!snapshot.exists()) {
-                    select.innerHTML += '<option value="">Nenhuma turma cadastrada</option>';
-                    return;
-                }
-
-                snapshot.forEach(function (item) {
-                    const turma = item.val() || {};
-                    const option = document.createElement("option");
-                    option.value = item.key;
-                    option.textContent = turma.nome || turma.codigo || item.key;
-                    select.appendChild(option);
-                });
-
-            }).catch(function (erro) {
-                console.error("Erro ao carregar turmas:", erro);
-                select.innerHTML = '<option value="">Erro ao carregar turmas</option>';
-            });
-
-        }
-
-
-        function carregarTurmasLista() {
-            const lista = document.getElementById("listaTurmas");
-            if (!db) return;
-
-            lista.innerHTML = "<p>Carregando turmas...</p>";
-
-            db.ref("turmas").once("value").then(function (snapshot) {
-                lista.innerHTML = "";
-
-                if (!snapshot.exists()) {
-                    lista.innerHTML = '<div class="msg">Nenhuma turma cadastrada.</div>';
-                    return;
-                }
-
-                snapshot.forEach(function (item) {
-                    const turma = item.val();
-                    const div = document.createElement("div");
-                    div.className = "item";
-                    div.innerHTML = `
-                        <strong>${escaparHTML(turma.nome)}</strong>
-                        <span class="badge">${escaparHTML(turma.codigo)}</span>
-                        <div class="actions">
-                            <button class="danger" onclick="excluirTurma('${item.key}')">🗑️ Excluir</button>
-                        </div>
-                    `;
-                    lista.appendChild(div);
-                });
-
-            }).catch(function (erro) {
-                console.error(erro);
-                lista.innerHTML = '<div class="msg erro">Erro ao carregar turmas.</div>';
+                alunos = alunos.filter(x => x.id !== alunoId);
+                sync(); await cloudDelete("alunos", alunoId);
+                listarAlunos(); listarTurmas(); carregarTurmasCadastro();
             });
         }
-
-
-        function salvarTurma() {
-            const nome = document.getElementById("turmaNome").value.trim();
-            const codigo = document.getElementById("turmaCodigo").value.trim();
-            const msg = document.getElementById("msgLoginAluno");
-
-            if (!nome || !codigo) {
-                alert("Preencha nome e código da turma.");
-                return;
-            }
-
-            const btn = document.getElementById("btnSalvarTurma");
-            btn.disabled = true;
-            btn.innerText = "Salvando...";
-
-            db.ref("turmas").push({
-                nome: nome,
-                codigo: codigo,
-                criadoEm: firebase.database.ServerValue.TIMESTAMP
-            }).then(() => {
-                document.getElementById("turmaNome").value = "";
-                document.getElementById("turmaCodigo").value = "";
-                carregarTurmasLista();
-                alert("Turma salva com sucesso!");
-            }).catch((erro) => {
-                console.error(erro);
-                alert("Erro ao salvar turma.");
-            }).finally(() => {
-                btn.disabled = false;
-                btn.innerText = "Salvar Turma";
-            });
-        }
-
-
-        function excluirTurma(id) {
-            if (!confirm("Tem certeza que deseja excluir esta turma?")) return;
-
-            db.ref("turmas/" + id).remove().then(() => {
-                carregarTurmasLista();
-                alert("Turma excluída!");
-            }).catch((erro) => {
-                console.error(erro);
-                alert("Erro ao excluir turma.");
-            });
-        }
-
-
-        /* =====================================================
-           FUNÇÕES DE PROVAS
-        ===================================================== */
-
-        function carregarProvasLista() {
-            const lista = document.getElementById("listaProvas");
-            if (!db) return;
-
-            lista.innerHTML = "<p>Carregando provas...</p>";
-
-            db.ref("provas").once("value").then(function (snapshot) {
-                lista.innerHTML = "";
-
-                if (!snapshot.exists()) {
-                    lista.innerHTML = '<div class="msg">Nenhuma prova cadastrada.</div>';
-                    return;
-                }
-
-                snapshot.forEach(function (item) {
-                    const prova = item.val();
-                    const div = document.createElement("div");
-                    div.className = "item";
-                    div.innerHTML = `
-                        <strong>${escaparHTML(prova.titulo)}</strong>
-                        <p class="titulo-pequeno">${escaparHTML(prova.descricao || '')}</p>
-                        <span class="badge">${prova.questoes ? prova.questoes.length : 0} questões</span>
-                        <span class="badge">${prova.duracao || 60} min</span>
-                        <div class="actions">
-                            <button class="sec" onclick="visualizarProva('${item.key}')">👁️ Visualizar</button>
-                            <button class="danger" onclick="excluirProva('${item.key}')">🗑️ Excluir</button>
-                        </div>
-                    `;
-                    lista.appendChild(div);
-                });
-
-            }).catch(function (erro) {
-                console.error(erro);
-                lista.innerHTML = '<div class="msg erro">Erro ao carregar provas.</div>';
-            });
-        }
-
-
-        function novaProva() {
-            document.getElementById("formProva").classList.remove("hidden");
-            document.getElementById("listaProvas").classList.add("hidden");
-            document.getElementById("provaTitulo").value = "";
-            document.getElementById("provaDescricao").value = "";
-            document.getElementById("provaDuracao").value = "60";
-            questoesTemp = [];
-            carregarSelectTurmasProva();
-            renderizarQuestoes();
-        }
-
-
-        function carregarSelectTurmasProva() {
-            const select = document.getElementById("provaTurma");
-            select.innerHTML = '<option value="">Selecione uma turma...</option>';
-
-            db.ref("turmas").once("value").then(function (snapshot) {
-                snapshot.forEach(function (item) {
-                    const turma = item.val();
-                    const option = document.createElement("option");
-                    option.value = item.key;
-                    option.textContent = turma.nome || turma.codigo;
-                    select.appendChild(option);
-                });
-            });
-        }
-
-
-        function adicionarQuestao() {
-            const questao = {
-                id: Date.now(),
-                enunciado: "",
-                alternativas: ["", "", "", ""],
-                gabarito: 0,
-                pontos: 1
-            };
-            questoesTemp.push(questao);
-            renderizarQuestoes();
-        }
-
-
-        function renderizarQuestoes() {
-            const container = document.getElementById("listaQuestoes");
-            container.innerHTML = "";
-
-            questoesTemp.forEach((questao, index) => {
-                const div = document.createElement("div");
-                div.className = "questao-builder";
-                div.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <strong>Questão ${index + 1}</strong>
-                        <button class="danger" onclick="removerQuestao(${index})" style="padding:5px 10px;">🗑️</button>
-                    </div>
-                    
-                    <label>Enunciado</label>
-                    <textarea onchange="atualizarQuestao(${index}, 'enunciado', this.value)" placeholder="Digite o enunciado da questão...">${questao.enunciado}</textarea>
-                    
-                    <label style="margin-top:10px;">Alternativas (marque a correta)</label>
-                    ${questao.alternativas.map((alt, i) => `
-                        <div class="alternativa-input">
-                            <input type="radio" name="gabarito-${index}" ${i === questao.gabarito ? 'checked' : ''} onchange="atualizarGabarito(${index}, ${i})">
-                            <span>${String.fromCharCode(65 + i)})</span>
-                            <input type="text" value="${alt}" onchange="atualizarAlternativa(${index}, ${i}, this.value)" placeholder="Alternativa ${String.fromCharCode(65 + i)}">
-                        </div>
-                    `).join('')}
-                    
-                    <div style="margin-top:10px;">
-                        <label>Pontos</label>
-                        <input type="number" min="0.5" step="0.5" value="${questao.pontos}" onchange="atualizarQuestao(${index}, 'pontos', parseFloat(this.value))" style="width:100px;">
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-
-        function atualizarQuestao(index, campo, valor) {
-            questoesTemp[index][campo] = valor;
-        }
-
-
-        function atualizarAlternativa(questaoIndex, altIndex, valor) {
-            questoesTemp[questaoIndex].alternativas[altIndex] = valor;
-        }
-
-
-        function atualizarGabarito(questaoIndex, altIndex) {
-            questoesTemp[questaoIndex].gabarito = altIndex;
-        }
-
-
-        function removerQuestao(index) {
-            questoesTemp.splice(index, 1);
-            renderizarQuestoes();
-        }
-
-
-        function salvarProva() {
-            const titulo = document.getElementById("provaTitulo").value.trim();
-            const descricao = document.getElementById("provaDescricao").value.trim();
-            const turmaId = document.getElementById("provaTurma").value;
-            const duracao = parseInt(document.getElementById("provaDuracao").value) || 60;
-
-            if (!titulo || !turmaId) {
-                alert("Preencha título e selecione uma turma.");
-                return;
-            }
-
-            if (questoesTemp.length === 0) {
-                alert("Adicione pelo menos uma questão.");
-                return;
-            }
-
-            const btn = document.getElementById("btnSalvarProva");
-            btn.disabled = true;
-            btn.innerText = "Salvando...";
-
-            const prova = {
-                titulo: titulo,
-                descricao: descricao,
-                turmaId: turmaId,
-                duracao: duracao,
-                questoes: questoesTemp,
-                criadoEm: firebase.database.ServerValue.TIMESTAMP
-            };
-
-            db.ref("provas").push(prova).then(() => {
-                document.getElementById("formProva").classList.add("hidden");
-                document.getElementById("listaProvas").classList.remove("hidden");
-                questoesTemp = [];
-                carregarProvasLista();
-                alert("Prova salva com sucesso!");
-            }).catch((erro) => {
-                console.error(erro);
-                alert("Erro ao salvar prova.");
-            }).finally(() => {
-                btn.disabled = false;
-                btn.innerText = "💾 Salvar Prova";
-            });
-        }
-
-
-        function cancelarProva() {
-            if (confirm("Deseja cancelar? Os dados serão perdidos.")) {
-                document.getElementById("formProva").classList.add("hidden");
-                document.getElementById("listaProvas").classList.remove("hidden");
-                questoesTemp = [];
-            }
-        }
-
-
-        function visualizarProva(id) {
-            db.ref("provas/" + id).once("value").then(snapshot => {
-                const prova = snapshot.val();
-                let msg = `PROVA: ${prova.titulo}\n\n`;
-                msg += `Descrição: ${prova.descricao || 'N/A'}\n`;
-                msg += `Duração: ${prova.duracao} minutos\n\n`;
-                msg += `QUESTÕES (${prova.questoes ? prova.questoes.length : 0}):\n\n`;
-
-                if (prova.questoes) {
-                    prova.questoes.forEach((q, i) => {
-                        msg += `${i + 1}) ${q.enunciado}\n`;
-                        q.alternativas.forEach((alt, j) => {
-                            const marker = j === q.gabarito ? '✓' : ' ';
-                            msg += `   ${marker} ${String.fromCharCode(65 + j)}) ${alt}\n`;
-                        });
-                        msg += `   Pontos: ${q.pontos}\n\n`;
-                    });
-                }
-
-                alert(msg);
-            });
-        }
-
-
-        function excluirProva(id) {
-            if (!confirm("Tem certeza que deseja excluir esta prova?")) return;
-
-            db.ref("provas/" + id).remove().then(() => {
-                carregarProvasLista();
-                alert("Prova excluída!");
-            }).catch((erro) => {
-                console.error(erro);
-                alert("Erro ao excluir prova.");
-            });
-        }
-
-
-        /* =====================================================
-           RESULTADOS E DASHBOARD
-        ===================================================== */
-
-        function carregarFiltrosResultados() {
-            // Carregar provas
-            const selectProva = document.getElementById("filtroProva");
-            selectProva.innerHTML = '<option value="">Todas as provas</option>';
-
-            db.ref("provas").once("value").then(snapshot => {
-                snapshot.forEach(item => {
-                    const prova = item.val();
-                    const option = document.createElement("option");
-                    option.value = item.key;
-                    option.textContent = prova.titulo;
-                    selectProva.appendChild(option);
-                });
-            });
-
-            // Carregar turmas
-            const selectTurma = document.getElementById("filtroTurma");
-            selectTurma.innerHTML = '<option value="">Todas as turmas</option>';
-
-            db.ref("turmas").once("value").then(snapshot => {
-                snapshot.forEach(item => {
-                    const turma = item.val();
-                    const option = document.createElement("option");
-                    option.value = item.key;
-                    option.textContent = turma.nome;
-                    selectTurma.appendChild(option);
-                });
-            });
-
-            // Adicionar listeners
-            document.getElementById("filtroProva").onchange = carregarResultados;
-            document.getElementById("filtroTurma").onchange = carregarResultados;
-        }
-
-
-        function carregarResultados() {
-            const provaId = document.getElementById("filtroProva").value;
-            const turmaId = document.getElementById("filtroTurma").value;
-            const container = document.getElementById("tabelaResultados");
-            const statsDiv = document.getElementById("statsDashboard");
-
-            container.innerHTML = "<p>Carregando resultados...</p>";
-            statsDiv.classList.add("hidden");
-
-            let query = db.ref("respostas");
-            if (provaId) query = query.orderByChild("provaId").equalTo(provaId);
-
-            query.once("value").then(snapshot => {
-                container.innerHTML = "";
-
-                if (!snapshot.exists()) {
-                    container.innerHTML = '<div class="msg">Nenhuma prova realizada ainda.</div>';
-                    return;
-                }
-
-                let totalAlunos = 0;
-                let somaNotas = 0;
-                let totalProvas = 0;
-                const resultados = [];
-
-                snapshot.forEach(item => {
-                    const resp = item.val();
-
-                    // Filtrar por turma se necessário
-                    if (turmaId && resp.turmaId !== turmaId) return;
-
-                    totalProvas++;
-                    if (resp.nota !== undefined) {
-                        somaNotas += resp.nota;
-                    }
-
-                    // Buscar dados do aluno
-                    db.ref("alunos/" + resp.alunoId).once("value").then(alunoSnap => {
-                        const aluno = alunoSnap.val() || {};
-                        resultados.push({
-                            aluno: aluno.nome || "N/A",
-                            prova: resp.provaTitulo || "N/A",
-                            nota: resp.nota !== undefined ? resp.nota.toFixed(1) : "Em andamento",
-                            data: resp.dataFim ? new Date(resp.dataFim).toLocaleDateString() : "Em andamento",
-                            status: resp.finalizada ? "Concluída" : "Em andamento"
-                        });
-
-                        totalAlunos++;
-
-                        // Se for o último, renderizar tabela
-                        if (resultados.length === snapshot.numChildren) {
-                            renderizarTabelaResultados(resultados);
-                            atualizarStats(totalAlunos, somaNotas, totalProvas);
-                        }
-                    });
-                });
-
-                if (resultados.length === 0) {
-                    container.innerHTML = '<div class="msg">Nenhum resultado encontrado para os filtros selecionados.</div>';
-                }
-
-            }).catch(erro => {
-                console.error(erro);
-                container.innerHTML = '<div class="msg erro">Erro ao carregar resultados.</div>';
-            });
-        }
-
-
-        function renderizarTabelaResultados(resultados) {
-            const container = document.getElementById("tabelaResultados");
-
-            let html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Aluno</th>
-                            <th>Prova</th>
-                            <th>Nota</th>
-                            <th>Data</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            resultados.forEach(r => {
-                const notaClass = r.nota !== "Em andamento" ? (parseFloat(r.nota) >= 7 ? "ok" : "no") : "";
-                html += `
-                    <tr>
-                        <td>${escaparHTML(r.aluno)}</td>
-                        <td>${escaparHTML(r.prova)}</td>
-                        <td><span class="badge ${notaClass}">${r.nota}</span></td>
-                        <td>${r.data}</td>
-                        <td><span class="badge">${r.status}</span></td>
-                    </tr>
-                `;
-            });
-
-            html += `</tbody></table>`;
-            container.innerHTML = html;
-        }
-
-
-        function atualizarStats(totalAlunos, somaNotas, totalProvas) {
-            const statsDiv = document.getElementById("statsDashboard");
-            statsDiv.classList.remove("hidden");
-
-            document.getElementById("statTotalAlunos").textContent = totalAlunos;
-            document.getElementById("statProvasRealizadas").textContent = totalProvas;
-
-            const media = totalProvas > 0 ? (somaNotas / totalProvas).toFixed(1) : "0";
-            document.getElementById("statMediaGeral").textContent = media;
-        }
-
-
-        /* =====================================================
-           TELA DE PROVA (FULLSCREEN)
-        ===================================================== */
-
-        function iniciarProva(id) {
-            if (!db) {
-                alert("Firebase indisponível.");
-                return;
-            }
-
-            db.ref("provas/" + id).once("value").then(function (snapshot) {
-                if (!snapshot.exists()) {
-                    alert("Avaliação não encontrada.");
-                    return;
-                }
-
-                const prova = snapshot.val();
-                provaAtual = {
-                    id: id,
-                    ...prova,
-                    respostas: {},
-                    inicio: Date.now()
-                };
-
-                // Verificar se já existe resposta em andamento
-                db.ref("respostas")
-                    .orderByChild("alunoId")
-                    .equalTo(alunoLogado.id)
-                    .once("value")
-                    .then(respostasSnap => {
-                        let provaEmAndamento = null;
-
-                        respostasSnap.forEach(item => {
-                            const resp = item.val();
-                            if (resp.provaId === id && !resp.finalizada) {
-                                provaEmAndamento = { key: item.key, ...resp };
-                            }
-                        });
-
-                        if (provaEmAndamento) {
-                            if (confirm("Você já tem esta prova em andamento. Deseja continuar?")) {
-                                provaAtual.respostas = provaEmAndamento.respostas || {};
-                                provaAtual.respostasKey = provaEmAndamento.key;
-                            } else {
-                                return;
-                            }
-                        }
-
-                        abrirTelaProva();
-                    });
-
-            }).catch(function (erro) {
-                console.error(erro);
-                alert("Não foi possível abrir a prova.");
-            });
-        }
-
-
-        function abrirTelaProva() {
-            // Criar elemento fullscreen
-            const fullscreen = document.createElement("div");
-            fullscreen.className = "fullscreen";
-            fullscreen.id = "telaProvaFullscreen";
-
-            // Timer
-            tempoRestante = provaAtual.duracao * 60; // converter para segundos
-
-            const timerDiv = document.createElement("div");
-            timerDiv.className = "timer-display";
-            timerDiv.id = "timerProva";
-            timerDiv.textContent = formatarTempo(tempoRestante);
-            fullscreen.appendChild(timerDiv);
-
-            // Container da prova
-            const container = document.createElement("div");
-            container.className = "prova-container";
-
-            // Cabeçalho
-            const header = document.createElement("div");
-            header.className = "card";
-            header.style.marginBottom = "20px";
-            header.innerHTML = `
-                <h2>${escaparHTML(provaAtual.titulo)}</h2>
-                <p>${escaparHTML(provaAtual.descricao || "")}</p>
-                <p><strong>Duração:</strong> ${provaAtual.duracao} minutos</p>
-                <p><strong>Questões:</strong> ${provaAtual.questoes ? provaAtual.questoes.length : 0}</p>
-            `;
-            container.appendChild(header);
-
-            // Questões
-            if (provaAtual.questoes) {
-                provaAtual.questoes.forEach((questao, index) => {
-                    const questaoDiv = document.createElement("div");
-                    questaoDiv.className = "prova-questao";
-
-                    let html = `
-                        <h3>Questão ${index + 1} (${questao.pontos} pontos)</h3>
-                        <p style="margin-bottom: 15px;">${escaparHTML(questao.enunciado)}</p>
-                    `;
-
-                    questao.alternativas.forEach((alt, altIndex) => {
-                        const letra = String.fromCharCode(65 + altIndex);
-                        const selecionada = provaAtual.respostas[questao.id] === altIndex ? "selecionada" : "";
-
-                        html += `
-                            <label class="prova-alternativa ${selecionada}" onclick="selecionarAlternativa(this, '${questao.id}', ${altIndex})">
-                                <input type="radio" name="questao-${questao.id}" ${selecionada ? 'checked' : ''}>
-                                <strong>${letra})</strong> ${escaparHTML(alt)}
-                            </label>
-                        `;
-                    });
-
-                    questaoDiv.innerHTML = html;
-                    container.appendChild(questaoDiv);
-                });
-            }
-
-            // Botões de ação
-            const actions = document.createElement("div");
-            actions.className = "actions";
-            actions.style.marginTop = "20px";
-            actions.innerHTML = `
-                <button id="btnFinalizarProva" class="success" style="font-size: 18px; padding: 15px 30px;">
-                    ✅ Finalizar Prova
-                </button>
-                <button id="btnCancelarProva" class="danger" style="font-size: 18px; padding: 15px 30px;">
-                    ❌ Cancelar
-                </button>
-            `;
-            container.appendChild(actions);
-
-            fullscreen.appendChild(container);
-            document.body.appendChild(fullscreen);
-
-            // Iniciar timer
-            timerInterval = setInterval(atualizarTimer, 1000);
-
-            // Auto-save a cada 30 segundos
-            setInterval(salvarRespostasParciais, 30000);
-
-            // Event listeners
-            document.getElementById("btnFinalizarProva").onclick = finalizarProva;
-            document.getElementById("btnCancelarProva").onclick = cancelarTelaProva;
-
-            // Prevenir saída acidental
-            window.onbeforeunload = function () {
-                return "Você tem uma prova em andamento. Deseja realmente sair?";
-            };
-        }
-
-
-        function formatarTempo(segundos) {
-            const h = Math.floor(segundos / 3600);
-            const m = Math.floor((segundos % 3600) / 60);
-            const s = segundos % 60;
-
-            if (h > 0) {
-                return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-            }
-            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        }
-
-
-        function atualizarTimer() {
-            tempoRestante--;
-            document.getElementById("timerProva").textContent = formatarTempo(tempoRestante);
-
-            if (tempoRestante <= 0) {
-                clearInterval(timerInterval);
-                alert("Tempo esgotado! A prova será finalizada automaticamente.");
-                finalizarProva();
-            }
-
-            // Alerta quando faltam 5 minutos
-            if (tempoRestante === 300) {
-                alert("Atenção! Faltam 5 minutos para o término da prova.");
-            }
-        }
-
-
-        function selecionarAlternativa(element, questaoId, alternativaIndex) {
-            // Remover seleção anterior da questão
-            const alternativas = element.parentElement.querySelectorAll(".prova-alternativa");
-            alternativas.forEach(alt => alt.classList.remove("selecionada"));
-
-            // Adicionar seleção atual
-            element.classList.add("selecionada");
-
-            // Marcar radio button
-            const radio = element.querySelector("input[type='radio']");
-            radio.checked = true;
-
-            // Salvar resposta
-            provaAtual.respostas[questaoId] = alternativaIndex;
-        }
-
-
-        function salvarRespostasParciais() {
-            if (!provaAtual || !provaAtual.respostasKey) {
-                // Criar novo registro
-                db.ref("respostas").push({
-                    alunoId: alunoLogado.id,
-                    alunoNome: alunoLogado.nome,
-                    provaId: provaAtual.id,
-                    provaTitulo: provaAtual.titulo,
-                    turmaId: alunoLogado.turmaId,
-                    respostas: provaAtual.respostas,
-                    finalizada: false,
-                    dataInicio: provaAtual.inicio,
-                    ultimaAtualizacao: firebase.database.ServerValue.TIMESTAMP
-                }).then(snapshot => {
-                    provaAtual.respostasKey = snapshot.key;
-                });
-            } else {
-                // Atualizar existente
-                db.ref("respostas/" + provaAtual.respostasKey).update({
-                    respostas: provaAtual.respostas,
-                    ultimaAtualizacao: firebase.database.ServerValue.TIMESTAMP
-                });
-            }
-        }
-
-
-        function finalizarProva() {
-            if (!confirm("Deseja finalizar a prova? Não será possível alterar as respostas.")) {
-                return;
-            }
-
-            clearInterval(timerInterval);
-            window.onbeforeunload = null;
-
-            // Calcular nota
-            let notaTotal = 0;
-            let pontosTotais = 0;
-            const questoes = provaAtual.questoes;
-            const respostas = provaAtual.respostas;
-
-            questoes.forEach(questao => {
-                pontosTotais += questao.pontos;
-                if (respostas[questao.id] === questao.gabarito) {
-                    notaTotal += questao.pontos;
-                }
-            });
-
-            const notaFinal = pontosTotais > 0 ? (notaTotal / pontosTotais) * 10 : 0;
-
-            // Salvar resultado final
-            const dadosFinais = {
-                alunoId: alunoLogado.id,
-                alunoNome: alunoLogado.nome,
-                provaId: provaAtual.id,
-                provaTitulo: provaAtual.titulo,
-                turmaId: alunoLogado.turmaId,
-                respostas: respostas,
-                nota: notaFinal,
-                pontosObtidos: notaTotal,
-                pontosTotais: pontosTotais,
-                finalizada: true,
-                dataInicio: provaAtual.inicio,
-                dataFim: Date.now(),
-                tempoGasto: Math.floor((Date.now() - provaAtual.inicio) / 1000)
-            };
-
-            const ref = provaAtual.respostasKey ?
-                db.ref("respostas/" + provaAtual.respostasKey) :
-                db.ref("respostas").push();
-
-            ref.set(dadosFinais).then(() => {
-                cancelarTelaProva();
-
-                // Mostrar resultado
-                setTimeout(() => {
-                    alert(`Prova finalizada!\n\nSua nota: ${notaFinal.toFixed(1)}\nAcertos: ${notaTotal} de ${pontosTotais} pontos`);
-                }, 500);
-
-            }).catch(erro => {
-                console.error(erro);
-                alert("Erro ao salvar prova. Tente novamente.");
-                window.onbeforeunload = function () { return "Prova não salva!"; };
-            });
-        }
-
-
-        function cancelarTelaProva() {
-            clearInterval(timerInterval);
-            window.onbeforeunload = null;
-
-            const fullscreen = document.getElementById("telaProvaFullscreen");
-            if (fullscreen) {
-                fullscreen.remove();
-            }
-
-            provaAtual = null;
-        }
-
-
-        /* =====================================================
-           CADASTRAR ALUNO
-        ===================================================== */
-
-        function cadastrarAluno() {
-
-            const msg = document.getElementById("msgCadastroAluno");
-
-            const nome = document.getElementById("cadAlunoNome").value.trim();
-            const usuario = document.getElementById("cadAlunoUsuario").value.trim().toLowerCase();
-            const senha = document.getElementById("cadAlunoSenha").value;
-            const senha2 = document.getElementById("cadAlunoSenha2").value;
-            const turma = document.getElementById("cadAlunoTurma").value;
-
-            esconderMensagem(msg);
-
-            if (!db) {
-                mostrarMensagem(msg, "Firebase não está conectado.", "erro");
-                return;
-            }
-
-            if (!nome) {
-                mostrarMensagem(msg, "Digite o nome completo.", "erro");
-                return;
-            }
-
-            if (!usuario) {
-                mostrarMensagem(msg, "Digite um usuário.", "erro");
-                return;
-            }
-
-            if (usuario.length < 3) {
-                mostrarMensagem(msg, "O usuário deve ter pelo menos 3 caracteres.", "erro");
-                return;
-            }
-
-            if (!senha) {
-                mostrarMensagem(msg, "Digite uma senha.", "erro");
-                return;
-            }
-
-            if (senha.length < 6) {
-                mostrarMensagem(msg, "A senha deve ter pelo menos 6 caracteres.", "erro");
-                return;
-            }
-
-            if (senha !== senha2) {
-                mostrarMensagem(msg, "As senhas não são iguais.", "erro");
-                return;
-            }
-
-            const btn = document.getElementById("btnCadastrarAluno");
-            btn.disabled = true;
-            btn.innerText = "Cadastrando...";
-
-            db.ref("alunos")
-                .orderByChild("usuario")
-                .equalTo(usuario)
-                .once("value")
-                .then(function (snapshot) {
-
-                    if (snapshot.exists()) {
-                        throw new Error("Este usuário já está cadastrado.");
-                    }
-
-                    const novoAlunoRef = db.ref("alunos").push();
-
-                    const aluno = {
-                        id: novoAlunoRef.key,
-                        nome: nome,
-                        usuario: usuario,
-                        senha: senha,
-                        turmaId: turma,
-                        criadoEm: firebase.database.ServerValue.TIMESTAMP
-                    };
-
-                    return novoAlunoRef.set(aluno);
-
-                })
-                .then(function () {
-
-                    mostrarMensagem(msg, "Cadastro realizado com sucesso!", "sucesso");
-
-                    document.getElementById("cadAlunoNome").value = "";
-                    document.getElementById("cadAlunoUsuario").value = "";
-                    document.getElementById("cadAlunoSenha").value = "";
-                    document.getElementById("cadAlunoSenha2").value = "";
-                    document.getElementById("cadAlunoTurma").value = "";
-
-                    setTimeout(function () {
-                        document.getElementById("cadastroAlunoCard").classList.add("hidden");
-                    }, 1200);
-
-                })
-                .catch(function (erro) {
-
-                    console.error("Erro no cadastro:", erro);
-                    mostrarMensagem(msg, erro.message || "Não foi possível realizar o cadastro.", "erro");
-
-                })
-                .finally(function () {
-
-                    btn.disabled = false;
-                    btn.innerText = "Cadastrar";
-
-                });
-
-        }
-
-
-        /* =====================================================
-           LOGIN DO ALUNO
-        ===================================================== */
-
-        function loginAluno() {
-
-            const msg = document.getElementById("msgLoginAluno");
-
-            const usuario = document.getElementById("loginAlunoUsuario").value.trim().toLowerCase();
-            const senha = document.getElementById("loginAlunoSenha").value;
-
-            esconderMensagem(msg);
-
-            if (!db) {
-                mostrarMensagem(msg, "Firebase não está conectado.", "erro");
-                return;
-            }
-
-            if (!usuario || !senha) {
-                mostrarMensagem(msg, "Digite usuário e senha.", "erro");
-                return;
-            }
-
-            const btn = document.getElementById("btnLoginAluno");
-            btn.disabled = true;
-            btn.innerText = "Entrando...";
-
-            db.ref("alunos")
-                .orderByChild("usuario")
-                .equalTo(usuario)
-                .once("value")
-                .then(function (snapshot) {
-
-                    if (!snapshot.exists()) {
-                        throw new Error("Usuário ou senha incorretos.");
-                    }
-
-                    let alunoEncontrado = null;
-
-                    snapshot.forEach(function (item) {
-                        const aluno = item.val();
-                        if (aluno && aluno.senha === senha) {
-                            alunoEncontrado = { ...aluno, id: item.key };
-                        }
-                    });
-
-                    if (!alunoEncontrado) {
-                        throw new Error("Usuário ou senha incorretos.");
-                    }
-
-                    alunoLogado = alunoEncontrado;
-                    mostrarPainelAluno();
-
-                })
-                .catch(function (erro) {
-
-                    console.error("Erro no login:", erro);
-                    mostrarMensagem(msg, erro.message || "Não foi possível entrar.", "erro");
-
-                })
-                .finally(function () {
-
-                    btn.disabled = false;
-                    btn.innerText = "Entrar";
-
-                });
-
-        }
-
-
-        /* =====================================================
-           MOSTRAR PAINEL DO ALUNO
-        ===================================================== */
-
-        function mostrarPainelAluno() {
-
-            const loginCard = document.querySelector("#areaAluno .grid");
-            const painel = document.getElementById("painelAluno");
-            const nome = document.getElementById("alunoNomeLogado");
-
-            loginCard.classList.add("hidden");
-            painel.classList.remove("hidden");
-
-            nome.innerHTML = "Aluno: <strong>" + escaparHTML(alunoLogado.nome) + "</strong>";
-
-            carregarProvasAluno();
-
-        }
-
-
-        /* =====================================================
-           PROVAS DO ALUNO
-        ===================================================== */
-
-        function carregarProvasAluno() {
-
-            const lista = document.getElementById("listaProvasAluno");
-            lista.innerHTML = "<p>Carregando avaliações...</p>";
-
-            if (!db) {
-                lista.innerHTML = '<div class="msg erro">Firebase indisponível.</div>';
-                return;
-            }
-
-            db.ref("provas").once("value").then(function (snapshot) {
-
-                lista.innerHTML = "";
-
-                if (!snapshot.exists()) {
-                    lista.innerHTML = '<div class="msg">Nenhuma avaliação disponível.</div>';
-                    return;
-                }
-
-                let encontrou = false;
-
-                snapshot.forEach(function (item) {
-
-                    const prova = item.val() || {};
-
-                    if (prova.turmaId && alunoLogado.turmaId && prova.turmaId !== alunoLogado.turmaId) {
-                        return;
-                    }
-
-                    // Verificar se aluno já fez esta prova
-                    db.ref("respostas")
-                        .orderByChild("alunoId")
-                        .equalTo(alunoLogado.id)
-                        .once("value")
-                        .then(respostasSnap => {
-                            let jaFez = false;
-                            let nota = null;
-
-                            respostasSnap.forEach(respItem => {
-                                const resp = respItem.val();
-                                if (resp.provaId === item.key && resp.finalizada) {
-                                    jaFez = true;
-                                    nota = resp.nota;
-                                }
-                            });
-
-                            encontrou = true;
-
-                            const div = document.createElement("div");
-                            div.className = "item";
-
-                            let statusHtml = "";
-                            let buttonHtml = "";
-
-                            if (jaFez) {
-                                statusHtml = `<span class="badge ok">Nota: ${nota.toFixed(1)}</span>`;
-                                buttonHtml = `<button disabled>✅ Prova realizada</button>`;
-                            } else {
-                                buttonHtml = `
-                                    <button class="btnIniciarProva" data-id="${item.key}">
-                                        📝 Iniciar prova
-                                    </button>
-                                `;
-                            }
-
-                            div.innerHTML = `
-                                <strong>${escaparHTML(prova.titulo || "Avaliação")}</strong>
-                                <p class="titulo-pequeno">${escaparHTML(prova.descricao || "Sem descrição.")}</p>
-                                <p class="titulo-pequeno">⏱️ Duração: ${prova.duracao || 60} minutos</p>
-                                <p class="titulo-pequeno">📋 ${prova.questoes ? prova.questoes.length : 0} questões</p>
-                                ${statusHtml}
-                                <div class="actions" style="margin-top: 10px;">
-                                    ${buttonHtml}
-                                </div>
-                            `;
-
-                            lista.appendChild(div);
-
-                            if (!jaFez) {
-                                div.querySelector(".btnIniciarProva").addEventListener("click", function () {
-                                    iniciarProva(this.dataset.id);
-                                });
-                            }
-                        });
-
-                });
-
-                setTimeout(() => {
-                    if (!encontrou) {
-                        lista.innerHTML = '<div class="msg">Nenhuma avaliação disponível para sua turma.</div>';
-                    }
-                }, 1000);
-
-            }).catch(function (erro) {
-
-                console.error(erro);
-                lista.innerHTML = '<div class="msg erro">Erro ao carregar avaliações.</div>';
-
-            });
-
-        }
-
-
-        /* =====================================================
-           SAIR DO ALUNO
-        ===================================================== */
-
-        function sairAluno() {
-
-            alunoLogado = null;
-
-            document.getElementById("painelAluno").classList.add("hidden");
-            document.querySelector("#areaAluno .grid").classList.remove("hidden");
-
-            document.getElementById("loginAlunoUsuario").value = "";
-            document.getElementById("loginAlunoSenha").value = "";
-
-            esconderMensagem(document.getElementById("msgLoginAluno"));
-
-        }
-
-
-        /* =====================================================
-           SEGURANÇA BÁSICA PARA EXIBIÇÃO DE TEXTO
-        ===================================================== */
-
-        function escaparHTML(valor) {
-
-            return String(valor || "")
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-
-        }
-
-
-        /* =====================================================
-           EVENTOS
-        ===================================================== */
-
-        document.getElementById("btnInicio").addEventListener("click", function () {
-            alternarSecao("inicio");
-        });
-
-        document.getElementById("btnAreaAluno").addEventListener("click", function () {
-            alternarSecao("areaAluno");
-            carregarTurmas();
-        });
-
-        document.getElementById("cardAluno").addEventListener("click", function () {
-            alternarSecao("areaAluno");
-            carregarTurmas();
-        });
-
-        document.getElementById("btnProfessor").addEventListener("click", function () {
-            alternarSecao("professor");
-        });
-
-        document.getElementById("cardProf").addEventListener("click", function () {
-            alternarSecao("professor");
-        });
-
-        document.getElementById("btnVoltarInicioProfessor").addEventListener("click", function () {
-            alternarSecao("inicio");
-        });
-
-        document.getElementById("btnAbrirCadastro").addEventListener("click", function () {
-            document.getElementById("cadastroAlunoCard").classList.remove("hidden");
-            carregarTurmas();
-        });
-
-        document.getElementById("btnVoltarAluno").addEventListener("click", function () {
-            document.getElementById("cadastroAlunoCard").classList.add("hidden");
-        });
-
-        document.getElementById("btnCadastrarAluno").addEventListener("click", cadastrarAluno);
-
-        document.getElementById("btnLoginAluno").addEventListener("click", loginAluno);
-
-        document.getElementById("btnSairAluno").addEventListener("click", sairAluno);
-
-        // Eventos do Professor
-        document.getElementById("btnSalvarTurma").addEventListener("click", salvarTurma);
-        document.getElementById("btnNovaProva").addEventListener("click", novaProva);
-        document.getElementById("btnAdicionarQuestao").addEventListener("click", adicionarQuestao);
-        document.getElementById("btnSalvarProva").addEventListener("click", salvarProva);
-        document.getElementById("btnCancelarProva").addEventListener("click", cancelarProva);
-
-        // Enter no login
-        document.getElementById("loginAlunoSenha").addEventListener("keydown", function (event) {
-            if (event.key === "Enter") {
-                loginAluno();
-            }
-        });
-
-
-        /* =====================================================
-           INICIAR SISTEMA
-        ===================================================== */
-
-        iniciarFirebase();
-
+        buscaAluno.oninput = listarAlunos;
+        function listarProfessores() { if (usuarioAtual?.tipo !== "master") return; listaProfessores.innerHTML = usuarios.map(u => `<div class="item"><b>${esc(u.nome)}</b> — ${esc(u.usuario)} <span class="badge">${u.tipo}</span><div class="actions"><button data-edit-u="${u.id}">Editar</button>${u.id !== "master-1" ? `<button data-del-u="${u.id}" class="danger">Excluir</button>` : ""}</div></div>`).join(""); listaProfessores.querySelectorAll("[data-edit-u]").forEach(b => b.onclick = () => editarProfessor(b.dataset.editU)); listaProfessores.querySelectorAll("[data-del-u]").forEach(b => b.onclick = async () => { if (!confirm("Excluir professor?")) return; usuarios = usuarios.filter(u => u.id !== b.dataset.delU); sync(); await cloudDelete("usuarios", b.dataset.delU); listarProfessores() }) }
+        btnSalvarProfessor.onclick = async () => { if (usuarioAtual?.tipo !== "master") return; const eid = val("editarProfessorId"), nome = val("novoProfNome"), usuario = val("novoProfUsuario"), senha = val("novoProfSenha"), tipo = val("novoProfTipo"); if (!nome || !usuario) return alert("Preencha nome e usuário."); let u = eid ? usuarios.find(x => x.id === eid) : null; if (!u) { u = { id: id(), nome, usuario, senha: senha || "1234", tipo }; usuarios.push(u) } else { u.nome = nome; u.usuario = usuario; u.tipo = tipo; if (senha) u.senha = senha } sync(); await cloud("usuarios", u.id, u); cancelarProfessor(); listarProfessores() };
+        function cancelarProfessor() { clear(["editarProfessorId", "novoProfNome", "novoProfUsuario", "novoProfSenha"]); novoProfTipo.value = "professor"; btnCancelarProfessor.classList.add("hidden") }
+        btnCancelarProfessor.onclick = cancelarProfessor;
+        function editarProfessor(i) { const u = usuarios.find(x => x.id === i); if (!u) return; editarProfessorId.value = u.id; novoProfNome.value = u.nome; novoProfUsuario.value = u.usuario; novoProfSenha.value = ""; novoProfTipo.value = u.tipo; btnCancelarProfessor.classList.remove("hidden") }
+        btnAlterarSenha.onclick = async () => { if (!usuarioAtual) return; const a = val("senhaAtual"), n = val("novaSenha"), c = val("confirmarSenha"); if (a !== usuarioAtual.senha || !n || n !== c) return alert("Verifique as senhas."); usuarioAtual.senha = n; const u = usuarios.find(x => x.id === usuarioAtual.id); u.senha = n; sync(); await cloud("usuarios", u.id, u); alert("Senha alterada.") };
+        btnBackup.onclick = () => { const blob = new Blob([JSON.stringify({ versao: "4.1", data: new Date().toISOString(), usuarios, provas, alunos, turmas, resultados }, null, 2)], { type: "application/json" }); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "backup-sistema-provas.json"; a.click(); URL.revokeObjectURL(a.href) };
+        btnRestaurar.onclick = () => arquivoBackup.click();
+        arquivoBackup.onchange = () => { const f = arquivoBackup.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { const x = JSON.parse(r.result); if (!confirm("Restaurar backup e substituir os dados locais?")) return; usuarios = x.usuarios || []; provas = x.provas || []; alunos = x.alunos || []; turmas = x.turmas || []; resultados = x.resultados || []; persist(); atualizarTudo(); alert("Backup restaurado."); } catch { alert("Arquivo de backup inválido.") } }; r.readAsText(f) };
+        btnApagarProvas.onclick = async () => { if (!confirm("Apagar todas as avaliações?")) return; for (const p of provas) await cloudDelete("provas", p.id); provas = []; persist(); atualizarTudo() };
+        btnApagarNotas.onclick = async () => { if (!confirm("Apagar todos os resultados?")) return; for (const r of resultados) await cloudDelete("resultados", r.id); resultados = []; persist(); listarResultados() };
+        btnZerar.onclick = async () => { if (!confirm("ZERAR avaliações e resultados locais?")) return; provas = []; resultados = []; persist(); atualizarTudo() };
+        function iniciarProva(p) { if (!p.liberada) return alert("Esta avaliação está bloqueada."); const agora = new Date(); if (p.inicio && agora < new Date(p.inicio)) return alert("A avaliação ainda não começou."); if (p.fim && agora > new Date(p.fim)) return alert("O período da avaliação terminou."); const tent = resultados.filter(r => r.provaId === p.id && r.alunoId === alunoAtual.id).length; if (tent >= (p.maxTentativas || 1)) return alert("Você atingiu o limite de tentativas."); if (!(p.questoes || []).length) return alert("A avaliação não possui questões."); provaAtual = p; finalizada = false; ocorrencias = 0; document.getElementById("tituloProva").textContent = p.nome; document.getElementById("dadosAluno").textContent = `Aluno: ${alunoAtual.nome}`; mostrar("areaProva"); renderQuestoes(p); iniciarTimer(p.tempo * 60); if (p.modoSeguro) ativarModoSeguro() }
+        function embaralharArr(arr) { return [...arr].sort(() => Math.random() - .5) }
+        function renderQuestoes(p) { let qs = p.embaralhar ? embaralharArr(p.questoes) : [...p.questoes]; questoesAluno.innerHTML = qs.map((q, i) => { let al = Object.entries(q.alternativas); if (p.embaralhar) al = embaralharArr(al); return `<div class="question" data-qid="${q.id}"><h3>${i + 1}. ${esc(q.enunciado)}</h3>${q.imagem ? `<img src="${q.imagem}" style="max-width:100%;max-height:300px">` : ""}${al.map(([k, v]) => `<label class="alt"><input type="radio" name="q-${q.id}" value="${k}"> <b>${k})</b> ${esc(v)}</label>`).join("")}</div>` }).join("") }
+        function iniciarTimer(s) { clearInterval(timer); tempoRestante = s; atualizarTimer(); timer = setInterval(() => { tempoRestante--; atualizarTimer(); if (tempoRestante <= 0) { clearInterval(timer); finalizar(true) } }, 1000) }
+        function atualizarTimer() { const m = Math.floor(tempoRestante / 60), s = tempoRestante % 60; cronometro.textContent = `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}` }
+        btnFinalizar.onclick = () => finalizar(false);
+        async function finalizar(auto) { if (finalizada) return; finalizada = true; clearInterval(timer); const qs = provaAtual.questoes || []; let ac = 0; qs.forEach(q => { const marcada = document.querySelector(`input[name="q-${q.id}"]:checked`); if (marcada?.value === q.correta) ac++ }); const nota = qs.length ? (ac / qs.length) * 10 : 0; const r = { id: id(), provaId: provaAtual.id, provaNome: provaAtual.nome, alunoId: alunoAtual.id, alunoNome: alunoAtual.nome, acertos: ac, total: qs.length, nota, data: new Date().toISOString() }; resultados.push(r); persist(); await cloud("resultados", r.id, r); if (document.fullscreenElement) document.exitFullscreen().catch(() => { }); resultadoConteudo.innerHTML = `<h3>${auto ? "⏰ Tempo encerrado" : "Prova finalizada"}</h3><p>Aluno: <b>${esc(alunoAtual.nome)}</b></p><p>Acertos: <b>${ac}/${qs.length}</b></p><p>Nota: <strong style="font-size:28px">${nota.toFixed(2)}</strong></p><p>${nota >= (provaAtual.notaMinima || 0) ? "✅ Aprovado" : "❌ Abaixo da nota mínima"}</p>`; mostrar("areaResultado") }
+        function ativarModoSeguro() { avisoSeguro.classList.remove("hidden"); avisoSeguro.textContent = "🔒 Modo seguro ativado. Não saia da tela."; document.documentElement.requestFullscreen?.().catch(() => { }); document.addEventListener("visibilitychange", eventoSeguro); window.addEventListener("blur", eventoSeguro) }
+        function eventoSeguro() { if (finalizada || !provaAtual?.modoSeguro) return; if (document.hidden || !document.hasFocus()) { ocorrencias++; avisoSeguro.textContent = `⚠️ Saída detectada (${ocorrencias}/3).`; if (ocorrencias >= 3) { alert("Limite atingido. Prova encerrada."); finalizar(false) } } }
+        btnVoltarInicio.onclick = () => { mostrar("inicio"); alunoAtual = null; provaAtual = null; document.getElementById("cadastroAlunoCard").classList.add("hidden") };
+        syncAll();
     </script>
-
 </body>
 
 </html>
